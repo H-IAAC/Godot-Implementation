@@ -8,6 +8,9 @@
 export_presets.cfg
 .mono
 
+# Godot Kotlin ignores
+/GodotKotlin/CoreModelTrail/exports
+
 # IDE ignores
 /AndroidProject/.idea/caches
 /AndroidProject/.idea/libraries

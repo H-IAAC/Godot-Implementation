@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node",
+"class": "com_example_game_CollectorMindCommunicator",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/example/game/CollectorMindCommunicator.kt"
+}, {
 "base": "Node2D",
 "class": "com_example_game_NotificationCenter",
 "language": "Kotlin",
@@ -35,6 +40,7 @@ _global_script_classes=[ {
 "path": "res://src/main/kotlin/com/example/game/testcst/TestCommunicator.kt"
 } ]
 _global_script_class_icons={
+"com_example_game_CollectorMindCommunicator": "",
 "com_example_game_NotificationCenter": "",
 "com_example_game_environment_Apple2D": "",
 "com_example_game_environment_Environment2D": "",
@@ -45,7 +51,14 @@ _global_script_class_icons={
 [application]
 
 config/name="Core Model Trail"
+run/main_scene="res://scenes/MindTester.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=960
+window/size/height=540
+window/stretch/mode="viewport"
 
 [physics]
 

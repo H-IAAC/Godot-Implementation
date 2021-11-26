@@ -3,6 +3,7 @@ package com.example.game.cst.codelets.behaviors
 import br.unicamp.cst.core.entities.Codelet
 import br.unicamp.cst.core.entities.MemoryObject
 import com.example.game.environment.Apple
+import godot.global.GD
 
 class EatApple : Codelet() {
     /*

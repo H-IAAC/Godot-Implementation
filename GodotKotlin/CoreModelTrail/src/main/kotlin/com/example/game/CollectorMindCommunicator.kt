@@ -5,48 +5,63 @@ import com.example.game.environment.Apple
 import com.example.game.environment.Player
 import godot.Node
 import godot.annotation.RegisterClass
+import godot.annotation.RegisterFunction
 import godot.core.Vector2
+import godot.global.GD
 
 @RegisterClass
 class CollectorMindCommunicator: Node() {
-    lateinit var mind: AgentMind
-    lateinit var player: Player
+	lateinit var mind: AgentMind
+	lateinit var player: Player
 
-    companion object {
-        lateinit var instance: CollectorMindCommunicator
-    }
+	companion object {
+		lateinit var instance: CollectorMindCommunicator
+	}
 
-    init {
-        instance = this
+	@RegisterFunction
+	override fun _ready() {
+		instance = this
 
-        mind = AgentMind()
-    }
+		mind = AgentMind(this)
+	}
 
-    /*
-        Agent Requests
-    */
+	@RegisterFunction
+	fun clearApple(apple: Apple) {
+		mind.clearApple(apple)
+	}
 
-    fun getPosition(): Vector2 {
-        return player.getPos()
-    }
+	/*
+		Agent Requests
+	*/
 
-    fun getApplesInReach(): ArrayList<Apple> {
-        return player.getApplesInTouch()
-    }
+	@RegisterFunction
+	fun getPosition(): Vector2 {
+		return player.getPos()
+	}
 
-    fun getApplesInVision(): ArrayList<Apple> {
-        return player.getApplesInVision()
-    }
+	@RegisterFunction
+	fun getApplesInReach(): ArrayList<Apple> {
+		return player.getApplesInTouch()
+	}
 
-    fun eatApple(code: String) {
-        player.eatApple(code)
-    }
+	@RegisterFunction
+	fun getApplesInVision(): ArrayList<Apple> {
+		return player.getApplesInVision()
+	}
 
-    fun forage() {
-        player.forage()
-    }
+	@RegisterFunction
+	fun eatApple(apple: Apple) {
+		player.eatApple(apple)
+		clearApple(apple)
+	}
 
-    fun goTo(pos: Vector2) {
-        player.goTo(pos)
-    }
+	@RegisterFunction
+	fun forage() {
+		player.forage()
+	}
+
+	@RegisterFunction
+	fun goTo(pos: Vector2) {
+		player.goTo(pos)
+	}
 }

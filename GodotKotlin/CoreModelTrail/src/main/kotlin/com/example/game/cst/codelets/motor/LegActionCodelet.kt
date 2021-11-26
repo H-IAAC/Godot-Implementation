@@ -5,7 +5,7 @@ import br.unicamp.cst.core.entities.MemoryObject
 import com.example.game.CollectorMindCommunicator
 import godot.core.Vector2
 
-class LegActionCodelet : Codelet() {
+class LegActionCodelet(var communicator: CollectorMindCommunicator) : Codelet() {
     /*
         Sends commands from the legsMO to Godot as signals
     */
@@ -21,9 +21,9 @@ class LegActionCodelet : Codelet() {
     override fun proc() {
         val legAimPos: Vector2? = legsMO!!.i as Vector2?
         if (legAimPos == null) {
-            CollectorMindCommunicator.instance.forage()
+            communicator.forage()
         } else {
-            CollectorMindCommunicator.instance.goTo(legAimPos)
+            communicator.goTo(legAimPos)
         }
     }
 }

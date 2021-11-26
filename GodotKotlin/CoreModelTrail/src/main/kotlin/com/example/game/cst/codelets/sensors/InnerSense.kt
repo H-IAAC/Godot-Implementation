@@ -4,7 +4,7 @@ import br.unicamp.cst.core.entities.Codelet
 import br.unicamp.cst.core.entities.MemoryObject
 import com.example.game.CollectorMindCommunicator
 
-class InnerSense: Codelet() {
+class InnerSense(var communicator: CollectorMindCommunicator): Codelet() {
     /*
         Requests the agent's position every proc. The body
         should respond to this request by updating the
@@ -17,11 +17,11 @@ class InnerSense: Codelet() {
     }
 
     override fun accessMemoryObjects() {
-        positionMO = getInput("POSITION") as MemoryObject
+        positionMO = getOutput("POSITION") as MemoryObject
     }
 
     override fun proc() {
-        positionMO?.setI(CollectorMindCommunicator.instance.getPosition())
+        positionMO?.setI(communicator.getPosition())
     }
 
     override fun calculateActivation() {}

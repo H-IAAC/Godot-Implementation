@@ -6,4 +6,5 @@ interface Apple {
     fun getPos(): Vector2
     fun getCode(): String
     fun getEaten()
+    fun queueFree()
 }

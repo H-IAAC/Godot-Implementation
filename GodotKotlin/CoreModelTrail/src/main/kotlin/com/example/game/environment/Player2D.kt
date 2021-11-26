@@ -47,29 +47,29 @@ class Player2D: KinematicBody2D(), Player {
 		NODES
 	*/
 
-	lateinit var particles: Particles2D
+	lateinit var particles: CPUParticles2D
 	lateinit var apples: Node2D
 
 	@RegisterFunction
 	override fun _ready() {
 		// Setup Nodes
-		particles = getNode(NodePath("Particles")) as Particles2D
+		particles = getNode(NodePath("Particles")) as CPUParticles2D
 		apples = getNode(NodePath("../Apples")) as Node2D
 
 		// Initialize Mind
-		mindCommunicator = CollectorMindCommunicator()
+		mindCommunicator = getNode(NodePath("MindCommunicator")) as CollectorMindCommunicator
 		mindCommunicator.player = this
 
 		GD.print("2D Player mind started")
 
 		// Setup Signals
-		var collectionArea: Area2D = getNode(NodePath("CollectionArea")) as Area2D
-		collectionArea.connect("signalBodyEntered", this, "enterAppleInReach")
-		collectionArea.connect("signalBodyExited", this, "exitAppleFromReach")
-
-		var visionArea: Area2D = getNode(NodePath("VisionArea")) as Area2D
-		collectionArea.connect("signalBodyEntered", this, "enterAppleInSight")
-		collectionArea.connect("signalBodyExited", this, "exitAppleFromSight")
+//		var collectionArea: Area2D = getNode(NodePath("CollectionArea")) as Area2D
+//		collectionArea.connect("body_entered", this, "enterAppleInReach")
+//		collectionArea.connect("body_exited", this, "exitAppleFromReach")
+//
+//		var visionArea: Area2D = getNode(NodePath("VisionArea")) as Area2D
+//		visionArea.connect("body_entered", this, "enterAppleInSight")
+//		visionArea.connect("body_exited", this, "exitAppleFromSight")
 	}
 
 	@RegisterFunction
@@ -82,8 +82,9 @@ class Player2D: KinematicBody2D(), Player {
 
 	@RegisterFunction
 	override fun goTo(pos: Vector2) {
+		aimPos = pos
 		if (state != State.MOVE) {
-			GD.print("Started moving towards apple")
+			GD.print("Started moving!")
 			state = State.MOVE
 		}
 	}
@@ -104,18 +105,24 @@ class Player2D: KinematicBody2D(), Player {
 	}
 
 	@RegisterFunction
-	override fun eatApple(code: String) {
-		var applesInGame: VariantArray<Any?> = apples.getChildren()
+	override fun eatApple(apple: Apple) {
+		var tApple = apple as Apple2D
+		exitAppleFromReach(tApple)
+		exitAppleFromSight(tApple)
+		tApple.getEaten()
 
-		for (apple in applesInGame) {
-			var tApple = apples as Apple2D
-			if (tApple.getCode() == code) {
-				exitAppleFromReach(tApple)
-				exitAppleFromSight(tApple)
-
-				tApple.getEaten()
-			}
-		}
+//		GD.print("Tried to eat apple")
+//		var applesInGame: VariantArray<Any?> = apples.getChildren()
+//
+//		for (apple in applesInGame) {
+//			var tApple = apples as Apple2D
+//			if (tApple.getCode() == code) {
+//				exitAppleFromReach(tApple)
+//				exitAppleFromSight(tApple)
+//
+//				tApple.getEaten()
+//			}
+//		}
 	}
 
 	@RegisterFunction
@@ -159,6 +166,7 @@ class Player2D: KinematicBody2D(), Player {
 	@RegisterFunction
 	fun animationProcess() {
 		particles.emitting = velocity.distanceTo(Vector2(0, 0)) > MIN_PARTICLE_SPEED
+
 	}
 
 	@RegisterFunction

@@ -4,8 +4,9 @@ import br.unicamp.cst.core.entities.Codelet
 import br.unicamp.cst.core.entities.MemoryObject
 import com.example.game.environment.Apple
 import com.example.game.CollectorMindCommunicator
+import godot.global.GD
 
-class HandActionCodelet : Codelet() {
+class HandActionCodelet(var communicator: CollectorMindCommunicator) : Codelet() {
     /*
         Sends commands from the handsMO to Godot as signals
     */
@@ -22,7 +23,7 @@ class HandActionCodelet : Codelet() {
         val applesInHand: ArrayList<Apple> = handsMO!!.i as ArrayList<Apple>
         if (applesInHand.size > 0) {
             for (apple in applesInHand) {
-                CollectorMindCommunicator.instance.eatApple(apple.getCode())
+                communicator.eatApple(apple)
             }
         }
     }

@@ -7,6 +7,7 @@ import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.core.NodePath
 import godot.core.Vector2
+import godot.global.GD
 import kotlin.random.Random
 
 @RegisterClass
@@ -47,5 +48,7 @@ class Environment2D: Node2D() {
 		newApple.appleCode = "$totalApples"
 		totalApples++
 		apples.addChild(newApple)
+
+		GD.print("Instanced apple")
 	}
 }

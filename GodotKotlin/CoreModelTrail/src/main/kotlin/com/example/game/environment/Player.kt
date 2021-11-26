@@ -6,7 +6,7 @@ interface Player {
     fun getPos(): Vector2
     fun getApplesInVision(): ArrayList<Apple>
     fun getApplesInTouch(): ArrayList<Apple>
-    fun eatApple(code: String)
+    fun eatApple(apple: Apple)
     fun forage()
     fun goTo(pos: Vector2)
 }

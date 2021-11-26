@@ -19,6 +19,6 @@ dependencies {
 }
 
 godot {
-    isAndroidExportEnabled.set(true)
+    isAndroidExportEnabled.set(false)
     dxToolPath.set("${System.getenv("ANDROID_SDK_ROOT")}/build-tools/30.0.3/dx")
 }

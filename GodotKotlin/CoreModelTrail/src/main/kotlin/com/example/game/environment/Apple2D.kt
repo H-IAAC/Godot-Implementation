@@ -15,6 +15,11 @@ class Apple2D: KinematicBody2D(), Apple {
 	var appleCode: String = ""
 
 	@RegisterFunction
+	fun setCode(code: String) {
+		appleCode = code
+	}
+
+	@RegisterFunction
 	override fun getPos(): Vector2 {
 		return position
 	}
