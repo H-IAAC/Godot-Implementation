@@ -1,0 +1,75 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://sprites/Default/Tilemap/froggy.png" type="Texture" id=1]
+[ext_resource path="res://src/main/kotlin/com/example/game/godot/Frog.kt" type="Script" id=2]
+
+[sub_resource type="Animation" id=1]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "idle"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5 ]
+}
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 4, 4 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 8, 8 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 40, 40 )
+
+[node name="Frog" type="KinematicBody2D"]
+script = ExtResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+hframes = 6
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 1 )
+anims/idle = SubResource( 2 )
+
+[node name="PhysicsHitbox" type="CollisionShape2D" parent="."]
+shape = SubResource( 3 )
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="InteractionHitbox" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource( 4 )
+
+[node name="VisionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="VisionHitbox" type="CollisionShape2D" parent="VisionArea"]
+shape = SubResource( 5 )
+
+[connection signal="body_entered" from="InteractionArea" to="." method="reset"]
+[connection signal="body_entered" from="VisionArea" to="." method="enter_vision_area"]
+[connection signal="body_exited" from="VisionArea" to="." method="exit_vision_area"]

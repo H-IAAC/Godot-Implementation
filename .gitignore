@@ -10,6 +10,7 @@ export_presets.cfg
 
 # Godot Kotlin ignores
 /GodotKotlin/CoreModelTrail/exports
+/GodotKotlin/MultiplatformCoreModelTrail/exports
 
 # IDE ignores
 /AndroidProject/.idea/caches

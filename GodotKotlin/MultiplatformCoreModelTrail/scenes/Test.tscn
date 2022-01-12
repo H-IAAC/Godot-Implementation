@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/main/kotlin/com/example/game/testcst/TestCommunicator.kt" type="Script" id=1]
+
+[node name="Test" type="Node2D"]
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = 45.0
+margin_top = 51.0
+margin_right = 970.0
+margin_bottom = 373.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
