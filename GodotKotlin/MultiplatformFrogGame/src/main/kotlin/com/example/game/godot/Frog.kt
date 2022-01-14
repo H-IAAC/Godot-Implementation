@@ -53,30 +53,32 @@ class Frog: Element() {
 
 	@RegisterFunction
 	fun getVision(): ArrayList<Car> {
-		for (i in 1 until carsInVision.size) {
-			var j = i - 1
-			var e = carsInVision[i]
+		return carsInVision
 
-			while (j >= 0 && manhattanDistance(this, carsInVision[j]) > manhattanDistance(this, carsInVision[i])) {
-				carsInVision[j + 1] = carsInVision[j]
-				j -= 1
-			}
-
-			carsInVision[j + 1] = e
-		}
-
-		var vision = ArrayList<Car>()
-		for (i in 0 until VISION_SIZE) {
-			if (i < carsInVision.size) {
-				vision.add(carsInVision[i])
-			} else {
-				var newCar = Car()
-				newCar.position = Vector2(-999, -999)
-				vision.add(newCar)
-			}
-		}
-
-		return vision
+//		for (i in 1 until carsInVision.size) {
+//			var j = i - 1
+//			var e = carsInVision[i]
+//
+//			while (j >= 0 && manhattanDistance(this, carsInVision[j]) > manhattanDistance(this, carsInVision[i])) {
+//				carsInVision[j + 1] = carsInVision[j]
+//				j -= 1
+//			}
+//
+//			carsInVision[j + 1] = e
+//		}
+//
+//		var vision = ArrayList<Car>()
+//		for (i in 0 until VISION_SIZE) {
+//			if (i < carsInVision.size) {
+//				vision.add(carsInVision[i])
+//			} else {
+//				var newCar = Car()
+//				newCar.position = Vector2(-999, -999)
+//				vision.add(newCar)
+//			}
+//		}
+//
+//		return vision
 	}
 
 	@RegisterFunction
