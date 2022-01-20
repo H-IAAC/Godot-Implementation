@@ -1,5 +1,6 @@
 package com.example.game.godot
 
+import com.example.game.FrogMindCommunicator
 import godot.Area2D
 import godot.Input
 import godot.KinematicBody2D
@@ -17,11 +18,15 @@ class Frog: Element() {
 
 	var carsInVision: ArrayList<Car> = ArrayList()
 
+	lateinit var mindCommunicator: FrogMindCommunicator
 	lateinit var visionArea: Area2D
 
 	@RegisterFunction
 	override fun _ready() {
 		super._ready()
+
+		mindCommunicator = getNode(NodePath("MindCommunicator")) as FrogMindCommunicator
+		mindCommunicator.player = this
 
 		visionArea = getNode(NodePath("VisionArea")) as Area2D
 	}
@@ -54,31 +59,6 @@ class Frog: Element() {
 	@RegisterFunction
 	fun getVision(): ArrayList<Car> {
 		return carsInVision
-
-//		for (i in 1 until carsInVision.size) {
-//			var j = i - 1
-//			var e = carsInVision[i]
-//
-//			while (j >= 0 && manhattanDistance(this, carsInVision[j]) > manhattanDistance(this, carsInVision[i])) {
-//				carsInVision[j + 1] = carsInVision[j]
-//				j -= 1
-//			}
-//
-//			carsInVision[j + 1] = e
-//		}
-//
-//		var vision = ArrayList<Car>()
-//		for (i in 0 until VISION_SIZE) {
-//			if (i < carsInVision.size) {
-//				vision.add(carsInVision[i])
-//			} else {
-//				var newCar = Car()
-//				newCar.position = Vector2(-999, -999)
-//				vision.add(newCar)
-//			}
-//		}
-//
-//		return vision
 	}
 
 	@RegisterFunction

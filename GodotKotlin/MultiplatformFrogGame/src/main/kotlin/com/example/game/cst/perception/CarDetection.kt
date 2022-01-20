@@ -4,6 +4,10 @@ import br.unicamp.cst.core.entities.Codelet
 import br.unicamp.cst.core.entities.MemoryObject
 import com.example.game.godot.Car
 
+/*
+    Stores unknown cars in the visionMO in the long-term memory, defined by the knownCarsMO
+*/
+
 class CarDetection: Codelet() {
     var visionMO: MemoryObject? = null
     var knownCarsMO: MemoryObject? = null

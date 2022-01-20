@@ -6,6 +6,12 @@ import com.example.game.godot.Car
 import godot.core.Vector2
 import kotlin.math.abs
 
+/*
+    From the knownCarsMO, creates a list of the n closest cars and stores it in the closestCarsMO. This list will always
+    have n elements, so if there are fewer than n cars in long-term memory, out of bound cars will be created to fill
+    the list
+*/
+
 class CloseCars: Codelet() {
     val TOTAL_CLOSE_CARS = 5
     val OUT_OF_BOUNDS_POSITION = Vector2(-999, -999)

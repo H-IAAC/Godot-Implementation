@@ -4,6 +4,10 @@ import br.unicamp.cst.core.entities.Codelet
 import br.unicamp.cst.core.entities.MemoryObject
 import com.example.game.FrogMindCommunicator
 
+/*
+    Gets the player's position and stores it in the positionMO
+*/
+
 class InnerSense(var communicator: FrogMindCommunicator): Codelet() {
     var positionMO: MemoryObject? = null
 

@@ -4,7 +4,12 @@ import br.unicamp.cst.core.entities.Codelet
 import br.unicamp.cst.core.entities.MemoryObject
 import com.example.game.godot.Car
 import godot.core.Vector2
+import godot.global.GD
 import kotlin.math.abs
+
+/*
+    Cleans cars that are too far away from the player from long-term memory, defined by the knownCarsMO
+*/
 
 class CarCleaning: Codelet() {
     val MAX_DISTANCE = 7
@@ -30,9 +35,12 @@ class CarCleaning: Codelet() {
         var pos = positionMO?.i as Vector2
 
         for (i in 0 until memoryList.size) {
-            if (manhattanDistance(memoryList[i].position, pos) > MAX_DISTANCE) {
+            if (!GD.isInstanceValid(memoryList[i])) {
+                memoryList.removeAt(i)
+            } else if (manhattanDistance(memoryList[i].position, pos) > MAX_DISTANCE) {
                 memoryList.removeAt(i)
             }
+
         }
     }
 }
