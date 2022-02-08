@@ -1,14 +1,11 @@
 package com.example.game.cst
 
-import br.unicamp.cst.core.entities.Codelet
 import br.unicamp.cst.core.entities.Mind
 import com.example.game.FrogMindCommunicator
-import com.example.game.cst.behavior.TestValueBasedRL
-import com.example.game.cst.motor.LookAction
-import com.example.game.cst.motor.MoveAction
 import com.example.game.cst.perception.CarCleaning
 import com.example.game.cst.perception.CarDetection
 import com.example.game.cst.perception.CloseCars
+import com.example.game.cst.perception.StateManager
 import com.example.game.cst.sensor.InnerSense
 import com.example.game.cst.sensor.Vision
 import com.example.game.godot.Car
@@ -21,8 +18,7 @@ class AgentMind(var communicator: FrogMindCommunicator) : Mind() {
         var visionMO = createMemoryObject("VISION", ArrayList<Car>())
         var knownCarsMO = createMemoryObject("KNOWN_CARS", ArrayList<Car>())
         var closestCarsMO = createMemoryObject("CLOSEST_CARS", ArrayList<Car>())
-        var lookActionMO = createMemoryObject("LOOK_ACTION", 0)
-        var moveActionMO = createMemoryObject("MOVE_ACTION", 0)
+        var stateMO = createMemoryObject("STATE", State(Vector2(0, 0), ArrayList<Car>()))
 
         // Create Sensor Codelets
         val innerSense = InnerSense(communicator)
@@ -51,21 +47,13 @@ class AgentMind(var communicator: FrogMindCommunicator) : Mind() {
         closeCars.addOutput(closestCarsMO)
         insertCodelet(closeCars, "PERCEPTION")
 
-        // Create Motor Codelets
-        val lookAction = LookAction()
-        lookAction.addInput(lookActionMO)
-        insertCodelet(lookAction, "MOTOR")
-
-        val moveAction = MoveAction()
-        moveAction.addInput(moveActionMO)
-        insertCodelet(moveAction, "MOTOR")
+        val stateManager = StateManager()
+        stateManager.addInput(positionMO)
+        stateManager.addInput(closestCarsMO)
+        stateManager.addOutput(stateMO)
 
         // Create Behavior Codelets
-        val testValueBasedRL = TestValueBasedRL()
-        testValueBasedRL.addInput(positionMO)
-        testValueBasedRL.addInput(closestCarsMO)
-        testValueBasedRL.addOutput(moveActionMO)
-        testValueBasedRL.addOutput(lookActionMO)
+        TODO("Create behavior structure")
 
         // Start Cognitive Cycle
         start()

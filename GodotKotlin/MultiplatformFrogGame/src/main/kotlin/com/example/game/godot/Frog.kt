@@ -20,6 +20,7 @@ class Frog: Element() {
 
 	lateinit var mindCommunicator: FrogMindCommunicator
 	lateinit var visionArea: Area2D
+	lateinit var parent: LevelBase
 
 	@RegisterFunction
 	override fun _ready() {
@@ -29,6 +30,7 @@ class Frog: Element() {
 		mindCommunicator.player = this
 
 		visionArea = getNode(NodePath("VisionArea")) as Area2D
+		parent = getParent() as LevelBase
 	}
 
 	@RegisterFunction
@@ -48,6 +50,8 @@ class Frog: Element() {
 	fun turn(dir: Vector2) {
 		if (canMove(dir)) {
 			move(dir)
+			getTree()?.callGroup("car", "turn")
+			parent.turn()
 		}
 	}
 

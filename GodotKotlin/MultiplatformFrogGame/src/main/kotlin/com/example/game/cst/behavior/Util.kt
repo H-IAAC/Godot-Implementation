@@ -1,4 +1,5 @@
 class Util {
+    /*
     fun getRandomNum(maxNum: Integer): Double {
         return Math.floor(Math.random() * maxNum)
     }
@@ -6,4 +7,5 @@ class Util {
     fun getRandomInt(maxNum: Integer): Int {
         return getRandomNum(maxNum).toInt()
     }
+    */
 }

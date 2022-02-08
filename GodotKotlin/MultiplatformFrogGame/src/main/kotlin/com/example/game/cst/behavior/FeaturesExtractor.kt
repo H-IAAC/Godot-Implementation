@@ -1,3 +1,4 @@
+package com.example.game.cst.behavior
 import java.util.ArrayList
 import java.util.LinkedHashMap
 import br.unicamp.cst.core.entities.Codelet
@@ -8,6 +9,7 @@ import br.unicamp.cst.core.entities.MemoryObject
 
 
 abstract class featuresExtractor : Codelet() {
+    /*
     fun getFeatures(state: ArrayList<Domain?>?, action: Integer?): LinkedHashMap<String, Double> {
         val f: LinkedHashMap<String, Double> = LinkedHashMap<String, Double>()
         val d_xy: Array<Integer> = Agent.idToAction(action) // change name agent!
@@ -18,4 +20,5 @@ abstract class featuresExtractor : Codelet() {
         * create features
         * */return f
     }
+    */
 }

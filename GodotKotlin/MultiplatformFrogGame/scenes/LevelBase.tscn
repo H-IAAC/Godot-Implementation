@@ -83,6 +83,4 @@ tile_data = PoolIntArray( 65541, 0, 2, 196607, 0, 65536, 131072, 0, 65537, 13107
 [node name="Camera" type="Camera2D" parent="."]
 script = ExtResource( 3 )
 
-[node name="SpawnTimer" type="Timer" parent="."]
-
-[connection signal="timeout" from="SpawnTimer" to="." method="end_spawn_timer"]
+[node name="CarContainer" type="Node2D" parent="."]

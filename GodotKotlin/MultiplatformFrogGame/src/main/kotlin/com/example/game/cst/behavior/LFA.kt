@@ -1,9 +1,13 @@
+package com.example.game.cst.behavior
+
+class LFA() {
+
+/*
 import java.util.ArrayList
 import java.util.Collections
 import java.util.LinkedHashMap
 import java.util.Set
 import com.example.game.cst.RLKotlin.FeaturesExtractor
-
 
 class LFA(alpha: Double, gamma: Double, epsilon: Double, epsilonDecay: Double, finalEpsilon: Double,
           numActions: Integer?, fe: FeaturesExtractor) :
@@ -101,5 +105,7 @@ class LFA(alpha: Double, gamma: Double, epsilon: Double, epsilonDecay: Double, f
 //    @Override
 //    protected fun calculateActivation() {
 //    }
+
+    */
 }
 

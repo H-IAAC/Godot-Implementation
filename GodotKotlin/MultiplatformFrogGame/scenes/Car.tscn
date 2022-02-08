@@ -38,7 +38,7 @@ tracks/0/keys = {
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 4, 4 )
 
-[node name="Car" type="KinematicBody2D"]
+[node name="Car" type="KinematicBody2D" groups=["car"]]
 collision_layer = 3
 script = ExtResource( 2 )
 

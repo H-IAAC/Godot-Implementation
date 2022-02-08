@@ -1,3 +1,6 @@
+class Domain() {
+
+/*
 class Domain<T>(var `val`: T) : Comparable<Domain<*>?> where T : Number?, T : Comparable<T>? {
     @Override
     override fun hashCode(): Int {
@@ -35,4 +38,6 @@ class Domain<T>(var `val`: T) : Comparable<Domain<*>?> where T : Number?, T : Co
     override fun toString(): String {
         return `val`.toString()
     }
+
+    */
 }

@@ -1,7 +1,12 @@
-mport java.util.ArrayList;
+package com.example.game.cst.behavior
+
+import java.util.ArrayList;
 import java.util.Collections
 import java.util.HashMap
 
+class Tabular() {
+
+/*
 class Tabular  //constructor
 (alpha: Double, gamma: Double, epsilon: Double, epsilonDecay: Double, finalEpsilon: Double, numActions: Integer?) :
     ValueBasedRL(alpha, gamma, epsilon: Double, epsilonDecay: Double, finalEpsilon: Double, numActions: Integer?) {
@@ -69,4 +74,6 @@ class Tabular  //constructor
         // perhaps it is not even necessary! Passed my reference.
         qTable.put(lastState, qValues)
     }
+
+    */
 }

@@ -2,8 +2,13 @@ import java.util.ArrayList
 import br.unicamp.cst.core.entities.Codelet
 import br.unicamp.cst.core.entities.MemoryObject
 
+abstract class Environment() {
+
+/*
 abstract class Environment(actionSpace: Array<Domain>, codelets: ArrayList<Codelet?>,
                            memoryObjects: ArrayList<MemoryObject?>, displayGame: Boolean) {
+
+
     // (min value, max value, step: only if is discrete, type: 0 - Discrete, 1 - Continuous)
     protected var actionSpace: Array<Domain>
     protected var displayGame: Boolean
@@ -49,4 +54,6 @@ abstract class Environment(actionSpace: Array<Domain>, codelets: ArrayList<Codel
 
     // depending of your problem, you might want to display your environment.
     abstract fun render()
+
+    */
 }

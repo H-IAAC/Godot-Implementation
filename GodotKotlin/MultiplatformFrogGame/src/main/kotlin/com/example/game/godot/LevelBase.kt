@@ -13,6 +13,7 @@ class LevelBase: Node2D() {
 	val CELL_SIZE = 16
 	val SPAWN_TIME = 0.5
 	val MOVE_TIME = 0.5
+	val TURNS_FOR_SPAWN = 2
 
 	val SIZE_H = 20
 	val SIZE_V = 10
@@ -20,11 +21,13 @@ class LevelBase: Node2D() {
 	var hTiles = 1
 	var vTiles = 1
 
+	var totalTurns = 0
+
 	lateinit var frogPackedScene: PackedScene
 	lateinit var carPackedScene: PackedScene
 
 	lateinit var tilemap: TileMap
-	lateinit var timer: Timer
+	lateinit var carContainer: Node2D
 
 	@RegisterFunction
 	override fun _ready() {
@@ -32,7 +35,7 @@ class LevelBase: Node2D() {
 		carPackedScene = ResourceLoader.load("res://scenes/Car.tscn") as PackedScene
 
 		tilemap = getNode(NodePath("TileMap")) as TileMap
-		timer = getNode(NodePath("SpawnTimer")) as Timer
+		carContainer = getNode(NodePath("CarContainer")) as Node2D
 
 		initialize(SIZE_H, SIZE_V)
 	}
@@ -66,10 +69,8 @@ class LevelBase: Node2D() {
 		}
 
 		var frog = frogPackedScene.instance() as Frog
-		frog.position = Vector2(tHSize*CELL_SIZE/2, (vSize-1)*CELL_SIZE + CELL_SIZE/2.0)
+		frog.position = Vector2(CELL_SIZE/2.0, (vSize-1)*CELL_SIZE + CELL_SIZE/2.0)
 		addChild(frog)
-
-		timer.start(SPAWN_TIME)
 
 		hTiles = tHSize
 		vTiles = tVSize
@@ -91,14 +92,19 @@ class LevelBase: Node2D() {
 	}
 
 	@RegisterFunction
-	fun endSpawnTimer() {
-		timer.start(SPAWN_TIME)
+	fun turn() {
+		totalTurns += 1
+		if (totalTurns >= TURNS_FOR_SPAWN) {
+			totalTurns = 0
+			spawn()
+		}
+	}
 
+	@RegisterFunction
+	fun spawn() {
 		var car = carPackedScene.instance() as Car
 		car.position = Vector2(Random.nextInt(0, 1) * (hTiles-1) * CELL_SIZE + CELL_SIZE/2.0, Random.nextInt(1, vTiles - 2) * CELL_SIZE + CELL_SIZE/2.0)
 		addChild(car)
 		car.callDeferred("initialize", Vector2(1, 0), MOVE_TIME)
 	}
-
-
 }

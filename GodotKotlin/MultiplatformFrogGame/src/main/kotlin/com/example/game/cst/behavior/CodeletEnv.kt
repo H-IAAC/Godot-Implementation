@@ -2,6 +2,9 @@ import java.util.ArrayList
 import br.unicamp.cst.core.entities.Codelet
 import br.unicamp.cst.core.entities.MemoryObject
 
+class CodeletEnv() {
+
+/*
 class CodeletEnv(actionSpace: Array<Domain>, codelets: ArrayList<Codelet?>,
                            memoryObjects: ArrayList<MemoryObject?>, displayGame: Boolean) : Codelet() {
     // (min value, max value, step: only if is discrete, type: 0 - Discrete, 1 - Continuous)
@@ -54,4 +57,6 @@ class CodeletEnv(actionSpace: Array<Domain>, codelets: ArrayList<Codelet?>,
 
     // depending of your problem, you might want to display your CodeletEnv.
     abstract fun render()
+
+    */
 }

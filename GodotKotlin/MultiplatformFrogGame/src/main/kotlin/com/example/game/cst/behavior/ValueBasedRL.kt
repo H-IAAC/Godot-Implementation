@@ -1,3 +1,5 @@
+package com.example.game.cst.behavior
+
 import java.util.ArrayList
 import java.util.Collections
 
@@ -5,6 +7,9 @@ import br.unicamp.cst.core.entities.Codelet
 import br.unicamp.cst.core.entities.Memory
 import br.unicamp.cst.core.entities.MemoryObject
 
+abstract class ValueBasedRL() {
+
+/*
 abstract class ValueBasedRL: Codelet protected constructor(
         var ALPHA: Double, var GAMMA: Double, var epsilon: Double,
         var epsilonDecay: Double, var finalEpsilon: Double,
@@ -93,4 +98,6 @@ abstract class ValueBasedRL: Codelet protected constructor(
 
     // may be unnecessary
     protected abstract fun calculateActivation()
+
+    */
 }
