@@ -40,4 +40,28 @@ class FrogMindCommunicator: Node() {
 	fun getPosition(): Vector2 {
 		return player.position
 	}
+
+	fun moveUp() {
+		player.move(Vector2(0, -1))
+	}
+
+	fun moveRight() {
+		player.move(Vector2(1, 0))
+	}
+
+	fun moveDown() {
+		player.move(Vector2(0, 1))
+	}
+
+	fun moveLeft() {
+		player.move(Vector2(-1, 0))
+	}
+
+	fun reset() {
+
+	}
+
+	fun render() {
+
+	}
 }
