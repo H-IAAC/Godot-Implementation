@@ -11,8 +11,8 @@ public class LFA extends ValueBasedRL {
     private LinkedHashMap<String, Double> weights = new LinkedHashMap<String, Double>();
     private FeaturesExtractor extractor; // new featuresExtractor();
 
-    public LFA(Double alpha, Double gamma, Integer numActions, FeaturesExtractor fe) {
-        super(alpha, gamma, numActions);
+    public LFA(Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FeaturesExtractor fe) {
+        super(alpha, gamma, numActions, pathToSaveLearning);
         this.extractor = fe;
     }
 
@@ -59,5 +59,39 @@ public class LFA extends ValueBasedRL {
         return vals;
     }
 
+    protected void serializeLearning(String fileName) {
+        try {
+            FileOutputStream fileOutputStream =
+                    new FileOutputStream(this.pathToSaveFile + fileName);
+            ObjectOutputStream objectOutputStream =
+                    new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(this.weights);
 
+            objectOutputStream.close();
+            fileOutputStream.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void deserializeLearning(String fileName) {
+        try {
+            FileInputStream fileInputStream =
+                    new FileInputStream(this.pathToSaveFile + fileName);
+            ObjectInputStream objectInputStream =
+                    new ObjectInputStream(fileInputStream);
+            objectInputStream.readObject(this.weights);
+
+            objectInputStream.close();
+            fileInputStream.close();
+        }
+        catch(IOException e1) {
+            e1.printStackTrace();
+        }
+        catch (ClassNotFoundException e2) {
+            System.out.println("Class not found");
+            e2.printStackTrace();
+        }
+    }
 }

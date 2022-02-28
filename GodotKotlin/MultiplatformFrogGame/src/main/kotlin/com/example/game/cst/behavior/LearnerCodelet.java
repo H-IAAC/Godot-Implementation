@@ -4,11 +4,18 @@
 *   isTraining?
 *   isLFA? Define Features Extractor;
 *   render?
+*
 *   (FrogEnv)
-*   function step: ArrayList {state : ArrayList<Domain>, reward : Domain,
-*                             done : Boolean, info : String}
+*   function step(Domain idAction):
+*   return ArrayList { state: ArrayList<Domain>, reward: Domain,
+*                      done: Boolean, info: String }
+*
 *   (FrogMindCommunicator)
-*   function step: { done : Boolean }
+*   function step: return { done: Boolean }
+*
+*   (LearnerCodelet)
+*   function proc():
+*   should it run as a step or as a 'main'?
 * */
 
 package com.example.game.cst.behavior;
