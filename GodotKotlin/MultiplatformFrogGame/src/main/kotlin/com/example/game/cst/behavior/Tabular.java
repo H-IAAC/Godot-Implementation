@@ -1,5 +1,6 @@
 package com.example.game.cst.behavior;
-
+/*1. iniciar tabela-Q com valores com desvio-padrão definido
+* */
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

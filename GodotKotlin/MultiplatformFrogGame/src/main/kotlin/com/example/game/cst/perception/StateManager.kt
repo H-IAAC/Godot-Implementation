@@ -10,11 +10,13 @@ class StateManager: Codelet() {
     var positionMO: MemoryObject? = null
     var closestCarsMO: MemoryObject? = null
     var stateMO: MemoryObject? = null
+    var lastStateMO: MemoryObject? = null
 
     override fun accessMemoryObjects() {
         positionMO = getInput("POSITION") as MemoryObject
         closestCarsMO = getInput("CLOSEST_CARS") as MemoryObject
         stateMO = getOutput("STATE") as MemoryObject
+        lastStateMO = getOutput("LAST_STATE") as MemoryObject
     }
 
     override fun calculateActivation() {
@@ -22,6 +24,7 @@ class StateManager: Codelet() {
     }
 
     override fun proc() {
+        lastStateMO?.i = stateMO?.i
         stateMO?.i = State(positionMO?.i as Vector2, closestCarsMO?.i as ArrayList<Car>)
     }
 }

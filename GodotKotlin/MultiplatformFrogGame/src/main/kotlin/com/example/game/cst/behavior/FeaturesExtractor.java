@@ -1,5 +1,8 @@
 package com.example.game.cst.behavior;
 
+/* Atenção: pode ser necessário adicionar o estado antigo para que o aproximador funcione adequadamente.
+* 1. Precisa adicionar features de acordo com o jogo (recomendado fazer em uma classe filha)
+* */
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 

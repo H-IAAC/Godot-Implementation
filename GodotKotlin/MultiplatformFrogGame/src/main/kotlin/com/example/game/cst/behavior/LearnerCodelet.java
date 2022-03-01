@@ -1,4 +1,4 @@
-/*
+/*OUT-OF-DATE
 * TODO
 *   save Q-table
 *   isTraining?

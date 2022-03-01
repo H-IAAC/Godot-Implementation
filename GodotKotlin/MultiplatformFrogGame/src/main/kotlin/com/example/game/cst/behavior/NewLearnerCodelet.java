@@ -2,14 +2,14 @@ package com.example.game.cst.behavior;
 
 /*
 * StateManager: how to access older states? How to call it?
-    it was not necessary to create StateManager... just copy the state before the step.
+    (obs: it was not necessary to create StateManager... just copy the state before the step.)
 
 * stateMO: remember to apply getI() before communicating to the learning part! (done)
-* Q-table / LFA Weights: how to save it? (ok)
+* Q-table / LFA Weights: how to save it? (done)
     Serialize it. Notice that HashMap already implements Serializable.io. Follow to tutorial:
     https://www.geeksforgeeks.org/how-to-serialize-hashmap-in-java/
 
-* What is the real purpose of communicator?
+* What is the real purpose of the communicator?
  */
 
 

@@ -1,5 +1,7 @@
 package com.example.game.cst.behavior;
 
+/* 1. Needs to implement reward policy */
+
 import br.unicamp.cst.core.entities.MemoryObject;
 import br.unicamp.cst.util.viewer.ObjectTreeNode;
 import com.example.game.FrogMindCommunicator;
@@ -16,18 +18,6 @@ public class FrogEnv extends  Environment {
         this.communicator = communicator;
     }
 
-    // it is probably unnecessary
-    @Override
-    protected void extractMemoryObjects() {
-        ArrayList<Domain> state = ((ArrayList<Domain>) super.stateMO.getI());
-    }
-
-    @Override
-    public ArrayList<Domain> reset() {
-        // return communicator.reset();
-        return new ArrayList<Domain>();
-    }
-
     /*
     * create custom metric of reward
     */
@@ -39,15 +29,15 @@ public class FrogEnv extends  Environment {
     }
 
     /*
-    * return ArrayList { state: ArrayList<Domain>, reward: Domain,
+    * calls a step in the environment.
+    * Return ArrayList { state: ArrayList<Domain>, reward: Domain,
                           done: Boolean, info: String }
     * */
     @Override
     public ArrayList step(Domain action) {
-        // return communicator.step(action);
         boolean isDone = communicator.step(action.intValue());
-        ArrayList step = new ArrayList();
 
+        ArrayList step = new ArrayList();
         step.add(this.stateMO.getI());
         step.add(this.getReward());
         step.add(isDone);
@@ -60,4 +50,17 @@ public class FrogEnv extends  Environment {
     public void render() {
         communicator.render();
     }
+
+    // it is probably unnecessary
+    @Override
+    protected void extractMemoryObjects() {
+        ArrayList<Domain> state = ((ArrayList<Domain>) super.stateMO.getI());
+    }
+
+    @Override
+    public ArrayList<Domain> reset() {
+        communicator.reset();
+        return this.stateMO.getI();
+    }
 }
+

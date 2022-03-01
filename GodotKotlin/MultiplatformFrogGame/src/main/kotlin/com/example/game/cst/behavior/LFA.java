@@ -1,5 +1,8 @@
 package com.example.game.cst.behavior;
 
+/*
+* Atenção: pode ser necessário alterar valor dos parâmetros de getFeatures (conferir FeaturesExtractor) */
+
 import com.example.game.cst.behavior.ValueBasedRL;
 
 import java.util.ArrayList;
