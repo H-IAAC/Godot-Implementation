@@ -6,8 +6,8 @@ import java.util.HashMap;
 
 
 public abstract class Environment {
-    MemoryObject stateMO;
-    Domain[] actionSpace;
+    protected MemoryObject stateMO;
+    protected Domain[] actionSpace;
 
     public Environment(MemoryObject stateMO, Domain[] actionSpace) {
         this.stateMO = stateMO;

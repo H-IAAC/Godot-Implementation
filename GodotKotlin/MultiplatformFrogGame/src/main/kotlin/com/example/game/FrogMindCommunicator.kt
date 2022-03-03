@@ -64,4 +64,8 @@ class FrogMindCommunicator: Node() {
 	fun render() {
 
 	}
+
+	fun step(action: Int): Boolean {
+		return true
+	}
 }

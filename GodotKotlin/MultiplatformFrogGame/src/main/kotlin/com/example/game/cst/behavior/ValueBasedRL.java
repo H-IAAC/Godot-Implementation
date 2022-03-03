@@ -4,23 +4,32 @@ import com.example.game.cst.behavior.Domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
 public abstract class ValueBasedRL {
     protected Double ALPHA;
     protected Double GAMMA;
     protected Integer numActions;
+    protected String pathToSaveLearning;
 
-    ValueBasedRL(Double ALPHA, Double GAMMA, Integer numActions) {
+    ValueBasedRL(Double ALPHA, Double GAMMA, Integer numActions, String pathToSaveLearning) {
         this.ALPHA = ALPHA;
         this.GAMMA = GAMMA;
         this.numActions = numActions;
+        this.pathToSaveLearning = pathToSaveLearning;
     }
 
+    /* updates your learning table (Q-table or linear function weights) */
     protected void update(ArrayList<Domain> state, ArrayList<Domain> newState,
                           Domain action, Domain reward) {
         /* TODO */
         return;
     }
+
     protected Double getValue(ArrayList<Domain> state, Domain action) {
         /* TODO */
         return new Double(-100);
@@ -56,4 +65,8 @@ public abstract class ValueBasedRL {
         }
     }
 
+    /* save your learning content (Q-table or linear function weights) is a byte stream format */
+    protected abstract void serializeLearning(String fileName);
+    /* load your learning content (Q-table or linear function weights) from a byte stream format */
+    protected abstract void deserializeLearning(String fileName);
 }

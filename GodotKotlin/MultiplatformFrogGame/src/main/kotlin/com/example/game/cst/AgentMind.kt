@@ -20,6 +20,7 @@ class AgentMind(var communicator: FrogMindCommunicator) : Mind() {
         var knownCarsMO = createMemoryObject("KNOWN_CARS", ArrayList<Car>())
         var closestCarsMO = createMemoryObject("CLOSEST_CARS", ArrayList<Car>())
         var stateMO = createMemoryObject("STATE", ArrayList<Domain<Double>>())
+        var lastStateMO = createMemoryObject("LAST_STATE", ArrayList<Domain<Double>>())
 
         // Create Sensor Codelets
         val innerSense = InnerSense(communicator)
@@ -52,6 +53,7 @@ class AgentMind(var communicator: FrogMindCommunicator) : Mind() {
         stateManager.addInput(positionMO)
         stateManager.addInput(closestCarsMO)
         stateManager.addOutput(stateMO)
+        stateManager.addOutput(lastStateMO)
 
         // Create Behavior Codelets
         TODO("Create behavior structure")
