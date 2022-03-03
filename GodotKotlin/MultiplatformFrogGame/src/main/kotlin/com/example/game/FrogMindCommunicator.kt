@@ -38,7 +38,7 @@ class FrogMindCommunicator: Node() {
 		Returns the player's position
 	*/
 	fun getPosition(): Vector2 {
-		return player.position
+		return player.cellPos
 	}
 
 	fun moveUp() {

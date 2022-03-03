@@ -31,6 +31,8 @@ class Frog: Element() {
 
 		visionArea = getNode(NodePath("VisionArea")) as Area2D
 		parent = getParent() as LevelBase
+
+		animationPlayer.play("idle_front")
 	}
 
 	@RegisterFunction
@@ -50,8 +52,20 @@ class Frog: Element() {
 	fun turn(dir: Vector2) {
 		if (canMove(dir)) {
 			move(dir)
-			getTree()?.callGroup("car", "turn")
+			for (car: Any? in getTree()?.getNodesInGroup("car")!!) {
+				var new_car = car as Car
+				new_car.turn()
+			}
 			parent.turn()
+
+			if (dir.y == -1.0) {
+				animationPlayer.play("jump_back")
+			} else if (dir.y == 1.0) {
+				animationPlayer.play("jump_front")
+			} else {
+				animationPlayer.play("jump_side")
+				sprite.flipH = dir.x != 1.0
+			}
 		}
 	}
 

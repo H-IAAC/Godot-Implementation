@@ -38,6 +38,9 @@ class LevelBase: Node2D() {
 		carContainer = getNode(NodePath("CarContainer")) as Node2D
 
 		initialize(SIZE_H, SIZE_V)
+
+		var viewport = getParent() as Viewport
+		viewport.size = Vector2(CELL_SIZE * hTiles, CELL_SIZE * vTiles)
 	}
 
 	@RegisterFunction
@@ -57,13 +60,13 @@ class LevelBase: Node2D() {
 		for (i in 0 until tHSize) {
 			for (j in 0 until tVSize) {
 				if (j == 0 || j == tVSize - 1) {
-					tilemap.setCellv(Vector2(i, j), 1)
+					tilemap.setCellv(Vector2(i, j), 0)
 				} else if (j == 1) {
-					tilemap.setCellv(Vector2(i, j), 2)
+					tilemap.setCellv(Vector2(i, j), 1)
 				} else if (j == tVSize - 2) {
-					tilemap.setCellv(Vector2(i, j), 4)
-				} else {
 					tilemap.setCellv(Vector2(i, j), 3)
+				} else {
+					tilemap.setCellv(Vector2(i, j), 2)
 				}
 			}
 		}
