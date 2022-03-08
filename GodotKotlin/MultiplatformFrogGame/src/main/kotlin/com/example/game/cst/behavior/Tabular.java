@@ -1,6 +1,7 @@
 package com.example.game.cst.behavior;
 /*1. iniciar tabela-Q com valores com desvio-padrão definido
 * */
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -75,7 +76,7 @@ public class Tabular extends ValueBasedRL {
             fileInputStream.close();
         }
         catch(IOException e1) {
-            e.printStackTrace();
+            e1.printStackTrace();
         }
         catch(ClassNotFoundException e2) {
             System.out.println("Class not found");

@@ -60,7 +60,7 @@ public class FrogEnv extends  Environment {
     @Override
     public ArrayList<Domain> reset() {
         communicator.reset();
-        return this.stateMO.getI();
+        return (ArrayList<Domain>) this.stateMO.getI();
     }
 }
 

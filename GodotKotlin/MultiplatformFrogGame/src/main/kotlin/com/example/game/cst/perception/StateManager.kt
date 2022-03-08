@@ -3,6 +3,7 @@ package com.example.game.cst.perception
 import br.unicamp.cst.core.entities.Codelet
 import br.unicamp.cst.core.entities.MemoryObject
 import com.example.game.cst.State
+import com.example.game.cst.behavior.Domain
 import com.example.game.godot.Car
 import godot.core.Vector2
 
@@ -24,7 +25,19 @@ class StateManager: Codelet() {
     }
 
     override fun proc() {
+        var new_state = ArrayList<Domain<Double>>()
+        var position = positionMO?.i as Vector2
+        var closestCars = closestCarsMO?.i as ArrayList<Car>
+
+        new_state.add(Domain<Double>(position.x))
+        new_state.add(Domain<Double>(position.y))
+
+        for (car: Car in closestCars) {
+            new_state.add(Domain<Double>(car.cellPos.x))
+            new_state.add(Domain<Double>(car.cellPos.y))
+        }
+
         lastStateMO?.i = stateMO?.i
-        stateMO?.i = State(positionMO?.i as Vector2, closestCarsMO?.i as ArrayList<Car>)
+        stateMO?.i = new_state
     }
 }

@@ -2,6 +2,7 @@ package com.example.game.cst
 
 import br.unicamp.cst.core.entities.Mind
 import com.example.game.FrogMindCommunicator
+import com.example.game.cst.behavior.Domain
 import com.example.game.cst.perception.CarCleaning
 import com.example.game.cst.perception.CarDetection
 import com.example.game.cst.perception.CloseCars
@@ -18,7 +19,8 @@ class AgentMind(var communicator: FrogMindCommunicator) : Mind() {
         var visionMO = createMemoryObject("VISION", ArrayList<Car>())
         var knownCarsMO = createMemoryObject("KNOWN_CARS", ArrayList<Car>())
         var closestCarsMO = createMemoryObject("CLOSEST_CARS", ArrayList<Car>())
-        var stateMO = createMemoryObject("STATE", State(Vector2(0, 0), ArrayList<Car>()))
+        var stateMO = createMemoryObject("STATE", ArrayList<Domain<Double>>())
+        var lastStateMO = createMemoryObject("LAST_STATE", ArrayList<Domain<Double>>())
 
         // Create Sensor Codelets
         val innerSense = InnerSense(communicator)
@@ -51,6 +53,7 @@ class AgentMind(var communicator: FrogMindCommunicator) : Mind() {
         stateManager.addInput(positionMO)
         stateManager.addInput(closestCarsMO)
         stateManager.addOutput(stateMO)
+        stateManager.addOutput(lastStateMO)
 
         // Create Behavior Codelets
         TODO("Create behavior structure")

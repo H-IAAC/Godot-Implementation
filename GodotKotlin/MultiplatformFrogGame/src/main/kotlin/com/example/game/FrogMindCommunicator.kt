@@ -38,7 +38,7 @@ class FrogMindCommunicator: Node() {
 		Returns the player's position
 	*/
 	fun getPosition(): Vector2 {
-		return player.position
+		return player.cellPos
 	}
 
 	fun moveUp() {
@@ -71,12 +71,7 @@ class FrogMindCommunicator: Node() {
 
 	}
 
-	/*
-	* Moves the agent and check if the episode is done.
-	*/
-	fun step(idAction: int) {
-		// moves accodingly
-		// returns if it is done
-		return false
+	fun step(action: Int): Boolean {
+		return true
 	}
 }

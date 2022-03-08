@@ -5,6 +5,7 @@ import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.core.NodePath
 import godot.core.Vector2
+import kotlin.random.Random
 
 @RegisterClass
 class Car: Element() {
@@ -16,6 +17,8 @@ class Car: Element() {
 	@RegisterFunction
 	override fun _ready() {
 		super._ready()
+
+		animationPlayer.play("idle_${Random.nextInt(0, 3)}")
 	}
 
 	@RegisterFunction
