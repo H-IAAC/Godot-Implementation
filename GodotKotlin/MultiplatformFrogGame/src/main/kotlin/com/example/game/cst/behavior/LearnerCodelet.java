@@ -20,6 +20,7 @@ import com.example.game.FrogMindCommunicator;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class LearnerCodelet extends Codelet {
     MemoryObject stateMO;
@@ -38,20 +39,26 @@ public class LearnerCodelet extends Codelet {
     // actionSpace[3] = {isRealDomain(0 or 1), minValue, maxValue-1}
     Domain<Double>[] actionSpace;
     FrogEnv env;
-    String pathToSaveLearning;
-    // e.g. "q_learning.txt", "lfa_weights.txt"
-    String learningFileName;
-
-    Boolean episodeIsDone = false;
-    Domain reward = new Domain(0.0);
     Long currEpisode = 0L;
     Integer currStep = 0;
+    private CSV csvRewardRecord;
+    // Serialization of q-table or weights. e.g. "q_learning.ser", "lfa_weights.ser"
+    String learningFileName;
+    // csv format. E.g. "cumulative_learning_lfa.csv"
+    String cumRewardFileName;
+    // for both learning and cumulative reward
+    String localPathToCheckpoint;
+    Boolean episodeIsDone = false;
+    Domain reward = new Domain(0.0);
+    Long checkpointEachNEpisodes;
+    private Double greatestCheckpointReward = Double.MIN_VALUE;
 
     LearnerCodelet(MemoryObject stateMO, FrogMindCommunicator communicator,
                    Double alpha, Double gamma, Double epsilonInitial, Double epsilonFinal,
                    Long numEpisodes, Boolean isTraining, Boolean isTabular,
                    ValueBasedRL learning, Domain[] actionSpace,
-                   String pathToSaveLearning, String learningFileName) {
+                   String localPathToCheckpoint, String learningFileName,
+                   String cumRewardFileName, Long checkpointEachNEpisodes) {
         this.stateMO = stateMO;
         this.communicator = communicator;
         this.alpha = alpha;
@@ -65,8 +72,10 @@ public class LearnerCodelet extends Codelet {
         this.isTabular = isTabular;
         this.actionSpace = actionSpace;
         this.env = new FrogEnv(stateMO, actionSpace, communicator);
-        this.pathToSaveLearning = pathToSaveLearning;
+        this.localPathToCheckpoint = localPathToCheckpoint;
         this.learningFileName = learningFileName;
+        this.cumRewardFileName = cumRewardFileName;
+        this.checkpointEachNEpisodes = checkpointEachNEpisodes;
         setLearningType();
     }
 
@@ -75,36 +84,37 @@ public class LearnerCodelet extends Codelet {
             this.qLearning =
                     new Tabular(this.alpha, this.gamma,
                             this.actionSpace[2].intValue(),
-                            this.pathToSaveLearning);
+                            this.localPathToCheckpoint);
         } else {
             FeaturesExtractor fe = new FeaturesExtractor();
             this.lfa =
                     new LFA(this.alpha, this.gamma,
                             this.actionSpace[2].intValue(),
-                            this.pathToSaveLearning, fe);
+                            this.localPathToCheckpoint, fe);
         }
     }
 
     @Override
     public void proc() {
         if (this.currEpisode < this.numEpisodes) {
+            
             if (this.currStep == 0 && this.currEpisode == 0) {
                 if (Files.exists(
-                        Path.of(this.pathToSaveLearning + this.learningFileName))) {
-                    if (this.isTabular)
-                        this.qLearning.deserializeLearning(this.learningFileName);
-                    else
-                        this.lfa.deserializeLearning(this.learningFileName);
+                        Path.of(this.localPathToCheckpoint + this.learningFileName))) {
+                    this.deserializeLearning();
                 }
             }
+
             if(!this.episodeIsDone) {
                 Domain idAction;
                 if (isTabular)
                     idAction =
-                            qLearning.epsilonGreedyPolicy(this.epsilon, (ArrayList<Domain>) this.stateMO.getI());
+                            qLearning.epsilonGreedyPolicy(this.epsilon, (
+                                ArrayList<Domain>) this.stateMO.getI());
                 else
                     idAction =
-                            lfa.epsilonGreedyPolicy(this.epsilon, (ArrayList<Domain>) this.stateMO.getI());
+                            lfa.epsilonGreedyPolicy(this.epsilon, 
+                                (ArrayList<Domain>) this.stateMO.getI());
 
                 ArrayList<Domain> lastState =
                         new ArrayList<Domain>(
@@ -126,7 +136,19 @@ public class LearnerCodelet extends Codelet {
                 }
 
             }
+
             else {
+                if ((this.currEpisode+1) % this.checkpointEachNEpisodes == 0) {
+                    if (this.reward.doubleValue() > this.greatestCheckpointReward) {
+                        this.greatestCheckpointReward = this.reward.doubleValue();
+                        serializeLearning();
+                    }
+                }
+                
+                csvRewardRecord.recordNewEpisode(
+                    this.currEpisode, this.reward, this.epsilon);
+                this.reward = new Domain<Double>(0.0);
+                this.currStep = 0;
                 this.currEpisode++;
                 this.env.reset();
                 this.episodeIsDone = false;
@@ -138,16 +160,37 @@ public class LearnerCodelet extends Codelet {
         }
 
         else {
-            if (this.isTabular) {
-                qLearning.serializeLearning(this.learningFileName);
-            }
-            else {
-                lfa.serializeLearning(this.learningFileName);
-            }
-            // TODO -> finish training
+            serializeLearning(this.localPathToCheckpoint + "final_" + this.learningFileName);
+            // TODO (is there more things to be done?) -> finish training
         }
     }
 
+    private void serializeLearning() {
+        if (this.isTabular) {
+            qLearning.serializeLearning(this.localPathToCheckpoint + this.learningFileName);
+        }
+        else {
+            lfa.serializeLearning(this.localPathToCheckpoint + this.learningFileName);
+        }
+    }
+
+    private void serializeLearning(String path) {
+        if (this.isTabular) {
+            qLearning.serializeLearning(path);
+        }
+        else {
+            lfa.serializeLearning(path);
+        }
+    }
+
+    private void deserializeLearning() {
+        if (this.isTabular) {
+            qLearning.deserializeLearning(this.localPathToCheckpoint + this.learningFileName);
+        }
+        else {
+            lfa.deserializeLearning(this.localPathToCheckpoint + this.learningFileName);
+        }
+    }
 
     @Override
     public void accessMemoryObjects () {

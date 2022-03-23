@@ -10,8 +10,8 @@ import godot.annotation.RegisterFunction
 import godot.core.Vector2
 
 /*
-	Communicator between the player's body (Frog) and the player's mind (AgentMind). Instanced in the player's body and
-	creates the player's mind
+	Communicator between the player's body (Frog) and the player's mind (AgentMind).
+	Instanced in the player's body and creates the player's mind
 */
 
 @RegisterClass
@@ -58,10 +58,16 @@ class FrogMindCommunicator: Node() {
 		player.move(Vector2(-1, 0))
 	}
 
+	/*
+	* Reset the game and returns the initial state.
+	 */
 	fun reset() {
 		player.reset(KinematicBody2D())
 	}
 
+	/*
+	Display the game.
+	 */
 	fun render() {
 		return
 	}
