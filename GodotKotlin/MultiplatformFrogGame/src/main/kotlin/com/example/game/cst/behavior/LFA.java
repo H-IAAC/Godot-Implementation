@@ -1,12 +1,10 @@
 package com.example.game.cst.behavior;
 
 /*
-* Atenção: pode ser necessário alterar valor dos parâmetros de getFeatures (conferir FeaturesExtractor) */
+ * Atenção: pode ser necessário alterar valor dos parâmetros de getFeatures (conferir FeaturesExtractor) */
 
-import com.example.game.cst.behavior.ValueBasedRL;
-
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
@@ -24,14 +22,14 @@ public class LFA extends ValueBasedRL {
                        Domain action, Domain reward) {
         LinkedHashMap<String, Double> gradient = this.extractor.getFeatures(state, action);
 
-        Double new_q_val = this.getBestValue(newState);
-        Double q_val = this.getValue(state, action);
+        Double new_q_val = super.getBestValue(newState);
+        Double q_val = super.getValue(state, action);
 
-        Double target = reward.doubleValue() + this.GAMMA * new_q_val;
+        Double target = reward.doubleValue() + super.GAMMA * new_q_val;
 
         Set<String> name_features = gradient.keySet();
         for(String f : name_features) {
-            Double w = this.ALPHA * (target - q_val) * gradient.get(f);
+            Double w = super.ALPHA * (target - q_val) * gradient.get(f);
             this.weights.put(f, w);
         }
     }
@@ -56,7 +54,7 @@ public class LFA extends ValueBasedRL {
     @Override
     protected ArrayList<Double> getValues(ArrayList<Domain> state) {
         ArrayList<Double> vals = null;
-        for (Integer a = 0; a < this.numActions; a++) {
+        for (Integer a = 0; a < super.numActions; a++) {
             vals.add(getValue(state, new Domain(a)));
         }
         return vals;
@@ -65,7 +63,7 @@ public class LFA extends ValueBasedRL {
     protected void serializeLearning(String fileName) {
         try {
             FileOutputStream fileOutputStream =
-                    new FileOutputStream(this.pathToSaveFile + fileName);
+                    new FileOutputStream(super.pathToSaveLearning + fileName);
             ObjectOutputStream objectOutputStream =
                     new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(this.weights);
@@ -81,10 +79,11 @@ public class LFA extends ValueBasedRL {
     protected void deserializeLearning(String fileName) {
         try {
             FileInputStream fileInputStream =
-                    new FileInputStream(this.pathToSaveFile + fileName);
+                    new FileInputStream(super.pathToSaveLearning + fileName);
             ObjectInputStream objectInputStream =
                     new ObjectInputStream(fileInputStream);
-            objectInputStream.readObject(this.weights);
+            //TODO("Figure out what's the right way to handle objectInputStream")
+            //objectInputStream.readObject(this.weights);
 
             objectInputStream.close();
             fileInputStream.close();
@@ -92,9 +91,9 @@ public class LFA extends ValueBasedRL {
         catch(IOException e1) {
             e1.printStackTrace();
         }
-        catch (ClassNotFoundException e2) {
-            System.out.println("Class not found");
-            e2.printStackTrace();
-        }
+//        catch (ClassNotFoundException e2) {
+//            System.out.println("Class not found");
+//            e2.printStackTrace();
+//        }
     }
 }

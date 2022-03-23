@@ -2,7 +2,6 @@ package com.example.game.cst.behavior;
 import br.unicamp.cst.core.entities.MemoryObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public abstract class Environment {

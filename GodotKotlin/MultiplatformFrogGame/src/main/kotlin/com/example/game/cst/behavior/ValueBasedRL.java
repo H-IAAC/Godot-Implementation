@@ -1,14 +1,7 @@
 package com.example.game.cst.behavior;
-import com.example.game.cst.behavior.Domain;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 
 public abstract class ValueBasedRL {
     protected Double ALPHA;
@@ -52,7 +45,7 @@ public abstract class ValueBasedRL {
         return id;
     }
 
-    protected Double getBestValue(ArrayList<Domain> state) {
+    public Double getBestValue(ArrayList<Domain> state) {
         return Collections.max(getValues(state));
     }
 

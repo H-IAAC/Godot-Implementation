@@ -3,7 +3,6 @@ package com.example.game.cst.behavior;
 /* 1. Needs to implement reward policy */
 
 import br.unicamp.cst.core.entities.MemoryObject;
-import br.unicamp.cst.util.viewer.ObjectTreeNode;
 import com.example.game.FrogMindCommunicator;
 
 import java.util.ArrayList;
@@ -19,8 +18,8 @@ public class FrogEnv extends  Environment {
     }
 
     /*
-    * create custom metric of reward
-    */
+     * create custom metric of reward
+     */
     private Domain getReward() {
         ArrayList<Domain> state = ((ArrayList<Domain>) super.stateMO.getI());
         Domain reward = new Domain(0.0);

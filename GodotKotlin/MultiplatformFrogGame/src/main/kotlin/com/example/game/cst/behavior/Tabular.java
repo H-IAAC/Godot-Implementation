@@ -1,9 +1,8 @@
 package com.example.game.cst.behavior;
 /*1. iniciar tabela-Q com valores com desvio-padrão definido
-* */
+ * */
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class Tabular extends ValueBasedRL {
@@ -17,7 +16,7 @@ public class Tabular extends ValueBasedRL {
 
     protected void initQValue(ArrayList<Domain> state) {
         ArrayList<Double> initVals = new ArrayList<Double>();
-        for (int i = 0; i < numActions; i++)
+        for (int i = 0; i < super.numActions; i++)
             initVals.add(Math.random());
 
         qTable.put(state, initVals);
@@ -39,10 +38,10 @@ public class Tabular extends ValueBasedRL {
     @Override
     protected void update (ArrayList<Domain> state, ArrayList<Domain> newState, Domain action, Domain reward) {
         Integer idAction = action.intValue();
-        Double maxFutureQ = this.getBestValue(newState);
-        ArrayList<Double> qValues = this.getValues(state);
+        Double maxFutureQ = super.getBestValue(newState);
+        ArrayList<Double> qValues = super.getValues(state);
         Double qVal = qValues.get(idAction);
-        qVal += this.ALPHA * (reward.doubleValue() + this.GAMMA * maxFutureQ - qVal);
+        qVal += super.ALPHA * (reward.doubleValue() + super.GAMMA * maxFutureQ - qVal);
         qValues.set(idAction, qVal);
         // perhaps it is not even necessary! Passed my reference.
         this.qTable.put(state, qValues);
@@ -51,7 +50,7 @@ public class Tabular extends ValueBasedRL {
     protected void serializeLearning(String fileName) {
         try {
             FileOutputStream fileOutputStream =
-                    new FileOutputStream(this.pathToSaveLearning + fileName);
+                    new FileOutputStream(super.pathToSaveLearning + fileName);
             ObjectOutputStream objectOutputStream =
                     new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(this.qTable);
@@ -66,7 +65,7 @@ public class Tabular extends ValueBasedRL {
     protected void deserializeLearning(String fileName) {
         try {
             FileInputStream fileInputStream =
-                    new FileInputStream(this.pathToSaveLearning + fileName);
+                    new FileInputStream(super.pathToSaveLearning + fileName);
             ObjectInputStream objectInputStream =
                     new ObjectInputStream(fileInputStream);
             this.qTable =

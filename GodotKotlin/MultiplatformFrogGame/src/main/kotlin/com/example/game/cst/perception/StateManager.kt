@@ -2,7 +2,6 @@ package com.example.game.cst.perception
 
 import br.unicamp.cst.core.entities.Codelet
 import br.unicamp.cst.core.entities.MemoryObject
-import com.example.game.cst.State
 import com.example.game.cst.behavior.Domain
 import com.example.game.godot.Car
 import godot.core.Vector2

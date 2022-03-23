@@ -3,6 +3,7 @@ package com.example.game
 import com.example.game.cst.AgentMind
 import com.example.game.godot.Car
 import com.example.game.godot.Frog
+import godot.KinematicBody2D
 import godot.Node
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
@@ -58,11 +59,11 @@ class FrogMindCommunicator: Node() {
 	}
 
 	fun reset() {
-
+		player.reset(KinematicBody2D())
 	}
 
 	fun render() {
-
+		return
 	}
 
 	fun step(action: Int): Boolean {

@@ -56,6 +56,7 @@ class AgentMind(var communicator: FrogMindCommunicator) : Mind() {
         stateManager.addOutput(lastStateMO)
 
         // Create Behavior Codelets
+
         TODO("Create behavior structure")
 
         // Start Cognitive Cycle
