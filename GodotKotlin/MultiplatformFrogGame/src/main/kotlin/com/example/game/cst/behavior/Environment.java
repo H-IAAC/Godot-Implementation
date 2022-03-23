@@ -1,5 +1,6 @@
 package com.example.game.cst.behavior;
 import br.unicamp.cst.core.entities.MemoryObject;
+import com.example.game.FrogMindCommunicator;
 
 import java.util.ArrayList;
 

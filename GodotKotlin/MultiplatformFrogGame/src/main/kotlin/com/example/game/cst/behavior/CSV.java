@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.util.Locale;
 
 public class CSV {
     private PrintWriter writer;

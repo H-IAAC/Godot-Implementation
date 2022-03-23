@@ -89,14 +89,10 @@ class Frog: Element() {
 	@RegisterFunction
 	fun enterVisionArea(body: KinematicBody2D) {
 		carsInVision.add(body as Car)
-
-		GD.print("Car entered")
 	}
 
 	@RegisterFunction
 	fun exitVisionArea(body: KinematicBody2D) {
 		carsInVision.remove(body as Car)
-
-		GD.print("Car exited")
 	}
 }

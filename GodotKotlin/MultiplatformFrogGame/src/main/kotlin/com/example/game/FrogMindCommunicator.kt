@@ -8,6 +8,7 @@ import godot.Node
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.core.Vector2
+import godot.global.GD
 
 /*
 	Communicator between the player's body (Frog) and the player's mind (AgentMind).
@@ -24,7 +25,14 @@ class FrogMindCommunicator: Node() {
 	*/
 	@RegisterFunction
 	override fun _ready() {
+		GD.print("Attempting to initialize mind")
 		mind = AgentMind(this)
+		GD.print("Mind initialized")
+	}
+
+	@RegisterFunction
+	fun print(message: String) {
+		GD.print(message)
 	}
 
 	/*
@@ -73,6 +81,13 @@ class FrogMindCommunicator: Node() {
 	}
 
 	fun step(action: Int): Boolean {
+		when (action) {
+			0 -> moveUp()
+			1 -> moveRight()
+			2 -> moveDown()
+			3 -> moveLeft()
+		}
+
 		return true
 	}
 }

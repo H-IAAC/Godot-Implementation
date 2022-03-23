@@ -53,13 +53,12 @@ public class LearnerCodelet extends Codelet {
     Long checkpointEachNEpisodes;
     private Double greatestCheckpointReward = Double.MIN_VALUE;
 
-    LearnerCodelet(MemoryObject stateMO, FrogMindCommunicator communicator,
+    public LearnerCodelet(FrogMindCommunicator communicator,
                    Double alpha, Double gamma, Double epsilonInitial, Double epsilonFinal,
                    Long numEpisodes, Boolean isTraining, Boolean isTabular,
                    ValueBasedRL learning, Domain[] actionSpace,
                    String localPathToCheckpoint, String learningFileName,
                    String cumRewardFileName, Long checkpointEachNEpisodes) {
-        this.stateMO = stateMO;
         this.communicator = communicator;
         this.alpha = alpha;
         this.gamma = gamma;
@@ -194,7 +193,7 @@ public class LearnerCodelet extends Codelet {
 
     @Override
     public void accessMemoryObjects () {
-        return;
+        stateMO = (MemoryObject) getInput("STATE");
     }
     @Override
     public void calculateActivation () {
