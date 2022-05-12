@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/scripts/HTTPTest.gd" type="Script" id=1]
+
+[node name="HTTPTest" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="Get" type="Button" parent="."]
+margin_left = 41.0
+margin_top = 34.0
+margin_right = 206.0
+margin_bottom = 97.0
+text = "Get API Data"
+
+[node name="Send" type="Button" parent="."]
+margin_left = 41.0
+margin_top = 114.0
+margin_right = 206.0
+margin_bottom = 177.0
+text = "Send API Data"
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[connection signal="pressed" from="Get" to="." method="get_api_data"]
+[connection signal="pressed" from="Send" to="." method="send_api_data"]
+[connection signal="request_completed" from="HTTPRequest" to="." method="receive_request"]

@@ -35,6 +35,8 @@ class AgentMind(var communicator: FrogMindCommunicator) : Mind() {
         vision.addOutput(visionMO)
         insertCodelet(vision, "SENSOR")
 
+        communicator.print("Created sensor codelets")
+
         // Create Perception Codelets
         val carDetection = CarDetection()
         carDetection.addInput(visionMO)
@@ -60,14 +62,22 @@ class AgentMind(var communicator: FrogMindCommunicator) : Mind() {
         stateManager.addOutput(lastStateMO)
         insertCodelet(stateManager, "PERCEPTION")
 
+        communicator.print("Created perception codelets")
+
         // Create Behavior Codelets
-        val dom = arrayOf<Domain<Double>>(Domain<Double>(0.0), Domain<Double>(0.0), Domain<Double>(3.0))
+        communicator.print("begin dom")
+        val dom = arrayOf(Domain(0.0), Domain(0.0), Domain(3.0))
+        communicator.print("dom")
         val tab = Tabular(0.99, 0.95, 4, "../../../../../../../../checkpoint/")
         val learnerCodelet = LearnerCodelet(communicator, 0.99, 0.95, 0.999, 0.05, 1000, true, true, tab, dom, "../../../../../../../../checkpoint/", "checkpoint", "reward", 300)
         learnerCodelet.addInput(stateMO)
         insertCodelet(learnerCodelet, "BEHAVIOR")
 
+        communicator.print("Created behavior codelets")
+
         // Start Cognitive Cycle
         start()
+
+        communicator.print("Started mind")
     }
 }
