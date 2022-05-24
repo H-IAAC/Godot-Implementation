@@ -1,4 +1,4 @@
 package com.example.godotrl.cst.perception;
 
-public class CarCleaning {
+public class StateManager {
 }
