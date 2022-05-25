@@ -1,4 +1,6 @@
 package com.example.godotrl.cst.perception;
 
-public class CarUpdater {
+import br.unicamp.cst.core.entities.Codelet;
+
+public class CarUpdater extends Codelet {
 }

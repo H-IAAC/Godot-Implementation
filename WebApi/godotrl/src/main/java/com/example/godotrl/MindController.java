@@ -42,18 +42,20 @@ public class MindController {
 
         JSONObject parsedInfo = new JSONObject(info);
 
-        // Update inner sense
+        // Get inner sense data
         JSONObject innerSenseInfo = parsedInfo.getJSONObject("innersense");
-        agentMind.updateInnerSense(new Vector2(innerSenseInfo.getDouble("x"), innerSenseInfo.getDouble("y")));
+        Vector2 agentPos = new Vector2(innerSenseInfo.getDouble("x"), innerSenseInfo.getDouble("y"));
 
-        // Update vision
+        // Get vision data
         JSONArray carsJSONArray = parsedInfo.getJSONArray("vision");
         ArrayList<Vector2> carsArray = new ArrayList<Vector2>();
         for (int i = 0; i < carsJSONArray.length(); i++) {
             JSONObject pos = carsJSONArray.getJSONObject(i);
             carsArray.add(new Vector2(pos.getDouble("x"), pos.getDouble("y")));
         }
-        agentMind.updateVision(carsArray);
+
+        // Update data
+        agentMind.updateSensor(agentPos, carsArray);
 
         return new AcceptContainer(id, "InnerSense: " + new Vector2(innerSenseInfo.getDouble("x"), innerSenseInfo.getDouble("y")) + " - Vision: " + carsArray);
     }
