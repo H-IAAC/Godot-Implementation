@@ -33,7 +33,6 @@ public class AgentMind extends Mind {
         MemoryObject knownCarsMO = createMemoryObject("KNOWN_CARS", new ArrayList<Vector2>());
         MemoryObject closestCarsMO = createMemoryObject("CLOSEST_CARS", new ArrayList<Vector2>());
         MemoryObject stateMO = createMemoryObject("STATE", new State(new Vector2(0, 0), new ArrayList<Vector2>()));
-        MemoryObject lastStateMO = createMemoryObject("LAST_STATE", new State(new Vector2(0, 0), new ArrayList<Vector2>()));
 
         // Behavior
         updateMO = createMemoryObject("UPDATE", new Updater());
@@ -69,7 +68,6 @@ public class AgentMind extends Mind {
         stateManager.addInput(positionMO);
         stateManager.addInput(closestCarsMO);
         stateManager.addOutput(stateMO);
-        stateManager.addOutput(lastStateMO);
         stateManager.addOutput(updateMO);
         insertCodelet(stateManager, "PERCEPTION");
 
@@ -78,7 +76,6 @@ public class AgentMind extends Mind {
         learnerCodelet.addOutput(updateMO);
         learnerCodelet.addOutput(motorMO);
         insertCodelet(learnerCodelet, "BEHAVIOR");
-
 
         start();
     }
