@@ -118,7 +118,11 @@ public class LearnerCodelet extends Codelet {
                 ArrayList<Domain> lastState =
                         new ArrayList<Domain>(
                                 (ArrayList<Domain>) this.stateMO.getI());
+
+
                 ArrayList step = env.step(idAction);
+
+
                 /* notice that it is not necessary to get state */
                 Double currReward = ((Double) step.get(1));
                 this.episodeIsDone = ((Boolean) step.get(2));
