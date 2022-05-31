@@ -1,14 +1,14 @@
 package com.example.game.cst
 
-import br.unicamp.cst.core.entities.Codelet
 import br.unicamp.cst.core.entities.Mind
 import com.example.game.FrogMindCommunicator
-import com.example.game.cst.behavior.TestValueBasedRL
-import com.example.game.cst.motor.LookAction
-import com.example.game.cst.motor.MoveAction
+import com.example.game.cst.behavior.Domain
+import com.example.game.cst.behavior.LearnerCodelet
+import com.example.game.cst.behavior.Tabular
 import com.example.game.cst.perception.CarCleaning
 import com.example.game.cst.perception.CarDetection
 import com.example.game.cst.perception.CloseCars
+import com.example.game.cst.perception.StateManager
 import com.example.game.cst.sensor.InnerSense
 import com.example.game.cst.sensor.Vision
 import com.example.game.godot.Car
@@ -16,13 +16,15 @@ import godot.core.Vector2
 
 class AgentMind(var communicator: FrogMindCommunicator) : Mind() {
     init {
+        communicator.print("Started AgentMind init")
         // Declare Memory Objects
         var positionMO = createMemoryObject("POSITION", Vector2(0, 0))
         var visionMO = createMemoryObject("VISION", ArrayList<Car>())
         var knownCarsMO = createMemoryObject("KNOWN_CARS", ArrayList<Car>())
         var closestCarsMO = createMemoryObject("CLOSEST_CARS", ArrayList<Car>())
-        var lookActionMO = createMemoryObject("LOOK_ACTION", 0)
-        var moveActionMO = createMemoryObject("MOVE_ACTION", 0)
+        var stateMO = createMemoryObject("STATE", ArrayList<Domain<Double>>())
+        var lastStateMO = createMemoryObject("LAST_STATE", ArrayList<Domain<Double>>())
+        communicator.print("Started")
 
         // Create Sensor Codelets
         val innerSense = InnerSense(communicator)
@@ -32,6 +34,8 @@ class AgentMind(var communicator: FrogMindCommunicator) : Mind() {
         val vision = Vision(communicator)
         vision.addOutput(visionMO)
         insertCodelet(vision, "SENSOR")
+
+        communicator.print("Created sensor codelets")
 
         // Create Perception Codelets
         val carDetection = CarDetection()
@@ -51,23 +55,29 @@ class AgentMind(var communicator: FrogMindCommunicator) : Mind() {
         closeCars.addOutput(closestCarsMO)
         insertCodelet(closeCars, "PERCEPTION")
 
-        // Create Motor Codelets
-        val lookAction = LookAction()
-        lookAction.addInput(lookActionMO)
-        insertCodelet(lookAction, "MOTOR")
+        val stateManager = StateManager()
+        stateManager.addInput(positionMO)
+        stateManager.addInput(closestCarsMO)
+        stateManager.addOutput(stateMO)
+        stateManager.addOutput(lastStateMO)
+        insertCodelet(stateManager, "PERCEPTION")
 
-        val moveAction = MoveAction()
-        moveAction.addInput(moveActionMO)
-        insertCodelet(moveAction, "MOTOR")
+        communicator.print("Created perception codelets")
 
         // Create Behavior Codelets
-        val testValueBasedRL = TestValueBasedRL()
-        testValueBasedRL.addInput(positionMO)
-        testValueBasedRL.addInput(closestCarsMO)
-        testValueBasedRL.addOutput(moveActionMO)
-        testValueBasedRL.addOutput(lookActionMO)
+        communicator.print("begin dom")
+        val dom = arrayOf(Domain(0.0), Domain(0.0), Domain(3.0))
+        communicator.print("dom")
+        val tab = Tabular(0.99, 0.95, 4, "../../../../../../../../checkpoint/")
+        val learnerCodelet = LearnerCodelet(communicator, 0.99, 0.95, 0.999, 0.05, 1000, true, true, tab, dom, "../../../../../../../../checkpoint/", "checkpoint", "reward", 300)
+        learnerCodelet.addInput(stateMO)
+        insertCodelet(learnerCodelet, "BEHAVIOR")
+
+        communicator.print("Created behavior codelets")
 
         // Start Cognitive Cycle
         start()
+
+        communicator.print("Started mind")
     }
 }

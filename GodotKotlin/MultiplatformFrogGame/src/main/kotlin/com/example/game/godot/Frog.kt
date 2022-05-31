@@ -20,6 +20,7 @@ class Frog: Element() {
 
 	lateinit var mindCommunicator: FrogMindCommunicator
 	lateinit var visionArea: Area2D
+	lateinit var parent: LevelBase
 
 	@RegisterFunction
 	override fun _ready() {
@@ -29,6 +30,9 @@ class Frog: Element() {
 		mindCommunicator.player = this
 
 		visionArea = getNode(NodePath("VisionArea")) as Area2D
+		parent = getParent() as LevelBase
+
+		animationPlayer.play("idle_front")
 	}
 
 	@RegisterFunction
@@ -48,6 +52,20 @@ class Frog: Element() {
 	fun turn(dir: Vector2) {
 		if (canMove(dir)) {
 			move(dir)
+			for (car: Any? in getTree()?.getNodesInGroup("car")!!) {
+				var new_car = car as Car
+				new_car.turn()
+			}
+			parent.turn()
+
+			if (dir.y == -1.0) {
+				animationPlayer.play("jump_back")
+			} else if (dir.y == 1.0) {
+				animationPlayer.play("jump_front")
+			} else {
+				animationPlayer.play("jump_side")
+				sprite.flipH = dir.x != 1.0
+			}
 		}
 	}
 
@@ -71,14 +89,10 @@ class Frog: Element() {
 	@RegisterFunction
 	fun enterVisionArea(body: KinematicBody2D) {
 		carsInVision.add(body as Car)
-
-		GD.print("Car entered")
 	}
 
 	@RegisterFunction
 	fun exitVisionArea(body: KinematicBody2D) {
 		carsInVision.remove(body as Car)
-
-		GD.print("Car exited")
 	}
 }

@@ -29,7 +29,7 @@ class CloseCars: Codelet() {
             var j = i - 1
             var e = l[i]
 
-            while(j >= 0 && manhattanDistance(pos, l[i].position) > manhattanDistance(pos, l[i].position)) {
+            while(j >= 0 && manhattanDistance(pos, l[i].cellPos) > manhattanDistance(pos, l[i].cellPos)) {
                 l[j + 1] = l[j]
                 j -= 1
             }
@@ -59,7 +59,7 @@ class CloseCars: Codelet() {
                 closestCars.add(memoryList[i])
             } else {
                 var newCar = Car()
-                newCar.position = OUT_OF_BOUNDS_POSITION
+                newCar.cellPos = OUT_OF_BOUNDS_POSITION
                 closestCars.add(newCar)
             }
         }
