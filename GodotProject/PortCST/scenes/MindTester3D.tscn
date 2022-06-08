@@ -1,0 +1,206 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://Player3D.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/Apple3D.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/MindTester3D.gd" type="Script" id=3]
+[ext_resource path="res://models/gridmap/Models/DAE format/road_straight.dae" type="PackedScene" id=4]
+[ext_resource path="res://models/gridmap/Models/DAE format/road_intersectionLine.dae" type="PackedScene" id=5]
+[ext_resource path="res://models/gridmap/Models/DAE format/tile_low.dae" type="PackedScene" id=6]
+[ext_resource path="res://models/gridmap/Models/DAE format/house_type04.dae" type="PackedScene" id=7]
+[ext_resource path="res://models/gridmap/Models/DAE format/house_type14.dae" type="PackedScene" id=8]
+[ext_resource path="res://models/gridmap/Models/DAE format/house_type09.dae" type="PackedScene" id=9]
+[ext_resource path="res://ButtonTheme.tres" type="Theme" id=10]
+[ext_resource path="res://models/gridmap/Models/DAE format/house_type01.dae" type="PackedScene" id=11]
+[ext_resource path="res://models/gridmap/Models/DAE format/fence_wide.dae" type="PackedScene" id=12]
+
+[sub_resource type="ViewportTexture" id=1]
+viewport_path = NodePath("Player3D/Viewport")
+
+[node name="MindTester3D" type="Spatial"]
+script = ExtResource( 3 )
+Apple3D = ExtResource( 2 )
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.846871, 0.531798, 0, -0.531798, 0.846871, 0.0393858, 7.3327, -0.184229 )
+current = true
+
+[node name="Player3D" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7 )
+
+[node name="Camera" parent="Player3D/Viewport" index="0"]
+transform = Transform( 1, 0, 0, 0, -1, 0, 0, 0, 1, 0.00557899, 1.34425, -1.04846 )
+
+[node name="Apples" type="Spatial" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="Spatial" type="Spatial" parent="."]
+transform = Transform( 5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0 )
+
+[node name="Spatial" type="Spatial" parent="Spatial"]
+transform = Transform( 4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0 )
+
+[node name="fence_wide" parent="Spatial/Spatial" instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6 )
+
+[node name="fence_wide2" parent="Spatial/Spatial" instance=ExtResource( 12 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.9, 0, -0.75 )
+
+[node name="house_type04" parent="Spatial/Spatial" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, -4.45 )
+
+[node name="house_type01" parent="Spatial/Spatial" instance=ExtResource( 11 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.1, 0, -3.55 )
+
+[node name="house_type14" parent="Spatial/Spatial" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 0, -3.8 )
+
+[node name="house_type09" parent="Spatial/Spatial" instance=ExtResource( 9 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.2, 0, -2.25 )
+
+[node name="fence_wide3" parent="Spatial/Spatial" instance=ExtResource( 12 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.75, 0, -2.2 )
+
+[node name="house_type10" parent="Spatial/Spatial" instance=ExtResource( 9 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.1, 0, -0.7 )
+
+[node name="road_straight" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.6 )
+
+[node name="road_straight2" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -1.6 )
+
+[node name="road_straight3" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -2.6 )
+
+[node name="road_straight4" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -3.6 )
+
+[node name="road_straight5" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -4.6 )
+
+[node name="road_straight6" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -5.6 )
+
+[node name="road_straight7" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -6.6 )
+
+[node name="road_straight8" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -7.6 )
+
+[node name="road_straight9" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -8.6 )
+
+[node name="road_straight10" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -9.6 )
+
+[node name="road_straight11" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -10.6 )
+
+[node name="road_straight12" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -11.6 )
+
+[node name="road_straight13" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -12.6 )
+
+[node name="road_straight14" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -12.6 )
+
+[node name="road_straight15" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -12.6 )
+
+[node name="road_straight16" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -12.6 )
+
+[node name="road_straight17" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -12.6 )
+
+[node name="road_straight18" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -12.6 )
+
+[node name="road_straight19" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -12.6 )
+
+[node name="road_straight20" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -12.6 )
+
+[node name="road_straight21" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, -12.6 )
+
+[node name="road_straight22" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -12.6 )
+
+[node name="road_straight23" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, -12.6 )
+
+[node name="road_straight24" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -12.6 )
+
+[node name="road_straight25" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -12.6 )
+
+[node name="road_straight26" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, -12.6 )
+
+[node name="road_straight27" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -12.6 )
+
+[node name="road_straight28" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -12.6 )
+
+[node name="road_straight29" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -12.6 )
+
+[node name="road_straight30" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -12.6 )
+
+[node name="road_straight31" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -12.6 )
+
+[node name="road_straight32" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -12.6 )
+
+[node name="road_straight33" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -12.6 )
+
+[node name="road_straight34" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -12.6 )
+
+[node name="road_straight35" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -12.6 )
+
+[node name="road_straight36" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -12.6 )
+
+[node name="tile_low" parent="Spatial" instance=ExtResource( 6 )]
+transform = Transform( 25.6, 0, 0, 0, 1, 0, 0, 0, 25.6, 0, -0.0173222, -6.6 )
+
+[node name="road_intersectionLine" parent="Spatial" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.6 )
+
+[node name="Button" type="Button" parent="."]
+margin_left = 18.0
+margin_top = 366.0
+margin_right = 141.0
+margin_bottom = 402.0
+theme = ExtResource( 10 )
+text = "Back"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_left = 656.184
+margin_top = 8.99933
+margin_right = 1548.18
+margin_bottom = 420.999
+texture = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="timeout" from="Timer" to="." method="on_timeout"]
+[connection signal="pressed" from="Button" to="." method="to_menu"]
+
+[editable path="Player3D"]

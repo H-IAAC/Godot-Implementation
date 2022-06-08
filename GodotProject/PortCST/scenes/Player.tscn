@@ -1,0 +1,58 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scripts/Player.gd" type="Script" id=1]
+[ext_resource path="res://sprites/vision_cone.png" type="Texture" id=2]
+[ext_resource path="res://sprites/Ships/ship_0001.png" type="Texture" id=3]
+[ext_resource path="res://sprites/Tiles/tile_0009.png" type="Texture" id=4]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 15.1963
+
+[sub_resource type="Gradient" id=2]
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[node name="Player" type="KinematicBody2D"]
+z_index = 5
+z_as_relative = false
+collision_mask = 0
+script = ExtResource( 1 )
+
+[node name="VisionCone" type="Light2D" parent="."]
+position = Vector2( -0.314987, 0 )
+texture = ExtResource( 2 )
+energy = 0.35
+
+[node name="CollectionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollectionHitbox" type="CollisionShape2D" parent="CollectionArea"]
+shape = SubResource( 1 )
+
+[node name="VisionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="VisionHitbox" type="CollisionPolygon2D" parent="VisionArea"]
+polygon = PoolVector2Array( 0, 0, -100, -450, 100, -450 )
+
+[node name="Particles" type="CPUParticles2D" parent="."]
+amount = 24
+lifetime_randomness = 0.5
+local_coords = false
+texture = ExtResource( 4 )
+direction = Vector2( 0, 1 )
+spread = 20.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 100.0
+damping = 100.0
+damping_random = 0.5
+color_ramp = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+
+[connection signal="body_entered" from="CollectionArea" to="." method="enter_apple_in_reach"]
+[connection signal="body_exited" from="CollectionArea" to="." method="exit_apple_from_reach"]
+[connection signal="body_entered" from="VisionArea" to="." method="enter_apple_in_sight"]
+[connection signal="body_exited" from="VisionArea" to="." method="exit_apple_from_sight"]

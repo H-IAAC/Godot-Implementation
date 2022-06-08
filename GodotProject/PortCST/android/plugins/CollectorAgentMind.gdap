@@ -1,0 +1,5 @@
+[config]
+
+name="CollectorAgentMind"
+binary_type="local"
+binary="CollectorAgentMind-debug.aar"

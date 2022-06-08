@@ -1,0 +1,5 @@
+[config]
+
+name="RequestTest"
+binary_type="local"
+binary="RequestTest-debug.aar"

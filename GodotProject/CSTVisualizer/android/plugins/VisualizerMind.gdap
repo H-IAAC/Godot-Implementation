@@ -1,0 +1,5 @@
+[config]
+
+name="VisualizerMind"
+binary_type="local"
+binary="VisualizerMind-debug.aar"

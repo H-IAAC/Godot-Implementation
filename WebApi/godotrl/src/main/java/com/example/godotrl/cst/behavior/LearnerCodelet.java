@@ -87,7 +87,7 @@ public class LearnerCodelet extends Codelet {
             // Gets s_n, s_(n-1) and a_(n-1). On first call, s_(-1) = null and a_(-1) = Action.INVALID
             State lastState = (State) lastStateMO.getI();
             Action lastAction = (Action) motorMO.getI();
-            
+
             State state = (State) stateMO.getI();
 
             /*

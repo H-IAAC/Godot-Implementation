@@ -1,0 +1,64 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scripts/Menu.gd" type="Script" id=1]
+[ext_resource path="res://sprites/black.png" type="Texture" id=2]
+[ext_resource path="res://RichTextTheme.tres" type="Theme" id=3]
+[ext_resource path="res://ButtonTheme.tres" type="Theme" id=4]
+
+[node name="Menu" type="Sprite"]
+texture = ExtResource( 2 )
+centered = false
+script = ExtResource( 1 )
+
+[node name="2D" type="Button" parent="."]
+margin_left = 174.0
+margin_top = 84.0
+margin_right = 321.0
+margin_bottom = 134.0
+theme = ExtResource( 4 )
+text = "2D Demo"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="3D" type="Button" parent="."]
+margin_left = 561.0
+margin_top = 84.0
+margin_right = 708.0
+margin_bottom = 134.0
+theme = ExtResource( 4 )
+text = "3D Demo"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = 0.159119
+margin_top = 256.0
+margin_right = 891.159
+margin_bottom = 365.0
+rect_clip_content = false
+theme = ExtResource( 3 )
+bbcode_enabled = true
+bbcode_text = "[center][wave][color=blue]CST-Godot[/color] implementation demo[/wave]
+
+For more on CST - https://cst.fee.unicamp.br/
+Contact - morais_gu@hotmail.com
+
+Assets from Kenney.nl
+Kong Text font from zone38.net"
+text = "CST-Godot implementation demo
+
+For more on CST - https://cst.fee.unicamp.br/
+Contact - morais_gu@hotmail.com
+
+Assets from Kenney.nl
+Kong Text font from zone38.net"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="2D" to="." method="go_to" binds= [ "res://scenes/MindTester.tscn" ]]
+[connection signal="pressed" from="3D" to="." method="go_to" binds= [ "res://scenes/MindTester3D.tscn" ]]
