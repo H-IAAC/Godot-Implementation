@@ -2,7 +2,9 @@ package com.example.godotrl.cst;
 
 import br.unicamp.cst.core.entities.MemoryObject;
 import br.unicamp.cst.core.entities.Mind;
+import com.example.godotrl.cst.behavior.Domain;
 import com.example.godotrl.cst.behavior.LearnerCodelet;
+import com.example.godotrl.cst.behavior.Tabular;
 import com.example.godotrl.cst.perception.CarDetection;
 import com.example.godotrl.cst.perception.CarUpdater;
 import com.example.godotrl.cst.perception.CloseCars;
@@ -32,7 +34,8 @@ public class AgentMind extends Mind {
         // Perception
         MemoryObject knownCarsMO = createMemoryObject("KNOWN_CARS", new ArrayList<Vector2>());
         MemoryObject closestCarsMO = createMemoryObject("CLOSEST_CARS", new ArrayList<Vector2>());
-        MemoryObject stateMO = createMemoryObject("STATE", new State(new Vector2(0, 0), new ArrayList<Vector2>()));
+        MemoryObject stateMO = createMemoryObject("STATE", null);
+        MemoryObject lastStateMO = createMemoryObject("LAST_STATE", null);
 
         // Behavior
         updateMO = createMemoryObject("UPDATE", new Updater());
@@ -68,13 +71,40 @@ public class AgentMind extends Mind {
         stateManager.addInput(positionMO);
         stateManager.addInput(closestCarsMO);
         stateManager.addOutput(stateMO);
+        stateManager.addOutput(lastStateMO);
         stateManager.addOutput(updateMO);
         insertCodelet(stateManager, "PERCEPTION");
 
         // Behavior
-        LearnerCodelet learnerCodelet = new LearnerCodelet();
+
+        String pathToSaveLearning = "~/IC/";
+        String file = pathToSaveLearning + "q-learning.txt";
+        String rewardFile = pathToSaveLearning + "rewards.txt";
+        Long checkPointEachNEpisodes = 1000L;
+
+        /*
+         * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning
+         * */
+        Tabular rl = new Tabular(0.99, 0.95, 4, "~/IC/");
+
+        /*
+        *                 Double epsilonInitial, Double epsilonFinal,
+                          Long numEpisodes, Boolean isTraining, Boolean isTabular,
+                          ValueBasedRL learning, Domain<Double>[] actionSpace,
+                          String localPathToCheckpoint, String learningFileName,
+                          String cumRewardFileName, Long checkpointEachNEpisodes
+                          * */
+        LearnerCodelet learnerCodelet = new LearnerCodelet(
+                0.9999, 0.05,
+                50L, true, true,
+                rl, new Domain[] {new Domain(0), new Domain(0), new Domain(3)},
+                pathToSaveLearning, file,
+                rewardFile, checkPointEachNEpisodes
+        );
         learnerCodelet.addOutput(updateMO);
         learnerCodelet.addOutput(motorMO);
+        learnerCodelet.addInput(stateMO);
+        learnerCodelet.addInput(lastStateMO);
         insertCodelet(learnerCodelet, "BEHAVIOR");
 
         start();
@@ -82,10 +112,10 @@ public class AgentMind extends Mind {
 
     public void updateSensor(Vector2 pos, ArrayList<Vector2> cars) {
         if (positionMO != null && visionMO != null) {
-            positionMO.setI(pos);
-            visionMO.setI(cars);
-
-            ((Updater) updateMO.getI()).updateSensor();
+            if (((Updater) updateMO.getI()).updateSensor()) {
+                positionMO.setI(pos);
+                visionMO.setI(cars);
+            }
         }
     }
 

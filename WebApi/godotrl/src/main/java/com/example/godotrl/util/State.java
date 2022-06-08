@@ -10,4 +10,12 @@ public class State {
         this.position = position;
         this.closestCars = closestCars;
     }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public ArrayList<Vector2> getClosestCars() {
+        return closestCars;
+    }
 }

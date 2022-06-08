@@ -1,5 +1,0 @@
-[config]
-
-name="HelloWorld"
-binary_type="local"
-binary="HelloWorld-debug.aar"

@@ -5,25 +5,29 @@ package com.example.godotrl.cst.behavior;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Tabular extends ValueBasedRL {
 
-    private HashMap<ArrayList<Domain>, ArrayList<Double>> qTable;
+    private HashMap<ArrayList, ArrayList<Double>> qTable;
 
     //constructor
     public Tabular(Double alpha, Double gamma, Integer numActions, String pathToSaveLearning) {
         super(alpha, gamma, numActions, pathToSaveLearning);
     }
 
-    protected void initQValue(ArrayList<Domain> state) {
+    protected void initQValue(ArrayList state) {
         ArrayList<Double> initVals = new ArrayList<Double>();
-        for (int i = 0; i < super.numActions; i++)
-            initVals.add(Math.random());
+        double mean = 0.5, std = 0.05;
+        Random rdm = new Random();
+        for (int i = 0; i < super.numActions; i++) {
+            initVals.add( mean + std * rdm.nextGaussian() );
+        }
 
         qTable.put(state, initVals);
     }
 
-    protected Double getValue(ArrayList<Domain> state, Integer idAction) {
+    protected Double getValue(ArrayList state, Integer idAction) {
         ArrayList<Double> val = qTable.get(state);
         if (val == null)
             initQValue(state);
@@ -32,12 +36,12 @@ public class Tabular extends ValueBasedRL {
     }
 
     @Override
-    protected ArrayList<Double> getValues(ArrayList<Domain> state) {
+    protected ArrayList<Double> getValues(ArrayList state) {
         return qTable.get(state);
     }
 
     @Override
-    protected void update (ArrayList<Domain> state, ArrayList<Domain> newState, Domain action, Domain reward) {
+    protected void update (ArrayList state, ArrayList newState, Domain action, Domain reward) {
         Integer idAction = action.intValue();
         Double maxFutureQ = super.getBestValue(newState);
         ArrayList<Double> qValues = super.getValues(state);

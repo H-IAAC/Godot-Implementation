@@ -18,7 +18,7 @@ public class LFA extends ValueBasedRL {
     }
 
     @Override
-    public void update(ArrayList<Domain> state, ArrayList<Domain> newState,
+    public void update(ArrayList state, ArrayList newState,
                        Domain action, Domain reward) {
         LinkedHashMap<String, Double> gradient = this.extractor.getFeatures(state, action);
 
@@ -39,7 +39,7 @@ public class LFA extends ValueBasedRL {
     }
 
     @Override
-    protected Double getValue (ArrayList<Domain> state, Domain action) {
+    protected Double getValue (ArrayList state, Domain action) {
         Double q_val = (double) 0;
         LinkedHashMap<String, Double> gradient = this.extractor.getFeatures(state, action);
 
@@ -52,7 +52,7 @@ public class LFA extends ValueBasedRL {
     }
 
     @Override
-    protected ArrayList<Double> getValues(ArrayList<Domain> state) {
+    protected ArrayList<Double> getValues(ArrayList state) {
         ArrayList<Double> vals = null;
         for (Integer a = 0; a < super.numActions; a++) {
             vals.add(getValue(state, new Domain(a)));

@@ -36,4 +36,12 @@ public class Vector2 {
         Vector2 v = (Vector2) o;
         return x == v.x && y == v.y;
     }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
 }

@@ -12,6 +12,7 @@ public class StateManager extends Codelet {
     MemoryObject positionMO = null;
     MemoryObject closestCarsMO = null;
     MemoryObject stateMO = null;
+    MemoryObject lastStateMO = null;
     MemoryObject updateMO = null;
 
     @Override
@@ -19,6 +20,7 @@ public class StateManager extends Codelet {
         positionMO = (MemoryObject) getInput("POSITION");
         closestCarsMO = (MemoryObject) getInput("CLOSEST_CARS");
         stateMO = (MemoryObject) getOutput("STATE");
+        lastStateMO = (MemoryObject) getOutput("LAST_STATE");
         updateMO = (MemoryObject) getOutput("UPDATE");
     }
 
@@ -30,6 +32,7 @@ public class StateManager extends Codelet {
     @Override
     public void proc() {
         if (((Updater) updateMO.getI()).updateState()) {
+            lastStateMO.setI(stateMO.getI());
             stateMO.setI(new State((Vector2) positionMO.getI(), (ArrayList<Vector2>) closestCarsMO.getI()));
         }
     }

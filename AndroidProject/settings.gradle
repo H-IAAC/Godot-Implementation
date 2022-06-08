@@ -1,7 +1,0 @@
-include ':VisualizerMind'
-include ':RequestTest'
-include ':CollectorAgentMind'
-include ':godot-lib.3.3.2.stable.release'
-include ':HelloWorld'
-include ':app'
-rootProject.name = "My Application"
