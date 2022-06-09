@@ -37,6 +37,13 @@ public class Tabular extends ValueBasedRL {
 
     @Override
     protected ArrayList<Double> getValues(ArrayList state) {
+        if (state == null) {
+            initQValue( state );
+        }
+        /*NULLPOINTER EXCEPTION*/
+        else if (!this.qTable.containsKey(state))
+            initQValue( state );
+
         return qTable.get(state);
     }
 

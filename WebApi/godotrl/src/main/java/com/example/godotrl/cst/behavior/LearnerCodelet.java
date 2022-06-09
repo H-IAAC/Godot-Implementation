@@ -16,8 +16,6 @@ import java.util.Hashtable;
 public class LearnerCodelet extends Codelet {
     Boolean isTraining;
     Boolean isTabular;
-    Double alpha;
-    Double gamma;
     Double epsilon;
     Double epsilonInitial;
     Double epsilonFinal;
@@ -65,119 +63,94 @@ public class LearnerCodelet extends Codelet {
         this.learningFileName = learningFileName;
         this.cumRewardFileName = cumRewardFileName;
         this.checkpointEachNEpisodes = checkpointEachNEpisodes;
-        setLearningType();
+        setLearningType( learning );
     }
 
-    private void setLearningType() {
+    private void setLearningType( ValueBasedRL learning ) {
         if (this.isTabular) {
-            this.qLearning = new Tabular(
-                    this.alpha, this.gamma, this.actionSpace[2].intValue(), this.localPathToCheckpoint
-            );
+            this.qLearning = (Tabular) learning;
+        // new Tabular( this.alpha, this.gamma, this.actionSpace[2].intValue(), this.localPathToCheckpoint );
         } else {
             FeaturesExtractor fe = new FeaturesExtractor();
-            this.lfa = new LFA(
-                    this.alpha, this.gamma, this.actionSpace[2].intValue(), this.localPathToCheckpoint, fe
-            );
+            this.lfa = (LFA) learning;
+            // new LFA( this.alpha, this.gamma, this.actionSpace[2].intValue(), this.localPathToCheckpoint, fe);
         }
     }
 
     @Override
     public void proc() {
         if (((Updater) this.updateMO.getI()).updateLearner()) {
-            // Gets s_n, s_(n-1) and a_(n-1). On first call, s_(-1) = null and a_(-1) = Action.INVALID
-            State lastState = (State) lastStateMO.getI();
-            Action lastAction = (Action) motorMO.getI();
-
-            State state = (State) stateMO.getI();
-
-            /*
-                Q LEARNING ALGORITHM GOES HERE
-            */
-
-            // Action should be decided through the Q-Learning algorithm. Should be an element of the enum Action
-            Action action = Action.UP;
-
-            motorMO.setI(action);
-        }
-
         /*
             Old code below, should be reimplemented above
         */
 
-        if (this.currEpisode < this.numEpisodes) {
+            if (this.currEpisode < this.numEpisodes) {
 
-            if (this.currStep == 0 && this.currEpisode == 0) {
-                if (Files.exists(
-                        Path.of(this.localPathToCheckpoint + this.learningFileName))) {
-                    this.deserializeLearning();
+                if (this.currStep == 0 && this.currEpisode == 0) {
+                    if (Files.exists(
+                            Path.of(this.localPathToCheckpoint + this.learningFileName))) {
+                        this.deserializeLearning();
+                    }
                 }
-            }
 
-            if(!this.episodeIsDone) {
+                if (!this.episodeIsDone) {
 
-                if ( ( (Updater) this.updateMO.getI() ).updateLearner() ) {
-// lastStateMO -> null
-// actionMO
-                    Domain idAction;
-                    State lastSt = (State) this.stateMO.getI();
-                    ArrayList lastState = env.getObservationSpace( lastSt );
+                    // Gets s_n, s_(n-1) and a_(n-1). On first call, s_(-1) = null and a_(-1) = Action.INVALID
+                    State lastState = (State) lastStateMO.getI();
+                    Action lastAction = (Action) motorMO.getI();
+                    State state = (State) stateMO.getI();
 
-                    if (isTabular)
-                        idAction = qLearning.epsilonGreedyPolicy(this.epsilon, lastState);
-                    else
-                        idAction = lfa.epsilonGreedyPolicy(this.epsilon,lastState);
-                    // salvar em MO
+                    /* Q LEARNING ALGORITHM */
+                    ArrayList step = env.step(state, lastAction);
 
-                    motorMO.setI(idAction);
-
-                    ArrayList step = env.step( );
-
-                    ArrayList state = ( (ArrayList) step.get(0) );
-                    Double currReward = ( (Double) step.get(1) );
-                    this.episodeIsDone = ( (Boolean) step.get(2) );
+                    this.episodeIsDone = ((Boolean) step.get(2));
+                    Double currReward = ((Double) step.get(1));
                     this.reward = new Domain<Double>(this.reward.doubleValue() + currReward);
 
+                    ArrayList lastObs = env.getObservationSpace(lastState);
+                    ArrayList obs = ((ArrayList<ArrayList<Domain>>) step.get(0));
+                    Domain idAction = env.getActionID(lastAction);
                     if (isTabular) {
-                        // how to access older state from StateManager?
-                        qLearning.update(lastState, state, idAction, new Domain<Double>(currReward));
+                        qLearning.update(lastObs, obs, idAction, new Domain<Double>(currReward));
+                    } else {
+                        lfa.update(lastObs, obs, idAction, new Domain<Double>(currReward));
                     }
-                    else {
-                        lfa.update(lastState, state, idAction, new Domain<Double>(currReward));
+
+                    /* CHOOSE ACTION */
+                    if (isTabular)
+                        idAction = qLearning.epsilonGreedyPolicy(this.epsilon, obs);
+                    else
+                        idAction = lfa.epsilonGreedyPolicy(this.epsilon, obs);
+
+                    // Action should be decided through the Q-Learning algorithm. Should be an element of the enum Action
+                    Action action = env.convertIdToAction(idAction);
+                    motorMO.setI(action);
+                } else {
+                    if ((this.currEpisode + 1) % this.checkpointEachNEpisodes == 0) {
+                        if (this.reward.doubleValue() > this.greatestCheckpointReward) {
+                            this.greatestCheckpointReward = this.reward.doubleValue();
+                            serializeLearning();
+                        }
                     }
+
+                    csvRewardRecord.recordNewEpisode(
+                            this.currEpisode, this.reward, this.epsilon);
+                    this.reward = new Domain<Double>(0.0);
+                    this.currStep = 0;
+                    this.currEpisode++;
+                    this.env.reset();
+                    this.episodeIsDone = false;
                 }
 
-
-
+                this.epsilon = Math.max(
+                        this.epsilon - this.epsilonDecay,
+                        this.epsilonFinal);
+            } else {
+                serializeLearning(this.localPathToCheckpoint + "final_" + this.learningFileName);
+                // TODO (is there more things to be done?) -> finish training
             }
-
-            else {
-                if ((this.currEpisode+1) % this.checkpointEachNEpisodes == 0) {
-                    if (this.reward.doubleValue() > this.greatestCheckpointReward) {
-                        this.greatestCheckpointReward = this.reward.doubleValue();
-                        serializeLearning();
-                    }
-                }
-
-                csvRewardRecord.recordNewEpisode(
-                        this.currEpisode, this.reward, this.epsilon);
-                this.reward = new Domain<Double>(0.0);
-                this.currStep = 0;
-                this.currEpisode++;
-                this.env.reset();
-                this.episodeIsDone = false;
-            }
-
-            this.epsilon = Math.max(
-                    this.epsilon - this.epsilonDecay,
-                    this.epsilonFinal);
-        }
-
-        else {
-            serializeLearning(this.localPathToCheckpoint + "final_" + this.learningFileName);
-            // TODO (is there more things to be done?) -> finish training
         }
     }
-
     private void serializeLearning() {
         if (this.isTabular) {
             qLearning.serializeLearning(this.localPathToCheckpoint + this.learningFileName);
@@ -215,6 +188,5 @@ public class LearnerCodelet extends Codelet {
     @Override
     public void calculateActivation () {
         return;
-
     }
 }

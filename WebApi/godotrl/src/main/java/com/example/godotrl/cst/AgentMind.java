@@ -85,7 +85,7 @@ public class AgentMind extends Mind {
         /*
          * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning
          * */
-        Tabular rl = new Tabular(0.99, 0.95, 4, "~/IC/");
+        Tabular rl = new Tabular(0.99, 0.95, 5, "~/IC/");
 
         /*
         *                 Double epsilonInitial, Double epsilonFinal,
@@ -97,7 +97,7 @@ public class AgentMind extends Mind {
         LearnerCodelet learnerCodelet = new LearnerCodelet(
                 0.9999, 0.05,
                 50L, true, true,
-                rl, new Domain[] {new Domain(0), new Domain(0), new Domain(3)},
+                rl, new Domain[] {new Domain(0), new Domain(0), new Domain(4)},
                 pathToSaveLearning, file,
                 rewardFile, checkPointEachNEpisodes
         );
