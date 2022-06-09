@@ -107,7 +107,7 @@ public class LearnerCodelet extends Codelet {
                     Double currReward = ((Double) step.get(1));
                     this.reward = new Domain<Double>(this.reward.doubleValue() + currReward);
 
-                    ArrayList lastObs = env.getObservationSpace(lastState);
+                    ArrayList lastObs = env.getObservationSpace( lastState, lastAction );
                     ArrayList obs = ((ArrayList<ArrayList<Domain>>) step.get(0));
                     Domain idAction = env.getActionID(lastAction);
                     if (isTabular) {

@@ -160,7 +160,7 @@ public class FrogEnv extends  Environment {
         ArrayList<Vector2> closestCars = st.getClosestCars();
 
         Domain state[] = {
-            new Domain( (Integer) lastAction == Action.UP ),      // 0: agent height
+            new Domain( (lastAction == Action.UP ? 1 : 0) ),      // 0: agent height
             new Domain(0),            // 1: has Car up
             new Domain(0),            // 2: has Car right
             new Domain(0),            // 3: has Car down
@@ -171,20 +171,20 @@ public class FrogEnv extends  Environment {
         for  ( Vector2 car : closestCars ) {
             if ( car.getX() > -998.0 ) {
                 Integer d[] = { 
-                    ((Double) pos.getX() - car.getX()).intValue(), 
-                    ((Double) pos.getY() - car.getY()).intValue() 
+                    (pos.getX().intValue() - car.getX().intValue() ),
+                    (pos.getY().intValue() - car.getY().intValue() )
                 };
                 if (d[0] == 0 || d[1] == 0) {
                     if (d[1] == 1) state[1].val = 1;
                     else if (d[0] == 1) state[2].val = 1;
-                    else if (d[0] == 1) state[3].val = 1;
-                    else if (d[0] == 1) state[4].val = 1;
+                    else if (d[1] == -1) state[3].val = 1;
+                    else if (d[0] == -1) state[4].val = 1;
                     else state[5].val = 1;
                 }
             }
         }
 
-        ArrayList<Domain> obsSpace = Arrays.asList( state );
+        ArrayList<Domain> obsSpace = new ArrayList<>(Arrays.asList( state ));
         return obsSpace;
     }
 
