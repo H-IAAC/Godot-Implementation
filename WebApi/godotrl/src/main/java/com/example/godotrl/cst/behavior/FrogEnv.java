@@ -35,9 +35,9 @@ public class FrogEnv extends  Environment {
     //     return sum;
     // }
 
-    private Double getReward( ArrayList<Domain> state, Action lastAction, Boolean isDone ) {
+    private Double getReward( ArrayList<Domain> state, Vector2 pos, Action lastAction, Boolean isDone ) {
         Double rw = 0.0;
-        if ( state.get(0).doubleValue() == this.yTarget ) rw += 10.0;
+        if ( (Double) pos.getY() == (Double) this.yTarget ) rw += 10.0;
         if ( lastAction == Action.UP ) rw += 1.0;
         if ( lastAction == Action.DOWN ) rw -= 1.0;
         if ( state.get(5).intValue() == 1 ) rw -= 10.0;
@@ -50,11 +50,12 @@ public class FrogEnv extends  Environment {
                           done: Boolean, info: String }
     * */
     public ArrayList step( State state, Action lastAction ) {
+        Vector2 pos = state.getPosition();
         Boolean isDone = this.isDone( state );
         ArrayList step = new ArrayList();
         ArrayList<Domain> obs = this.getObservationSpace( state, lastAction );
         step.add( obs );
-        step.add( this.getReward( obs, lastAction, isDone ) );
+        step.add( this.getReward( obs, pos, lastAction, isDone ) );
         step.add( isDone );
         // step.add("info");
 
@@ -62,8 +63,6 @@ public class FrogEnv extends  Environment {
     }
 
     public ArrayList getObservationSpace( State state, Action lastAction ) {
-        if ( state == null )
-            return new ArrayList<ArrayList<Domain>>();
         return this.convertState( state, lastAction );
     }
 

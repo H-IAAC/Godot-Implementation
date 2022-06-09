@@ -16,25 +16,35 @@ public class Tabular extends ValueBasedRL {
         super(alpha, gamma, numActions, pathToSaveLearning);
     }
 
-    protected void initQTable() {
+    public void initQTable() {
         // is closer of goal
         for (int cl = 0; cl <= 1; cl++ ) {
+            this.qTable.add(new ArrayList<>());
             // has car up
             for ( int up = 0; up <= 1; up++ ) {
 
+                this.qTable.get(cl).add(new ArrayList<>());
+
                 for (int r = 0; r <= 1; r++) {
+
+                    this.qTable.get(cl).get(up).add(new ArrayList<>());
 
                     for (int dn = 0; dn <= 1; dn++) {
 
+                        this.qTable.get(cl).get(up).get(r).add(new ArrayList<>());
+
                         for (int l = 0; l <= 1; l++ ) {
 
-                            qTable.get(cl).get(up).get(r).get(dn).set(l, this.getInitActionValues() );
+                            this.qTable.get(cl).get(up).get(r).get(dn).add(new ArrayList<>());
+
+                            this.qTable.get(cl).get(up).get(r).get(dn).set(l, this.getInitActionValues() );
                         
                         }
                     }
                 }
             }
         }
+        return;
     }
 
     protected ArrayList<Double> getInitActionValues() {

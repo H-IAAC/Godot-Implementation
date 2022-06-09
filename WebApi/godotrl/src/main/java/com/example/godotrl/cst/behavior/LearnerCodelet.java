@@ -69,6 +69,7 @@ public class LearnerCodelet extends Codelet {
     private void setLearningType( ValueBasedRL learning ) {
         if (this.isTabular) {
             this.qLearning = (Tabular) learning;
+            this.qLearning.initQTable();
         // new Tabular( this.alpha, this.gamma, this.actionSpace[2].intValue(), this.localPathToCheckpoint );
         } else {
             FeaturesExtractor fe = new FeaturesExtractor();
@@ -108,7 +109,7 @@ public class LearnerCodelet extends Codelet {
                     this.reward = new Domain<Double>(this.reward.doubleValue() + currReward);
 
                     ArrayList lastObs = env.getObservationSpace( lastState, lastAction );
-                    ArrayList obs = ((ArrayList<ArrayList<Domain>>) step.get(0));
+                    ArrayList obs = ((ArrayList<Domain>) step.get(0));
                     Domain idAction = env.getActionID(lastAction);
                     if (isTabular) {
                         qLearning.update(lastObs, obs, idAction, new Domain<Double>(currReward));
