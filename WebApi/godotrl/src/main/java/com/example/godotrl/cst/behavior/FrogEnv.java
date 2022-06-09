@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 public class FrogEnv extends  Environment {
 
-    Double yTarget = 10.0;
+    Double yTarget = 0.0;
 
     public FrogEnv(MemoryObject stateMO, Domain[] actionSpace) {
         super(stateMO, actionSpace);
@@ -51,12 +51,12 @@ public class FrogEnv extends  Environment {
     * */
     public ArrayList step( State state, Action lastAction ) {
         Vector2 pos = state.getPosition();
-        Boolean isDone = this.isDone( state );
         ArrayList step = new ArrayList();
         ArrayList<Domain> obs = this.getObservationSpace( state, lastAction );
+        Boolean isDone = this.isDone( obs, pos );
         step.add( obs );
         step.add( this.getReward( obs, pos, lastAction, isDone ) );
-        step.add( isDone );
+        step.add( this.isDone( obs, pos ) );
         // step.add("info");
 
         return step;
@@ -66,19 +66,11 @@ public class FrogEnv extends  Environment {
         return this.convertState( state, lastAction );
     }
 
-    private Boolean isDone( State st ) {
+    private Boolean isDone( ArrayList<Domain> st, Vector2 pos ) {
 
-        if ( st.getClosestCars() != null ) {
-
-            Vector2 pos = st.getPosition();
-            ArrayList<Vector2> closestCars = st.getClosestCars();
-            for ( Vector2 d : closestCars ) {
-
-                if (d.getX().intValue() == pos.getX().intValue() &&
-                    d.getY().intValue() == pos.getY().intValue() ) {
-                    return true;
-                }
-            }
+        if ( !st.isEmpty() ) {
+            if ( st.get(5).intValue() == 1 || pos.getY().doubleValue() == this.yTarget.doubleValue() )
+                return true;
         }
 
         return false;

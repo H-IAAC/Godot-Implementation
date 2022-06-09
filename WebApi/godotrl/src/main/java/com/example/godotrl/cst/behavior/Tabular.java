@@ -72,14 +72,14 @@ public class Tabular extends ValueBasedRL {
     @Override
     protected Double getValue(ArrayList<Domain> obs, Domain idAction) {
         return qTable.get( obs.get(0).intValue() ).get( obs.get(1).intValue() ).get( obs.get(2).intValue() ).get(
-            obs.get(3).intValue() ).get( obs.get(4).intValue() ).get( idAction.intValue() );
+                obs.get(3).intValue() ).get( obs.get(4).intValue() ).get( idAction.intValue() );
     }
 
     @Override
     protected ArrayList<Double> getValues(ArrayList<Domain> obs) {
         if (obs != null) {
-            return qTable.get( obs.get(0).intValue() ).get( obs.get(1).intValue() ).get( obs.get(2).intValue() ).get(
-            obs.get(3).intValue() ).get( obs.get(4).intValue() );
+            return qTable.get( obs.get(0).intValue() ).get( obs.get(1).intValue() ).get(
+                    obs.get(2).intValue() ).get( obs.get(3).intValue() ).get( obs.get(4).intValue() );
         }
         return this.getInitActionValues();
     }

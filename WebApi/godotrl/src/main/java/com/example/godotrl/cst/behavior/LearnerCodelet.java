@@ -64,6 +64,7 @@ public class LearnerCodelet extends Codelet {
         this.cumRewardFileName = cumRewardFileName;
         this.checkpointEachNEpisodes = checkpointEachNEpisodes;
         setLearningType( learning );
+        this.csvRewardRecord = new CSV(localPathToCheckpoint, cumRewardFileName, false);
     }
 
     private void setLearningType( ValueBasedRL learning ) {
@@ -139,7 +140,7 @@ public class LearnerCodelet extends Codelet {
                     this.reward = new Domain<Double>(0.0);
                     this.currStep = 0;
                     this.currEpisode++;
-                    this.env.reset();
+                    // this.env.reset();
                     this.episodeIsDone = false;
                 }
 

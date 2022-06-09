@@ -77,15 +77,15 @@ public class AgentMind extends Mind {
 
         // Behavior
 
-        String pathToSaveLearning = "~/IC/";
-        String file = pathToSaveLearning + "q-learning.txt";
-        String rewardFile = pathToSaveLearning + "rewards.txt";
+        String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
+        String qFile = "q-table.csv";
+        String rewardFile = "rewards-qlearning.csv";
         Long checkPointEachNEpisodes = 1000L;
 
         /*
          * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning
          * */
-        Tabular rl = new Tabular(0.99, 0.95, 5, "~/IC/");
+        Tabular rl = new Tabular(0.99, 0.95, 5, pathToSaveLearning);
 
         /*
         *                 Double epsilonInitial, Double epsilonFinal,
@@ -96,9 +96,9 @@ public class AgentMind extends Mind {
                           * */
         LearnerCodelet learnerCodelet = new LearnerCodelet(
                 0.9999, 0.05,
-                50L, true, true,
+                3L, true, true,
                 rl, new Domain[] {new Domain(0), new Domain(0), new Domain(4)},
-                pathToSaveLearning, file,
+                pathToSaveLearning, qFile,
                 rewardFile, checkPointEachNEpisodes
         );
         learnerCodelet.addOutput(updateMO);

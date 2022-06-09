@@ -71,18 +71,28 @@ public class CSV {
     }
 
     private void initializeCallback() {
-        try (
-                FileReader fr = new FileReader(
-                        this.localPathToFile + this.fileName);
-                BufferedReader br = new BufferedReader(fr);
-        ) {
-            FileWriter fw = new FileWriter(
-                    this.localPathToFile + this.fileName,
-                    this.append);
+
+        try {
+            File file = new File( this.localPathToFile + this.fileName );
+            if (file.createNewFile()) {
+                System.out.println("file created.");
+            }
+            else
+                System.out.println("file already exists.");
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (FileReader fr = new FileReader(this.localPathToFile + this.fileName);
+             BufferedReader br = new BufferedReader(fr);)
+        {
+            FileWriter fw = new FileWriter(this.localPathToFile + this.fileName, this.append);
             BufferedWriter bw = new BufferedWriter(fw);
             this.writer = new PrintWriter(bw);
-            if(br.readLine() == null)
+            if(br.readLine() == null) {
                 this.writer.println("episode, reward, epsilon");
+            }
 
             this.writer.flush();
 
