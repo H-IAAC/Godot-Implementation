@@ -7,6 +7,7 @@ import br.unicamp.cst.core.entities.MemoryObject;
 import com.example.godotrl.util.Action;
 import com.example.godotrl.util.State;
 import com.example.godotrl.util.Updater;
+import com.example.godotrl.util.Vector2;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,6 +44,8 @@ public class LearnerCodelet extends Codelet {
     private MemoryObject motorMO;
     private MemoryObject stateMO;
     private MemoryObject lastStateMO;
+
+    private Vector2 mapSize;
 
     public LearnerCodelet(
                           Double epsilonInitial, Double epsilonFinal,
@@ -177,6 +180,26 @@ public class LearnerCodelet extends Codelet {
         }
         else {
             lfa.deserializeLearning(this.localPathToCheckpoint + this.learningFileName);
+        }
+    }
+
+    public void setMapSize(Vector2 mapSize) {
+        this.mapSize = mapSize;
+    }
+
+    // Given a map position and an action, returns true if the action is valid based on map size
+    private boolean isActionValid(Vector2 pos, Action action) {
+        switch (action) {
+            case UP:
+                return pos.getY() > 0;
+            case RIGHT:
+                return pos.getX() < mapSize.getX() - 1;
+            case DOWN:
+                return pos.getY() < mapSize.getY() - 1;
+            case LEFT:
+                return pos.getX() > 0;
+            default:
+                return false;
         }
     }
 

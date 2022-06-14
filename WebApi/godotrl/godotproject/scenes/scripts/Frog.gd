@@ -19,7 +19,9 @@ func _ready():
 	
 	http_request.connect("request_completed", self, "finish_request")
 	
-	http_request.request("http://localhost:8080/initialize")
+	var map_size = {"x": base.H_SIZE, "y": base.V_SIZE}
+	var map_size_string = JSON.print(map_size)
+	http_request.request("http://localhost:8080/initialize", PoolStringArray(["Content-Type:application/json"]), true, HTTPClient.METHOD_POST, map_size_string)
 	
 	request_pile.append(Request.SENSOR)
 

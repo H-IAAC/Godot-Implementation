@@ -2,6 +2,7 @@ package com.example.godotrl;
 
 import com.example.godotrl.containers.AcceptContainer;
 import com.example.godotrl.cst.AgentMind;
+import com.example.godotrl.util.Action;
 import com.example.godotrl.util.RequestType;
 import com.example.godotrl.util.SensorData;
 import com.example.godotrl.util.Vector2;
@@ -22,8 +23,8 @@ public class MindController {
     private AgentMind agentMind = null;
     private long id = 0;
 
-    @GetMapping("/initialize")
-    public AcceptContainer initialize() {
+    @PostMapping("/initialize")
+    public AcceptContainer initialize(@RequestBody Vector2 mapSize) {
         id += 1;
 
         if (agentMind != null) {
@@ -31,7 +32,7 @@ public class MindController {
         }
 
         agentMind = new AgentMind();
-        agentMind.initialize();
+        agentMind.initialize(mapSize);
 
         return new AcceptContainer(id, "Mind initialized", RequestType.INFO);
     }
@@ -50,7 +51,10 @@ public class MindController {
     public AcceptContainer getMotorData() {
         id += 1;
 
-        return new AcceptContainer(id, String.valueOf(agentMind.getActionData()), RequestType.MOTOR);
+        if (agentMind.canGetActionData()) {
+            return new AcceptContainer(id, String.valueOf(agentMind.getActionData()), RequestType.MOTOR);
+        }
+        return new AcceptContainer(id, String.valueOf(Action.INVALID), RequestType.MOTOR);
     }
 
     @GetMapping("/logwin")
