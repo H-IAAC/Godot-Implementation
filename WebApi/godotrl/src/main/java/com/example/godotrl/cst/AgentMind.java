@@ -22,7 +22,7 @@ public class AgentMind extends Mind {
     MemoryObject updateMO = null;
     MemoryObject motorMO = null;
 
-    public void initialize() {
+    public void initialize(Vector2 mapSize) {
         /*
             INITIALIZE MEMORY OBJECTS
         */
@@ -101,6 +101,7 @@ public class AgentMind extends Mind {
                 pathToSaveLearning, qFile,
                 rewardFile, checkPointEachNEpisodes
         );
+        learnerCodelet.setMapSize(mapSize);
         learnerCodelet.addOutput(updateMO);
         learnerCodelet.addOutput(motorMO);
         learnerCodelet.addInput(stateMO);
@@ -119,12 +120,14 @@ public class AgentMind extends Mind {
         }
     }
 
-    public Action getActionData() {
+    public boolean canGetActionData() {
         if (motorMO != null) {
-            ((Updater) updateMO.getI()).updateMotor();
-
-            return (Action) motorMO.getI();
+            return ((Updater) updateMO.getI()).updateMotor();
         }
-        return Action.INVALID;
+        return false;
+    }
+
+    public Action getActionData() {
+        return (Action) motorMO.getI();
     }
 }

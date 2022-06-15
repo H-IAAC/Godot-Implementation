@@ -3,7 +3,7 @@ package com.example.godotrl.util;
 /*
     Used to control information update timing
 
-    -> Awaiting for sensor data -> Awaiting for car detection -> Awaiting for car update -> Awaiting for close cars update
+    -> Awaiting for sensor data -> Awaiting for car update -> Awaiting for car detection -> Awaiting for close cars update
     -> Awaiting for state update -> Awaiting for learner update -> Awaiting for motor data read ->
 */
 public class Updater {
@@ -11,14 +11,6 @@ public class Updater {
 
     public boolean updateSensor() {
         if (state == UpdateState.SENSOR) {
-            state = UpdateState.CAR_READ;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean updateCarRead() {
-        if (state == UpdateState.CAR_READ) {
             state = UpdateState.CAR_UPDATE;
             return true;
         }
@@ -27,6 +19,14 @@ public class Updater {
 
     public boolean updateCarUpdate() {
         if (state == UpdateState.CAR_UPDATE) {
+            state = UpdateState.CAR_READ;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateCarRead() {
+        if (state == UpdateState.CAR_READ) {
             state = UpdateState.CLOSE_CAR;
             return true;
         }
