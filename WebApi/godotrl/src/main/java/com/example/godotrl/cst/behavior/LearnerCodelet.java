@@ -45,7 +45,9 @@ public class LearnerCodelet extends Codelet {
     private MemoryObject stateMO;
     private MemoryObject lastStateMO;
 
-    private Vector2 mapSize;
+    private boolean hasWon = false;
+    private boolean hasLost = false;
+
 
     public LearnerCodelet(
                           Double epsilonInitial, Double epsilonFinal,
@@ -89,6 +91,8 @@ public class LearnerCodelet extends Codelet {
             Old code below, should be reimplemented above
         */
 
+            this.episodeIsDone = hasWon || hasLost;
+
             if (this.currEpisode < this.numEpisodes) {
 
                 if (this.currStep == 0 && this.currEpisode == 0) {
@@ -98,39 +102,42 @@ public class LearnerCodelet extends Codelet {
                     }
                 }
 
+                // Gets s_n, s_(n-1) and a_(n-1). On first call, s_(-1) = null and a_(-1) = Action.INVALID
+                State lastState = (State) lastStateMO.getI();
+                Action lastAction = (Action) motorMO.getI();
+                State state = (State) stateMO.getI();
+
+                /* Q LEARNING ALGORITHM */
+                ArrayList step = env.step(state, lastAction);
+
+                //this.episodeIsDone = ((Boolean) step.get(2));
+                Double currReward = ((Double) step.get(1));
+                this.reward = new Domain<Double>(this.reward.doubleValue() + currReward);
+
+                ArrayList lastObs = env.getObservationSpace( lastState, lastAction );
+                ArrayList obs = ((ArrayList<Domain>) step.get(0));
+                Domain idAction = env.getActionID(lastAction);
+                if (isTabular) {
+                    qLearning.update(lastObs, obs, idAction, new Domain<Double>(currReward));
+                } else {
+                    lfa.update(lastObs, obs, idAction, new Domain<Double>(currReward));
+                }
+
                 if (!this.episodeIsDone) {
-
-                    // Gets s_n, s_(n-1) and a_(n-1). On first call, s_(-1) = null and a_(-1) = Action.INVALID
-                    State lastState = (State) lastStateMO.getI();
-                    Action lastAction = (Action) motorMO.getI();
-                    State state = (State) stateMO.getI();
-
-                    /* Q LEARNING ALGORITHM */
-                    ArrayList step = env.step(state, lastAction);
-
-                    this.episodeIsDone = ((Boolean) step.get(2));
-                    Double currReward = ((Double) step.get(1));
-                    this.reward = new Domain<Double>(this.reward.doubleValue() + currReward);
-
-                    ArrayList lastObs = env.getObservationSpace( lastState, lastAction );
-                    ArrayList obs = ((ArrayList<Domain>) step.get(0));
-                    Domain idAction = env.getActionID(lastAction);
-                    if (isTabular) {
-                        qLearning.update(lastObs, obs, idAction, new Domain<Double>(currReward));
-                    } else {
-                        lfa.update(lastObs, obs, idAction, new Domain<Double>(currReward));
-                    }
-
                     /* CHOOSE ACTION */
                     if (isTabular)
                         idAction = qLearning.epsilonGreedyPolicy(this.epsilon, obs);
                     else
                         idAction = lfa.epsilonGreedyPolicy(this.epsilon, obs);
+                }
 
-                    // Action should be decided through the Q-Learning algorithm. Should be an element of the enum Action
-                    Action action = env.convertIdToAction(idAction);
-                    motorMO.setI(action);
-                } else {
+                // Action should be decided through the Q-Learning algorithm. Should be an element of the enum Action
+                Action action = env.convertIdToAction(idAction);
+                motorMO.setI(action);
+                }
+
+                else {
+
                     if ((this.currEpisode + 1) % this.checkpointEachNEpisodes == 0) {
                         if (this.reward.doubleValue() > this.greatestCheckpointReward) {
                             this.greatestCheckpointReward = this.reward.doubleValue();
@@ -155,7 +162,7 @@ public class LearnerCodelet extends Codelet {
                 // TODO (is there more things to be done?) -> finish training
             }
         }
-    }
+
     private void serializeLearning() {
         if (this.isTabular) {
             qLearning.serializeLearning(this.localPathToCheckpoint + this.learningFileName);
@@ -183,24 +190,21 @@ public class LearnerCodelet extends Codelet {
         }
     }
 
-    public void setMapSize(Vector2 mapSize) {
-        this.mapSize = mapSize;
+    public void lose() {
+        hasLost = true;
     }
 
-    // Given a map position and an action, returns true if the action is valid based on map size
-    private boolean isActionValid(Vector2 pos, Action action) {
-        switch (action) {
-            case UP:
-                return pos.getY() > 0;
-            case RIGHT:
-                return pos.getX() < mapSize.getX() - 1;
-            case DOWN:
-                return pos.getY() < mapSize.getY() - 1;
-            case LEFT:
-                return pos.getX() > 0;
-            default:
-                return false;
-        }
+    public void win() {
+        hasWon = true;
+    }
+
+    public void resetWinState() {
+        hasWon = false;
+        hasLost = false;
+    }
+
+    public boolean canEnd() {
+        return episodeIsDone;
     }
 
     @Override
@@ -210,6 +214,7 @@ public class LearnerCodelet extends Codelet {
         updateMO = (MemoryObject) getOutput("UPDATE");
         motorMO = (MemoryObject) getOutput("MOTOR");
     }
+
     @Override
     public void calculateActivation () {
         return;

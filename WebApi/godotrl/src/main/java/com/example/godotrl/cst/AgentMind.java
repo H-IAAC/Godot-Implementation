@@ -19,10 +19,38 @@ import java.util.ArrayList;
 public class AgentMind extends Mind {
     MemoryObject positionMO = null;
     MemoryObject visionMO = null;
+
+    MemoryObject knownCarsMO = null;
+    MemoryObject closestCarsMO = null;
+    MemoryObject stateMO = null;
+    MemoryObject lastStateMO = null;
+
     MemoryObject updateMO = null;
     MemoryObject motorMO = null;
 
-    public void initialize(Vector2 mapSize) {
+    LearnerCodelet learnerCodelet = null;
+
+    public void resetMOs() {
+        // Sensor
+        positionMO.setI(new Vector2(0, 0));
+        visionMO.setI(new ArrayList<Vector2>());
+
+        // Perception
+        knownCarsMO.setI(new ArrayList<Vector2>());
+        closestCarsMO.setI(new ArrayList<Vector2>());
+        stateMO.setI(null);
+        lastStateMO.setI(null);
+
+        // Behavior
+        updateMO.setI(new Updater());
+
+        // Motor
+        motorMO.setI(Action.INVALID);
+
+        learnerCodelet.resetWinState();
+    }
+
+    public void initialize() {
         /*
             INITIALIZE MEMORY OBJECTS
         */
@@ -32,10 +60,10 @@ public class AgentMind extends Mind {
         visionMO = createMemoryObject("VISION", new ArrayList<Vector2>());
 
         // Perception
-        MemoryObject knownCarsMO = createMemoryObject("KNOWN_CARS", new ArrayList<Vector2>());
-        MemoryObject closestCarsMO = createMemoryObject("CLOSEST_CARS", new ArrayList<Vector2>());
-        MemoryObject stateMO = createMemoryObject("STATE", null);
-        MemoryObject lastStateMO = createMemoryObject("LAST_STATE", null);
+        knownCarsMO = createMemoryObject("KNOWN_CARS", new ArrayList<Vector2>());
+        closestCarsMO = createMemoryObject("CLOSEST_CARS", new ArrayList<Vector2>());
+        stateMO = createMemoryObject("STATE", null);
+        lastStateMO = createMemoryObject("LAST_STATE", null);
 
         // Behavior
         updateMO = createMemoryObject("UPDATE", new Updater());
@@ -77,7 +105,8 @@ public class AgentMind extends Mind {
 
         // Behavior
 
-        String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
+        //String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
+        String pathToSaveLearning = ".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+"callback/";
         String qFile = "q-table.csv";
         String rewardFile = "rewards-qlearning.csv";
         Long checkPointEachNEpisodes = 1000L;
@@ -94,14 +123,13 @@ public class AgentMind extends Mind {
                           String localPathToCheckpoint, String learningFileName,
                           String cumRewardFileName, Long checkpointEachNEpisodes
                           * */
-        LearnerCodelet learnerCodelet = new LearnerCodelet(
+        learnerCodelet = new LearnerCodelet(
                 0.9999, 0.05,
                 3L, true, true,
                 rl, new Domain[] {new Domain(0), new Domain(0), new Domain(4)},
                 pathToSaveLearning, qFile,
                 rewardFile, checkPointEachNEpisodes
         );
-        learnerCodelet.setMapSize(mapSize);
         learnerCodelet.addOutput(updateMO);
         learnerCodelet.addOutput(motorMO);
         learnerCodelet.addInput(stateMO);
@@ -129,5 +157,24 @@ public class AgentMind extends Mind {
 
     public Action getActionData() {
         return (Action) motorMO.getI();
+    }
+
+    public String canEndMessage() {
+        if (learnerCodelet.canEnd()) {
+            return "DONE";
+        }
+        return "NOT_DONE";
+    }
+
+    public void win() {
+        if (learnerCodelet != null) {
+            learnerCodelet.win();
+        }
+    }
+
+    public void lose() {
+        if (learnerCodelet != null) {
+            learnerCodelet.lose();
+        }
     }
 }

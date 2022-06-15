@@ -1,7 +1,7 @@
 extends "res://scenes/scripts/Element.gd"
 
 
-enum Request {SENSOR, MOTOR, WIN, LOSE, INFO}
+enum Request {SENSOR, MOTOR, WIN, LOSE, INFO, END}
 enum Action {UP, RIGHT, DOWN, LEFT, INVALID}
 
 
@@ -19,9 +19,7 @@ func _ready():
 	
 	http_request.connect("request_completed", self, "finish_request")
 	
-	var map_size = {"x": base.H_SIZE, "y": base.V_SIZE}
-	var map_size_string = JSON.print(map_size)
-	http_request.request("http://localhost:8080/initialize", PoolStringArray(["Content-Type:application/json"]), true, HTTPClient.METHOD_POST, map_size_string)
+	http_request.request("http://localhost:8080/initialize")
 	
 	request_pile.append(Request.SENSOR)
 
@@ -30,30 +28,36 @@ func turn(dir):
 	if (can_move(dir)):
 		move(dir)
 		
-		lose_on_collision()
-		
-		for car in get_tree().get_nodes_in_group("car"):
-			car.turn()
-		base.turn()
-		
-		if cell_pos[1] == 0:
-			win()
-		
-		lose_on_collision()
-		
-		if dir[1] == -1:
-			animation_player.play("idle_back")
-		elif dir[1] == 1:
-			animation_player.play("idle_front")
-		else:
-			animation_player.play("idle_side")
-			sprite.flip_h = dir[0] != 1
+		if lose_on_collision():
+			return false
+	
+	for car in get_tree().get_nodes_in_group("car"):
+		car.turn()
+	base.turn()
+	
+	if cell_pos[1] == 0:
+		win()
+	
+	if lose_on_collision():
+		return false
+	
+	if dir[1] == -1:
+		animation_player.play("idle_back")
+	elif dir[1] == 1:
+		animation_player.play("idle_front")
+	else:
+		animation_player.play("idle_side")
+		sprite.flip_h = dir[0] != 1
+	
+	return true
 
 
 func lose_on_collision():
 	for car in get_tree().get_nodes_in_group("car"):
 			if car.cell_pos == cell_pos:
 				lose()
+				return true
+	return false
 
 
 func finish_request(result, response_code, headers, body):
@@ -67,13 +71,27 @@ func finish_request(result, response_code, headers, body):
 	if request_type == "MOTOR":
 		match info:
 			"UP":
-				turn(Vector2(0, -1))
+				if not turn(Vector2(0, -1)):
+					return
 			"RIGHT":
-				turn(Vector2(1, 0))
+				if not turn(Vector2(1, 0)):
+					return
 			"DOWN":
-				turn(Vector2(0, 1))
+				if not turn(Vector2(0, 1)):
+					return
 			"LEFT":
-				turn(Vector2(-1, 0))
+				if not turn(Vector2(-1, 0)):
+					return
+			"INVALID":
+				if not turn(Vector2(0, 0)):
+					return
+			"RESET":
+				lose()
+				return
+	elif request_type == "END":
+		if info != "DONE":
+			request_pile.append(Request.SENSOR)
+			request_pile.append(Request.END)
 	
 	request()
 
@@ -103,8 +121,12 @@ func request():
 				try_to_add_request(Request.SENSOR)
 			Request.WIN:
 				http_request.request("http://localhost:8080/logwin")
+				request_pile.append(Request.END)
 			Request.LOSE:
 				http_request.request("http://localhost:8080/loglose")
+				request_pile.append(Request.END)
+			Request.END:
+				http_request.request("http://localhost:8080/end")
 
 
 func is_in_sight(pos):
@@ -117,9 +139,10 @@ func try_to_add_request(request):
 
 
 func game_over():
-	http_request.cancel_request()
-	request_pile = []
-	done = true
+	if not done:
+		http_request.cancel_request()
+		request_pile = []
+		done = true
 
 
 func lose():

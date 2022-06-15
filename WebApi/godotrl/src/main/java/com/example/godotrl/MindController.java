@@ -23,16 +23,16 @@ public class MindController {
     private AgentMind agentMind = null;
     private long id = 0;
 
-    @PostMapping("/initialize")
-    public AcceptContainer initialize(@RequestBody Vector2 mapSize) {
+    @GetMapping("/initialize")
+    public AcceptContainer initialize() {
         id += 1;
 
-        if (agentMind != null) {
-            agentMind.shutDown();
+        if (agentMind == null) {
+            agentMind = new AgentMind();
+            agentMind.initialize();
+        } else {
+            agentMind.resetMOs();
         }
-
-        agentMind = new AgentMind();
-        agentMind.initialize(mapSize);
 
         return new AcceptContainer(id, "Mind initialized", RequestType.INFO);
     }
@@ -54,12 +54,14 @@ public class MindController {
         if (agentMind.canGetActionData()) {
             return new AcceptContainer(id, String.valueOf(agentMind.getActionData()), RequestType.MOTOR);
         }
-        return new AcceptContainer(id, String.valueOf(Action.INVALID), RequestType.MOTOR);
+        return new AcceptContainer(id, Action.NO_ACTION.toString(), RequestType.MOTOR);
     }
 
     @GetMapping("/logwin")
     public AcceptContainer logWin() {
         id += 1;
+
+        agentMind.win();
 
         return new AcceptContainer(id, "Win logged", RequestType.WIN);
     }
@@ -68,6 +70,15 @@ public class MindController {
     public AcceptContainer logDefeat() {
         id += 1;
 
+        agentMind.lose();
+
         return new AcceptContainer(id, "Defeat logged", RequestType.LOSE);
+    }
+
+    @GetMapping("/end")
+    public AcceptContainer end() {
+        id += 1;
+
+        return new AcceptContainer(id, agentMind.canEndMessage(), RequestType.END);
     }
 }
