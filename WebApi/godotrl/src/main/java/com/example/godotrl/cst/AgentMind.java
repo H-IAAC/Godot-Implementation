@@ -96,7 +96,7 @@ public class AgentMind extends Mind {
                           * */
         LearnerCodelet learnerCodelet = new LearnerCodelet(
                 0.9999, 0.05,
-                3L, true, true,
+                1L, true, true,
                 rl, new Domain[] {new Domain(0), new Domain(0), new Domain(4)},
                 pathToSaveLearning, qFile,
                 rewardFile, checkPointEachNEpisodes
