@@ -215,6 +215,8 @@ public class LearnerCodelet extends Codelet {
     public void resetWinState() {
         hasWon = false;
         hasLost = false;
+
+        currStep = 0;
     }
 
     public boolean canEnd() {
