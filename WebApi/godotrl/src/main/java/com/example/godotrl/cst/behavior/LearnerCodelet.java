@@ -128,13 +128,20 @@ public class LearnerCodelet extends Codelet {
                 }
 
                 /* CHOOSE ACTION */
-                if (isTabular)
-                    idAction = qLearning.epsilonGreedyPolicy(this.epsilon, obs);
-                else
-                    idAction = lfa.epsilonGreedyPolicy(this.epsilon, obs);
+                Action action;
 
-                // Action should be decided through the Q-Learning algorithm. Should be an element of the enum Action
-                Action action = env.convertIdToAction(idAction);
+                if ( currStep < nMaxSteps ) {
+                    if (isTabular)
+                        idAction = qLearning.epsilonGreedyPolicy(this.epsilon, obs);
+                    else
+                        idAction = lfa.epsilonGreedyPolicy(this.epsilon, obs);
+
+                    // Action should be decided through the Q-Learning algorithm. Should be an element of the enum Action
+                    action = env.convertIdToAction(idAction);
+                }
+                else
+                    action = Action.RESET;
+
                 motorMO.setI(action);
                 lastObs = obs;
 
