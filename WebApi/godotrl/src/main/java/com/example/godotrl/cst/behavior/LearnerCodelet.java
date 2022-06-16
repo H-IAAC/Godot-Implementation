@@ -2,17 +2,14 @@ package com.example.godotrl.cst.behavior;
 import br.unicamp.cst.core.entities.Codelet;
 
 
-import br.unicamp.cst.core.entities.Codelet;
 import br.unicamp.cst.core.entities.MemoryObject;
 import com.example.godotrl.util.Action;
 import com.example.godotrl.util.State;
 import com.example.godotrl.util.Updater;
-import com.example.godotrl.util.Vector2;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 public class LearnerCodelet extends Codelet {
     Boolean isTraining;
@@ -47,14 +44,16 @@ public class LearnerCodelet extends Codelet {
 
     private boolean hasWon = false;
     private boolean hasLost = false;
+    private Integer nMaxSteps;
+    private ArrayList lastObs;
 
 
     public LearnerCodelet(
-                          Double epsilonInitial, Double epsilonFinal,
-                          Long numEpisodes, Boolean isTraining, Boolean isTabular,
-                          ValueBasedRL learning, Domain<Double>[] actionSpace,
-                          String localPathToCheckpoint, String learningFileName,
-                          String cumRewardFileName, Long checkpointEachNEpisodes) {
+            Double epsilonInitial, Double epsilonFinal,
+            Long numEpisodes, Boolean isTraining, Boolean isTabular,
+            ValueBasedRL learning, Domain<Double>[] actionSpace,
+            String localPathToCheckpoint, String learningFileName,
+            String cumRewardFileName, Long checkpointEachNEpisodes, Integer nMaxSteps) {
         this.epsilon = epsilonInitial;
         this.epsilonInitial = epsilonInitial;
         this.epsilonFinal = epsilonFinal;
@@ -68,8 +67,9 @@ public class LearnerCodelet extends Codelet {
         this.learningFileName = learningFileName;
         this.cumRewardFileName = cumRewardFileName;
         this.checkpointEachNEpisodes = checkpointEachNEpisodes;
+        this.nMaxSteps = nMaxSteps;
         setLearningType( learning );
-        this.csvRewardRecord = new CSV(localPathToCheckpoint, cumRewardFileName, false);
+        this.csvRewardRecord = new CSV(localPathToCheckpoint, cumRewardFileName, false, true);
     }
 
     private void setLearningType( ValueBasedRL learning ) {
@@ -91,11 +91,12 @@ public class LearnerCodelet extends Codelet {
             Old code below, should be reimplemented above
         */
 
-            this.episodeIsDone = hasWon || hasLost;
+            hasLost = hasLost || currStep >= nMaxSteps;
+            episodeIsDone = hasWon || hasLost;
 
             if (this.currEpisode < this.numEpisodes) {
 
-                if (this.currStep == 0 && this.currEpisode == 0) {
+                if (this.currEpisode == 0 && this.currStep == 0) {
                     if (Files.exists(
                             Path.of(this.localPathToCheckpoint + this.learningFileName))) {
                         this.deserializeLearning();
@@ -108,36 +109,36 @@ public class LearnerCodelet extends Codelet {
                 State state = (State) stateMO.getI();
 
                 /* Q LEARNING ALGORITHM */
-                ArrayList step = env.step(state, lastAction);
+                ArrayList step = env.step(state, lastAction, episodeIsDone, hasWon);
 
-                //this.episodeIsDone = ((Boolean) step.get(2));
                 Double currReward = ((Double) step.get(1));
                 this.reward = new Domain<Double>(this.reward.doubleValue() + currReward);
 
-                ArrayList lastObs = env.getObservationSpace( lastState, lastAction );
+                // ArrayList lastObs = env.getObservationSpace( lastState, lastAction );
                 ArrayList obs = ((ArrayList<Domain>) step.get(0));
                 Domain idAction = env.getActionID(lastAction);
-                if (isTabular) {
-                    qLearning.update(lastObs, obs, idAction, new Domain<Double>(currReward));
-                } else {
-                    lfa.update(lastObs, obs, idAction, new Domain<Double>(currReward));
+
+                if (!this.episodeIsDone && currStep > 0) {
+
+                    if (isTabular) {
+                        qLearning.update(lastObs, obs, idAction, new Domain<Double>(currReward));
+                    } else {
+                        lfa.update(lastObs, obs, idAction, new Domain<Double>(currReward));
+                    }
                 }
 
-                if (!this.episodeIsDone) {
-                    /* CHOOSE ACTION */
-                    if (isTabular)
-                        idAction = qLearning.epsilonGreedyPolicy(this.epsilon, obs);
-                    else
-                        idAction = lfa.epsilonGreedyPolicy(this.epsilon, obs);
-                }
+                /* CHOOSE ACTION */
+                if (isTabular)
+                    idAction = qLearning.epsilonGreedyPolicy(this.epsilon, obs);
+                else
+                    idAction = lfa.epsilonGreedyPolicy(this.epsilon, obs);
 
                 // Action should be decided through the Q-Learning algorithm. Should be an element of the enum Action
                 Action action = env.convertIdToAction(idAction);
                 motorMO.setI(action);
-                }
+                lastObs = obs;
 
-                else {
-
+                if (episodeIsDone) {
                     if ((this.currEpisode + 1) % this.checkpointEachNEpisodes == 0) {
                         if (this.reward.doubleValue() > this.greatestCheckpointReward) {
                             this.greatestCheckpointReward = this.reward.doubleValue();
@@ -146,22 +147,28 @@ public class LearnerCodelet extends Codelet {
                     }
 
                     csvRewardRecord.recordNewEpisode(
-                            this.currEpisode, this.reward, this.epsilon);
-                    this.reward = new Domain<Double>(0.0);
-                    this.currStep = 0;
-                    this.currEpisode++;
-                    // this.env.reset();
-                    this.episodeIsDone = false;
-                }
+                            currEpisode, reward, epsilon);
 
-                this.epsilon = Math.max(
-                        this.epsilon - this.epsilonDecay,
-                        this.epsilonFinal);
-            } else {
-                serializeLearning(this.localPathToCheckpoint + "final_" + this.learningFileName);
-                // TODO (is there more things to be done?) -> finish training
+                    reward = new Domain<Double>(0.0);
+                    currStep = 0;
+                    episodeIsDone = false;
+                    hasLost = false;
+                    hasWon = false;
+                    currEpisode++;
+
+                    this.epsilon = Math.max(
+                            this.epsilon - this.epsilonDecay,
+                            this.epsilonFinal);
+                }
+                else {
+                    currStep++;
+                }
+            }
+            else {
+                serializeLearning( localPathToCheckpoint + "final_" + learningFileName );
             }
         }
+    }
 
     private void serializeLearning() {
         if (this.isTabular) {
@@ -183,10 +190,10 @@ public class LearnerCodelet extends Codelet {
 
     private void deserializeLearning() {
         if (this.isTabular) {
-            qLearning.deserializeLearning(this.localPathToCheckpoint + this.learningFileName);
+            qLearning.deserializeLearning( this.learningFileName );
         }
         else {
-            lfa.deserializeLearning(this.localPathToCheckpoint + this.learningFileName);
+            lfa.deserializeLearning( this.learningFileName );
         }
     }
 

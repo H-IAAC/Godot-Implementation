@@ -19,12 +19,13 @@ public class CSV {
     public CSV(
             String localPathToFile,
             String fileName,
-            Boolean appendContentToExistingFile
+            Boolean appendContentToExistingFile,
+            Boolean initReward
     ) {
         this.localPathToFile = localPathToFile;
         this.fileName = fileName;
         this.append = appendContentToExistingFile;
-        initializeCallback();
+        initializeCallback(initReward);
     }
 
     public void recordNewEpisode(
@@ -69,20 +70,40 @@ public class CSV {
             e.printStackTrace();
         }
     }
+    public static void createFile(String filePath) {
 
-    private void initializeCallback() {
+        System.out.printf("file path: %s.", filePath );
 
         try {
-            File file = new File( this.localPathToFile + this.fileName );
+            File file = new File( filePath );
             if (file.createNewFile()) {
-                System.out.println("file created.");
+                System.out.printf("file %s created.", filePath );
             }
             else
-                System.out.println("file already exists.");
+                System.out.printf("file %s already exists.", filePath );
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void createFile(String localPathToFile, String fileName) {
+        try {
+            File file = new File( localPathToFile + fileName );
+            if (file.createNewFile()) {
+                System.out.printf("file %s created at %s.", fileName,localPathToFile);
+            }
+            else
+                System.out.printf("file %s already exists at %s.", fileName, localPathToFile);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeCallback(boolean initReward) {
+
+        createFile(this.localPathToFile, this.fileName);
 
         try (FileReader fr = new FileReader(this.localPathToFile + this.fileName);
              BufferedReader br = new BufferedReader(fr);)
@@ -90,7 +111,7 @@ public class CSV {
             FileWriter fw = new FileWriter(this.localPathToFile + this.fileName, this.append);
             BufferedWriter bw = new BufferedWriter(fw);
             this.writer = new PrintWriter(bw);
-            if(br.readLine() == null) {
+            if(initReward && br.readLine() == null) {
                 this.writer.println("episode, reward, epsilon");
             }
 

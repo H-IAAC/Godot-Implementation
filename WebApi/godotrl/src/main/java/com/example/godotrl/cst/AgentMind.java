@@ -105,11 +105,12 @@ public class AgentMind extends Mind {
 
         // Behavior
 
-        //String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
-        String pathToSaveLearning = ".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+"callback/";
+        String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
+        // String pathToSaveLearning = ".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+"callback/";
         String qFile = "q-table.csv";
         String rewardFile = "rewards-qlearning.csv";
         Long checkPointEachNEpisodes = 1000L;
+        Integer nMaxSteps = 50;
 
         /*
          * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning
@@ -121,14 +122,15 @@ public class AgentMind extends Mind {
                           Long numEpisodes, Boolean isTraining, Boolean isTabular,
                           ValueBasedRL learning, Domain<Double>[] actionSpace,
                           String localPathToCheckpoint, String learningFileName,
-                          String cumRewardFileName, Long checkpointEachNEpisodes
+                          String cumRewardFileName, Long checkpointEachNEpisodes,
+                          Integer nMaxSteps
                           * */
         learnerCodelet = new LearnerCodelet(
                 0.9999, 0.05,
-                1L, true, true,
+                3L, true, true,
                 rl, new Domain[] {new Domain(0), new Domain(0), new Domain(4)},
                 pathToSaveLearning, qFile,
-                rewardFile, checkPointEachNEpisodes
+                rewardFile, checkPointEachNEpisodes, nMaxSteps
         );
         learnerCodelet.addOutput(updateMO);
         learnerCodelet.addOutput(motorMO);

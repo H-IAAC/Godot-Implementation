@@ -35,32 +35,48 @@ public class FrogEnv extends  Environment {
     //     return sum;
     // }
 
-    private Double getReward( ArrayList<Domain> state, Vector2 pos, Action lastAction, Boolean isDone ) {
+    private Double getReward( ArrayList<Domain> state, Vector2 pos, Action lastAction, Boolean isDone, Boolean hasWon ) {
         Double rw = 0.0;
-        if ( (Double) pos.getY() == (Double) this.yTarget ) rw += 10.0;
+        if ( isDone ) {
+            if ( hasWon ) rw += 30.0;
+            else rw -= 30.0;
+        }
+
         if ( lastAction == Action.UP ) rw += 1.0;
         if ( lastAction == Action.DOWN ) rw -= 1.0;
-        if ( state.get(5).intValue() == 1 ) rw -= 10.0;
 
         return rw;
     }
+
     /*
     * calls a step in the environment.
     * Return ArrayList { state: ArrayList<Domain>, reward: Domain,
                           done: Boolean, info: String }
     * */
-    public ArrayList step( State state, Action lastAction ) {
+    public ArrayList step( State state, Action lastAction, Boolean isDone, Boolean hasWon ) {
         Vector2 pos = state.getPosition();
         ArrayList step = new ArrayList();
+        /* IS THIS CORRECT? */
         ArrayList<Domain> obs = this.getObservationSpace( state, lastAction );
-        Boolean isDone = this.isDone( obs, pos );
         step.add( obs );
-        step.add( this.getReward( obs, pos, lastAction, isDone ) );
-        step.add( this.isDone( obs, pos ) );
-        // step.add("info");
+        step.add( this.getReward( obs, pos, lastAction, isDone, hasWon ) );
+        step.add( isDone );
 
         return step;
     }
+
+    // public ArrayList step( State state, Action lastAction ) {
+        //     Vector2 pos = state.getPosition();
+        //     ArrayList step = new ArrayList();
+        //     ArrayList<Domain> obs = this.getObservationSpace( state, lastAction );
+        //     Boolean isDone = this.isDone( obs, pos );
+        //     step.add( obs );
+        //     step.add( this.getReward( obs, pos, lastAction, isDone ) );
+        //     step.add( this.isDone( obs, pos ) );
+        //     step.add("info");
+
+        //     return step;
+    // }
 
     public ArrayList getObservationSpace( State state, Action lastAction ) {
         return this.convertState( state, lastAction );

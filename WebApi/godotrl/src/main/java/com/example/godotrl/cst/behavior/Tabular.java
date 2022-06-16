@@ -98,10 +98,14 @@ public class Tabular extends ValueBasedRL {
         this.setQValues(state, qValues);
     }
 
-    protected void serializeLearning(String fileName) {
+    protected void serializeLearning(String filePath) {
+
+        CSV.createFile( filePath );
+
         try {
             FileOutputStream fileOutputStream =
-                    new FileOutputStream(super.pathToSaveLearning + fileName);
+        //            new FileOutputStream(super.pathToSaveLearning + fileName);
+                    new FileOutputStream(filePath);
             ObjectOutputStream objectOutputStream =
                     new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(this.qTable);
