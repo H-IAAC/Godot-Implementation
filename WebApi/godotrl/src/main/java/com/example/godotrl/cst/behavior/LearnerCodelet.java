@@ -170,8 +170,8 @@ public class LearnerCodelet extends Codelet {
                 }
             }
             else {
-                serializeLearning( localPathToCheckpoint + "final_" + learningFileName );
                 doneRunning = true;
+                serializeLearning( localPathToCheckpoint + "final_" + learningFileName );
             }
         }
     }

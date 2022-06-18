@@ -106,12 +106,17 @@ public class AgentMind extends Mind {
 
         // Behavior
 
-        // String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
-        String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
-        String qFile = "q-table.csv";
+        String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
+        // String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
+        String rlFile = "q-table.csv";
         String rewardFile = "rewards-qlearning.csv";
-        Long checkPointEachNEpisodes = 1000L;
         Integer nMaxSteps = 50;
+        Double epsilonInitial = 0.999;
+        Double epsilonFinal = 0.01;
+        Long numEpisodes = 3L;
+        Long checkPointEachNEpisodes = 1000L;
+        Boolean isTraining = true;
+        Boolean isTabular = true;
 
         /*
          * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning
@@ -127,10 +132,10 @@ public class AgentMind extends Mind {
                           Integer nMaxSteps
                           * */
         learnerCodelet = new LearnerCodelet(
-                0.9999, 0.05,
-                3L, true, true,
+                epsilonInitial, epsilonFinal,
+                numEpisodes, isTraining, isTabular,
                 rl, new Domain[] {new Domain(0), new Domain(0), new Domain(4)},
-                pathToSaveLearning, qFile,
+                pathToSaveLearning, rlFile,
                 rewardFile, checkPointEachNEpisodes, nMaxSteps
         );
         learnerCodelet.addOutput(updateMO);

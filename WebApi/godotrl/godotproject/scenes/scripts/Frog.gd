@@ -1,7 +1,7 @@
 extends "res://scenes/scripts/Element.gd"
 
-
 enum Request {SENSOR, MOTOR, WIN, LOSE, INFO, END}
+
 enum Action {UP, RIGHT, DOWN, LEFT, INVALID}
 
 
@@ -51,7 +51,6 @@ func turn(dir):
 	
 	return true
 
-
 func lose_on_collision():
 	for car in get_tree().get_nodes_in_group("car"):
 			if car.cell_pos == cell_pos:
@@ -92,7 +91,6 @@ func finish_request(result, response_code, headers, body):
 		if info != "DONE":
 			request_pile.append(Request.SENSOR)
 			request_pile.append(Request.END)
-	
 	request()
 
 
@@ -128,7 +126,6 @@ func request():
 			Request.END:
 				http_request.request("http://localhost:8080/end")
 
-
 func is_in_sight(pos):
 	return abs(pos[0] - cell_pos[0]) <= VISION_DISTANCE and abs(pos[1] - cell_pos[1]) <= VISION_DISTANCE
 
@@ -136,7 +133,6 @@ func is_in_sight(pos):
 func try_to_add_request(request):
 	if not done:
 		request_pile.append(request)
-
 
 func game_over():
 	if not done:

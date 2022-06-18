@@ -9,14 +9,17 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 public class LFA extends ValueBasedRL {
-    private LinkedHashMap<String, Double> weights = new LinkedHashMap<String, Double>();
-    private FeaturesExtractor extractor; // new featuresExtractor();
+    protected LinkedHashMap<String, Double> weights = new LinkedHashMap<String, Double>();
+    protected FeaturesExtractor extractor; // new featuresExtractor();
 
     public LFA(Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FeaturesExtractor fe) {
         super(alpha, gamma, numActions, pathToSaveLearning);
         this.extractor = fe;
     }
 
+    /**
+     *  Create a child class for implement the correct update function
+     * */
     @Override
     public void update(ArrayList state, ArrayList newState,
                        Domain action, Domain reward) {
@@ -76,10 +79,10 @@ public class LFA extends ValueBasedRL {
         }
     }
 
-    protected void deserializeLearning(String fileName) {
+    protected void deserializeLearning(String filePath) {
         try {
             FileInputStream fileInputStream =
-                    new FileInputStream(super.pathToSaveLearning + fileName);
+                    new FileInputStream( filePath );
             ObjectInputStream objectInputStream =
                     new ObjectInputStream(fileInputStream);
             //TODO("Figure out what's the right way to handle objectInputStream")
@@ -91,9 +94,5 @@ public class LFA extends ValueBasedRL {
         catch(IOException e1) {
             e1.printStackTrace();
         }
-//        catch (ClassNotFoundException e2) {
-//            System.out.println("Class not found");
-//            e2.printStackTrace();
-//        }
     }
 }

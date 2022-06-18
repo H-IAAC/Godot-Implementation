@@ -20,7 +20,6 @@ Global="*res://scenes/Global.tscn"
 
 [display]
 
-window/size/resizable=false
 window/stretch/mode="viewport"
 
 [physics]
