@@ -42,6 +42,7 @@ public class LearnerCodelet extends Codelet {
     private MemoryObject stateMO;
     private MemoryObject lastStateMO;
 
+    private boolean doneRunning = false;
     private boolean hasWon = false;
     private boolean hasLost = false;
     private Integer nMaxSteps;
@@ -86,7 +87,7 @@ public class LearnerCodelet extends Codelet {
 
     @Override
     public void proc() {
-        if (((Updater) this.updateMO.getI()).updateLearner()) {
+        if (((Updater) this.updateMO.getI()).updateLearner() && !doneRunning) {
         /*
             Old code below, should be reimplemented above
         */
@@ -158,9 +159,6 @@ public class LearnerCodelet extends Codelet {
 
                     reward = new Domain<Double>(0.0);
                     currStep = 0;
-                    episodeIsDone = false;
-                    hasLost = false;
-                    hasWon = false;
                     currEpisode++;
 
                     this.epsilon = Math.max(
@@ -173,6 +171,7 @@ public class LearnerCodelet extends Codelet {
             }
             else {
                 serializeLearning( localPathToCheckpoint + "final_" + learningFileName );
+                doneRunning = true;
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.godotrl.cst;
 
+import br.unicamp.cst.core.entities.Codelet;
 import br.unicamp.cst.core.entities.MemoryObject;
 import br.unicamp.cst.core.entities.Mind;
 import com.example.godotrl.cst.behavior.Domain;
@@ -105,8 +106,8 @@ public class AgentMind extends Mind {
 
         // Behavior
 
-        String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
-        // String pathToSaveLearning = ".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+".."+System.getProperty("file.separator")+"callback/";
+        // String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
+        String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
         String qFile = "q-table.csv";
         String rewardFile = "rewards-qlearning.csv";
         Long checkPointEachNEpisodes = 1000L;
@@ -115,7 +116,7 @@ public class AgentMind extends Mind {
         /*
          * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning
          * */
-        Tabular rl = new Tabular(0.99, 0.95, 5, pathToSaveLearning);
+        Tabular rl = new Tabular(0.1, 0.98, 5, pathToSaveLearning);
 
         /*
         *                 Double epsilonInitial, Double epsilonFinal,
@@ -137,6 +138,9 @@ public class AgentMind extends Mind {
         learnerCodelet.addInput(stateMO);
         learnerCodelet.addInput(lastStateMO);
         insertCodelet(learnerCodelet, "BEHAVIOR");
+
+        for (Codelet c : this.getCodeRack().getAllCodelets())
+            c.setTimeStep(10);
 
         start();
     }
