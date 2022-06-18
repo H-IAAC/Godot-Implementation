@@ -13,7 +13,7 @@ public abstract class Environment {
     }
 
     public Object getObservationSpace() {
-        return ((ArrayList<Domain>) this.stateMO.getI());
+        return ( this.stateMO.getI() );
     }
 
     public Domain[] getActionSpace() {

@@ -1,8 +1,8 @@
 package com.example.godotrl.util;
 
 public class Vector2 {
-    private double x;
-    private double y;
+    private Double x;
+    private Double y;
 
     public Vector2(double x, double y) {
         this.x = x;
@@ -35,5 +35,13 @@ public class Vector2 {
 
         Vector2 v = (Vector2) o;
         return x == v.x && y == v.y;
+    }
+
+    public Double getX() {
+        return x;
+    }
+
+    public Double getY() {
+        return y;
     }
 }

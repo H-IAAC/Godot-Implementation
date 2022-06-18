@@ -52,7 +52,7 @@ public abstract class ValueBasedRL {
     // could be Integer too.
     protected Domain epsilonGreedyPolicy(Double epsilon, ArrayList<Domain> state) {
         if (Math.random() < epsilon)
-            return new Domain((int) Math.floor(Math.random() * this.numActions));
+            return new Domain((int) Math.floor( ((Math.random() - 0.1) * (this.numActions - 1) ) ) );
         else {
             return new Domain(getIdBestValue(state));
         }

@@ -1,7 +1,7 @@
 package com.example.godotrl.cst.behavior;
 
 public final class Domain<T extends Number & Comparable<T>> implements Comparable<Domain<?>> {
-    T val;
+    public T val;
 
     public Domain(T val) {
         this.val = val;
