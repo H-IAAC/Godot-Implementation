@@ -70,6 +70,7 @@ public class LearnerCodelet extends Codelet {
         this.checkpointEachNEpisodes = checkpointEachNEpisodes;
         this.nMaxSteps = nMaxSteps;
         setLearningType( learning );
+        cumRewardFileName = isTraining ? "training_" + cumRewardFileName : "eval_" + cumRewardFileName;
         this.csvRewardRecord = new CSV(localPathToCheckpoint, cumRewardFileName, false, true);
     }
 
@@ -147,7 +148,8 @@ public class LearnerCodelet extends Codelet {
                 lastObs = obs;
 
                 if (episodeIsDone) {
-                    if ((this.currEpisode + 1) % this.checkpointEachNEpisodes == 0) {
+
+                    if (isTraining && (this.currEpisode + 1) % this.checkpointEachNEpisodes == 0) {
                         if (this.reward.doubleValue() > this.greatestCheckpointReward) {
                             this.greatestCheckpointReward = this.reward.doubleValue();
                             serializeLearning();
@@ -171,7 +173,9 @@ public class LearnerCodelet extends Codelet {
             }
             else {
                 doneRunning = true;
-                serializeLearning( localPathToCheckpoint + "final_" + learningFileName );
+
+                if (isTraining)
+                    serializeLearning( localPathToCheckpoint + "final_" + learningFileName );
             }
         }
     }
