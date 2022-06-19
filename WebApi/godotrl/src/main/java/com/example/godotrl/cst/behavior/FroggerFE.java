@@ -8,8 +8,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class FroggerFE extends FeaturesExtractor {
-    private int yLen = 5;
-    private int xLen = 5;
+
+    private Double yLen;
+    private Double xLen;
+
+    public FroggerFE(Double xLen, Double yLen ) {
+        this.yLen = yLen;
+        this.xLen = xLen;
+    }
+
 
     public LinkedHashMap<String, Double> getFeatures( State state, Action action, Boolean isDone, Boolean hasWon ) {
         

@@ -11,11 +11,14 @@ import java.util.Set;
 
 public class FroggerLFA extends LFA {
 
-    protected Double yLim = 5.0;
-    protected Double xLim = 5.0;
+    protected Double yLim;
+    protected Double xLim;
 
-    public FroggerLFA(Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FroggerFE fe) {
+    public FroggerLFA(Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FroggerFE fe,
+                      Double xLen, Double yLen ) {
         super(alpha, gamma, numActions, pathToSaveLearning, fe);
+        this.xLim = xLen;
+        this.yLim = yLen;
     }
 
     public void update(State state, State newState, Action action, Domain reward, Boolean isDone, Boolean won) {

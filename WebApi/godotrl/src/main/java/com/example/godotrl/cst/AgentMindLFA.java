@@ -115,11 +115,13 @@ public class AgentMindLFA extends Mind {
         Long checkPointEachNEpisodes = 300L;
         Boolean isTraining = true;
         Boolean isTabular = true;
+        Double xLen = 5.0;
+        Double yLen = 5.0;
 
         /*
          * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FroggerFE fe
          * */
-        FroggerLFA rl = new FroggerLFA( 0.1, 0.98, 5, pathToSaveLearning, new FroggerFE()) ;
+        FroggerLFA rl = new FroggerLFA( 0.1, 0.98, 5, pathToSaveLearning, new FroggerFE(xLen, yLen), xLen, yLen ) ;
 
         /*
               Double epsilonInitial, Double epsilonFinal,

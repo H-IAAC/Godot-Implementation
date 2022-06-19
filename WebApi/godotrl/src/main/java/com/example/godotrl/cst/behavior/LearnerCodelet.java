@@ -78,11 +78,9 @@ public class LearnerCodelet extends Codelet {
         if (this.isTabular) {
             this.qLearning = (Tabular) learning;
             this.qLearning.initQTable();
-        // new Tabular( this.alpha, this.gamma, this.actionSpace[2].intValue(), this.localPathToCheckpoint );
         } else {
             FeaturesExtractor fe = new FeaturesExtractor();
             this.lfa = (LFA) learning;
-            // new LFA( this.alpha, this.gamma, this.actionSpace[2].intValue(), this.localPathToCheckpoint, fe);
         }
     }
 

@@ -115,7 +115,7 @@ public class AgentMind extends Mind {
         Double epsilonFinal = 0.01;
         Long numEpisodes = 10L;
         Long checkPointEachNEpisodes = 500L;
-        Boolean isTraining = false;
+        Boolean isTraining = true;
         Boolean isTabular = true;
 
         /*
