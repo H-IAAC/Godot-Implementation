@@ -47,6 +47,8 @@ public class CloseCars extends Codelet {
     public void proc() {
         if (((Updater) updateMO.getI()).updateCloseCar()) {
             ArrayList<Vector2> memoryList = (ArrayList<Vector2>) knownCarsMO.getI();
+            if (memoryList == null)
+                memoryList = new ArrayList<>();
 
             insertionSort(memoryList, (Vector2) positionMO.getI());
 

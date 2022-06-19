@@ -31,30 +31,16 @@ public class CSV {
     public void recordNewEpisode(
             Long episode,
             Domain reward,
-            Double epsilon
+            Double epsilon,
+            Boolean hasWon
     ) {
         String line = String.format(
                 Locale.US,
-                "%d, %.2f, %.2f",
+                "%d, %.2f, %.2f, %b",
                 episode,
                 reward.doubleValue(),
-                epsilon
-        );
-        this.writer.println(line);
-        this.writer.flush();
-    }
-
-    public void recordNewEpisode(
-            Integer episode,
-            Domain reward,
-            Double epsilon
-    ) {
-        String line = String.format(
-                Locale.US,
-                "%d, %.2f, %.2f",
-                episode,
-                reward.doubleValue(),
-                episode
+                epsilon,
+                hasWon
         );
         this.writer.println(line);
         this.writer.flush();
@@ -112,7 +98,7 @@ public class CSV {
             BufferedWriter bw = new BufferedWriter(fw);
             this.writer = new PrintWriter(bw);
             if(initReward && br.readLine() == null) {
-                this.writer.println("episode, reward, epsilon");
+                this.writer.println("episode, reward, epsilon, hasWon");
             }
 
             this.writer.flush();

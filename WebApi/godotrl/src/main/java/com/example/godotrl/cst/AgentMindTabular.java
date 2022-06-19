@@ -17,7 +17,7 @@ import com.example.godotrl.util.Vector2;
 
 import java.util.ArrayList;
 
-public class AgentMind extends Mind {
+public class AgentMindTabular extends Mind {
     MemoryObject positionMO = null;
     MemoryObject visionMO = null;
 
@@ -113,8 +113,8 @@ public class AgentMind extends Mind {
         Integer nMaxSteps = 50;
         Double epsilonInitial = 0.999;
         Double epsilonFinal = 0.01;
-        Long numEpisodes = 5000L;
-        Long checkPointEachNEpisodes = 500L;
+        Long numEpisodes = 3L;
+        Long checkPointEachNEpisodes = 300L;
         Boolean isTraining = true;
         Boolean isTabular = true;
 

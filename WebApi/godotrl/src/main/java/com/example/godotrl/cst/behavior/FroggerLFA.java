@@ -11,6 +11,9 @@ import java.util.Set;
 
 public class FroggerLFA extends LFA {
 
+    protected Double yLim = 5.0;
+    protected Double xLim = 5.0;
+
     public FroggerLFA(Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FroggerFE fe) {
         super(alpha, gamma, numActions, pathToSaveLearning, fe);
     }
@@ -49,15 +52,15 @@ public class FroggerLFA extends LFA {
         Double x = state.getPosition().getX();
         Double y = state.getPosition().getY();
         // won
-        if ( y == 9.0 && action == Action.UP )
+        if ( y == yLim && action == Action.UP )
             return 1;
 
         switch (action) {
             case UP:
-                y = Math.min(10.0, y+1);
+                y = Math.min( yLim, y+1);
                 break;
             case RIGHT:
-                x = Math.min( 10.0, x+1 );
+                x = Math.min( xLim, x+1 );
                 break;
             case DOWN:
                 y = Math.max(y-1, 0);

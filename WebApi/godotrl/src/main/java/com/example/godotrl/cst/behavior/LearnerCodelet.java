@@ -155,7 +155,7 @@ public class LearnerCodelet extends Codelet {
                     }
 
                     csvRewardRecord.recordNewEpisode(
-                            currEpisode, reward, epsilon);
+                            currEpisode, reward, epsilon, hasWon );
 
                     reward = new Domain<Double>(0.0);
                     currStep = 0;
