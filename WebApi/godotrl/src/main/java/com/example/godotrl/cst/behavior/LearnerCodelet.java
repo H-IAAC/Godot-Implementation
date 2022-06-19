@@ -55,7 +55,7 @@ public class LearnerCodelet extends Codelet {
             ValueBasedRL learning, Domain<Double>[] actionSpace,
             String localPathToCheckpoint, String learningFileName,
             String cumRewardFileName, Long checkpointEachNEpisodes, Integer nMaxSteps) {
-        this.epsilon = epsilonInitial;
+        this.epsilon = isTraining ? epsilonInitial : epsilonFinal;
         this.epsilonInitial = epsilonInitial;
         this.epsilonFinal = epsilonFinal;
         this.numEpisodes = numEpisodes;
@@ -100,6 +100,10 @@ public class LearnerCodelet extends Codelet {
 
                 if (this.currEpisode == 0 && this.currStep == 0) {
                     if (Files.exists(
+                            Path.of(this.localPathToCheckpoint + "final_" + this.learningFileName))) {
+                        this.deserializeLearning();
+                    }
+                    else if (Files.exists(
                             Path.of(this.localPathToCheckpoint + this.learningFileName))) {
                         this.deserializeLearning();
                     }
@@ -163,9 +167,8 @@ public class LearnerCodelet extends Codelet {
                     currStep = 0;
                     currEpisode++;
 
-                    this.epsilon = Math.max(
-                            this.epsilon - this.epsilonDecay,
-                            this.epsilonFinal);
+                    if (isTraining)
+                        this.epsilon = Math.max(this.epsilon - this.epsilonDecay, this.epsilonFinal);
                 }
                 else {
                     currStep++;

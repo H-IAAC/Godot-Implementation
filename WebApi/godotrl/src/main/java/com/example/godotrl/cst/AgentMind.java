@@ -113,9 +113,9 @@ public class AgentMind extends Mind {
         Integer nMaxSteps = 50;
         Double epsilonInitial = 0.999;
         Double epsilonFinal = 0.01;
-        Long numEpisodes = 5000L;
+        Long numEpisodes = 10L;
         Long checkPointEachNEpisodes = 500L;
-        Boolean isTraining = true;
+        Boolean isTraining = false;
         Boolean isTabular = true;
 
         /*
