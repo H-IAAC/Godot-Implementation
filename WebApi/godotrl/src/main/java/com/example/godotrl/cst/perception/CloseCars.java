@@ -45,7 +45,7 @@ public class CloseCars extends Codelet {
 
     @Override
     public void proc() {
-        if (((Updater) updateMO.getI()).updateCloseCar()) {
+        if (((Updater) updateMO.getI()).canUpdateCloseCar()) {
             ArrayList<Vector2> memoryList = (ArrayList<Vector2>) knownCarsMO.getI();
             if (memoryList == null)
                 memoryList = new ArrayList<>();
@@ -62,6 +62,8 @@ public class CloseCars extends Codelet {
             }
 
             closestCarsMO.setI(closestCars);
+
+            ((Updater) updateMO.getI()).updateCloseCar();
         }
     }
 }

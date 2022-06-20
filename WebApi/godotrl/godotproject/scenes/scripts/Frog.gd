@@ -16,11 +16,12 @@ onready var http_request = $HTTPRequest
 
 func _ready():
 	animation_player.play("idle_front")
-
+	
 	http_request.connect("request_completed", self, "finish_request")
-
-	http_request.request("http://localhost:8080/initialize")
-
+	
+	var map_data = {"h_size": base.H_SIZE, "v_size": base.V_SIZE}
+	http_request.request("http://localhost:8080/initialize", PoolStringArray(["Content-Type:application/json"]), true, HTTPClient.METHOD_POST, JSON.print(map_data))
+	
 	request_pile.append(Request.SENSOR)
 
 
@@ -131,7 +132,7 @@ func request():
 
 
 func is_in_sight(pos):
-	return abs(pos[0] - cell_pos[0]) <= VISION_DISTANCE and abs(pos[1] - cell_pos[1]) <= VISION_DISTANCE and base.is_in_map(pos)
+	return abs(pos[0] - cell_pos[0]) <= VISION_DISTANCE and abs(pos[1] - cell_pos[1]) <= VISION_DISTANCE and (base.is_in_map(pos) or base.is_in_map(pos + Vector2(1, 0))) 
 
 
 func try_to_add_request(request):

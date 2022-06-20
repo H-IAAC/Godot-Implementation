@@ -10,10 +10,7 @@ import com.example.godotrl.cst.perception.CarDetection;
 import com.example.godotrl.cst.perception.CarUpdater;
 import com.example.godotrl.cst.perception.CloseCars;
 import com.example.godotrl.cst.perception.StateManager;
-import com.example.godotrl.util.Action;
-import com.example.godotrl.util.State;
-import com.example.godotrl.util.Updater;
-import com.example.godotrl.util.Vector2;
+import com.example.godotrl.util.*;
 
 import java.util.ArrayList;
 
@@ -29,9 +26,10 @@ public class AgentMindTabular extends Mind {
     MemoryObject updateMO = null;
     MemoryObject motorMO = null;
 
+    CarUpdater carUpdater = null;
     LearnerCodelet learnerCodelet = null;
 
-    public void resetMOs() {
+    public void resetMOs(MapData mapData) {
         // Sensor
         positionMO.setI(new Vector2(0, 0));
         visionMO.setI(new ArrayList<Vector2>());
@@ -48,10 +46,11 @@ public class AgentMindTabular extends Mind {
         // Motor
         motorMO.setI(Action.INVALID);
 
+        carUpdater.setMapData(mapData);
         learnerCodelet.resetWinState();
     }
 
-    public void initialize() {
+    public void initialize(MapData mapData) {
         /*
             INITIALIZE MEMORY OBJECTS
         */
@@ -83,7 +82,7 @@ public class AgentMindTabular extends Mind {
         carDetection.addOutput(updateMO);
         insertCodelet(carDetection, "PERCEPTION");
 
-        CarUpdater carUpdater = new CarUpdater();
+        carUpdater = new CarUpdater(mapData);
         carUpdater.addInput(positionMO);
         carUpdater.addOutput(knownCarsMO);
         carUpdater.addOutput(updateMO);

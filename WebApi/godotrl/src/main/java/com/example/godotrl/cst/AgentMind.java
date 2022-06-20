@@ -10,10 +10,7 @@ import com.example.godotrl.cst.perception.CarDetection;
 import com.example.godotrl.cst.perception.CarUpdater;
 import com.example.godotrl.cst.perception.CloseCars;
 import com.example.godotrl.cst.perception.StateManager;
-import com.example.godotrl.util.Action;
-import com.example.godotrl.util.State;
-import com.example.godotrl.util.Updater;
-import com.example.godotrl.util.Vector2;
+import com.example.godotrl.util.*;
 
 import java.util.ArrayList;
 
@@ -29,9 +26,10 @@ public class AgentMind extends Mind {
     MemoryObject updateMO = null;
     MemoryObject motorMO = null;
 
+    CarUpdater carUpdater = null;
     LearnerCodelet learnerCodelet = null;
 
-    public void resetMOs() {
+    public void resetMOs(MapData mapData) {
         // Sensor
         positionMO.setI(new Vector2(0, 0));
         visionMO.setI(new ArrayList<Vector2>());
@@ -48,10 +46,11 @@ public class AgentMind extends Mind {
         // Motor
         motorMO.setI(Action.INVALID);
 
+        carUpdater.setMapData(mapData);
         learnerCodelet.resetWinState();
     }
 
-    public void initialize() {
+    public void initialize(MapData mapData) {
         /*
             INITIALIZE MEMORY OBJECTS
         */
@@ -83,7 +82,7 @@ public class AgentMind extends Mind {
         carDetection.addOutput(updateMO);
         insertCodelet(carDetection, "PERCEPTION");
 
-        CarUpdater carUpdater = new CarUpdater();
+        carUpdater = new CarUpdater(mapData);
         carUpdater.addInput(positionMO);
         carUpdater.addOutput(knownCarsMO);
         carUpdater.addOutput(updateMO);
@@ -107,7 +106,7 @@ public class AgentMind extends Mind {
         // Behavior
 
         String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
-        // String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
+        //String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
         String rlFile = "q-table.csv";
         String rewardFile = "rewards-qlearning.csv";
         Integer nMaxSteps = 50;
@@ -152,9 +151,10 @@ public class AgentMind extends Mind {
 
     public void updateSensor(Vector2 pos, ArrayList<Vector2> cars) {
         if (positionMO != null && visionMO != null) {
-            if (((Updater) updateMO.getI()).updateSensor()) {
+            if (((Updater) updateMO.getI()).canUpdateSensor()) {
                 positionMO.setI(pos);
                 visionMO.setI(cars);
+                ((Updater) updateMO.getI()).updateSensor();
             }
         }
     }
@@ -180,12 +180,16 @@ public class AgentMind extends Mind {
     public void win() {
         if (learnerCodelet != null) {
             learnerCodelet.win();
+
+            ((Updater) updateMO.getI()).end();
         }
     }
 
     public void lose() {
         if (learnerCodelet != null) {
             learnerCodelet.lose();
+
+            ((Updater) updateMO.getI()).end();
         }
     }
 }

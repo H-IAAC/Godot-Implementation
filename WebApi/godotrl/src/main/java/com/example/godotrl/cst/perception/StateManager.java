@@ -31,9 +31,11 @@ public class StateManager extends Codelet {
 
     @Override
     public void proc() {
-        if (((Updater) updateMO.getI()).updateState()) {
+        if (((Updater) updateMO.getI()).canUpdateState()) {
             lastStateMO.setI(stateMO.getI());
             stateMO.setI(new State((Vector2) positionMO.getI(), (ArrayList<Vector2>) closestCarsMO.getI()));
+
+            ((Updater) updateMO.getI()).updateState();
         }
     }
 }

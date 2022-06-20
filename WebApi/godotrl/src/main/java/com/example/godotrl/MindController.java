@@ -2,10 +2,7 @@ package com.example.godotrl;
 
 import com.example.godotrl.containers.AcceptContainer;
 import com.example.godotrl.cst.AgentMind;
-import com.example.godotrl.util.Action;
-import com.example.godotrl.util.RequestType;
-import com.example.godotrl.util.SensorData;
-import com.example.godotrl.util.Vector2;
+import com.example.godotrl.util.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
@@ -23,15 +20,15 @@ public class MindController {
     private AgentMind agentMind = null;
     private long id = 0;
 
-    @GetMapping("/initialize")
-    public AcceptContainer initialize() {
+    @PostMapping("/initialize")
+    public AcceptContainer initialize(@RequestBody MapData mapData) {
         id += 1;
 
         if (agentMind == null) {
             agentMind = new AgentMind();
-            agentMind.initialize();
+            agentMind.initialize(mapData);
         } else {
-            agentMind.resetMOs();
+            agentMind.resetMOs(mapData);
         }
 
         return new AcceptContainer(id, "Mind initialized", RequestType.INFO);

@@ -86,7 +86,7 @@ public class LearnerCodelet extends Codelet {
 
     @Override
     public void proc() {
-        if (((Updater) this.updateMO.getI()).updateLearner() && !doneRunning) {
+        if (((Updater) this.updateMO.getI()).canUpdateLearner() && !doneRunning) {
         /*
             Old code below, should be reimplemented above
         */
@@ -178,6 +178,8 @@ public class LearnerCodelet extends Codelet {
                 if (isTraining)
                     serializeLearning( localPathToCheckpoint + "final_" + learningFileName );
             }
+
+            ((Updater) updateMO.getI()).updateLearner();
         }
     }
 

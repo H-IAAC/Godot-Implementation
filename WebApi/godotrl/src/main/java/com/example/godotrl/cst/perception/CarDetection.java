@@ -26,7 +26,7 @@ public class CarDetection extends Codelet {
 
     @Override
     public void proc() {
-        if (((Updater) updateMO.getI()).updateCarRead()) {
+        if (((Updater) updateMO.getI()).canUpdateCarRead()) {
             ArrayList<Vector2> visionList = (ArrayList<Vector2>) visionMO.getI();
             ArrayList<Vector2> memoryList = (ArrayList<Vector2>) knownCarsMO.getI();
 
@@ -35,6 +35,8 @@ public class CarDetection extends Codelet {
                     memoryList.add(v);
                 }
             }
+
+            ((Updater) updateMO.getI()).updateCarRead();
         }
     }
 }
