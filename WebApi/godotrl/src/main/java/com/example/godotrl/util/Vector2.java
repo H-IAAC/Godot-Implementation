@@ -34,7 +34,7 @@ public class Vector2 {
         }
 
         Vector2 v = (Vector2) o;
-        return x == v.x && y == v.y;
+        return x.equals(v.x) && y.equals(v.y);
     }
 
     public Double getX() {

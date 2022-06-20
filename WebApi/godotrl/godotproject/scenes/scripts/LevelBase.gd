@@ -37,7 +37,7 @@ func _ready():
 
 	initialize(H_SIZE, V_SIZE)
 
-	get_parent().size = Vector2(Global.CELL_SIZE * h_tiles, Global.CELL_SIZE * v_tiles)
+	get_parent().size = Vector2(Global.CELL_SIZE * 2 * h_tiles, Global.CELL_SIZE * 2 * v_tiles)
 
 
 func initialize(h_size, v_size):

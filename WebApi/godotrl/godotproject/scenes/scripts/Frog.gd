@@ -131,7 +131,7 @@ func request():
 
 
 func is_in_sight(pos):
-	return abs(pos[0] - cell_pos[0]) <= VISION_DISTANCE and abs(pos[1] - cell_pos[1]) <= VISION_DISTANCE
+	return abs(pos[0] - cell_pos[0]) <= VISION_DISTANCE and abs(pos[1] - cell_pos[1]) <= VISION_DISTANCE and base.is_in_map(pos)
 
 
 func try_to_add_request(request):

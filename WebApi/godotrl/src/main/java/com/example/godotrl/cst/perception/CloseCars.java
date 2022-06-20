@@ -55,7 +55,7 @@ public class CloseCars extends Codelet {
             ArrayList<Vector2> closestCars = new ArrayList<Vector2>();
             for (int i = 0; i < TOTAL_CLOSE_CARS; i++) {
                 if (i < memoryList.size()) {
-                    closestCars.add(memoryList.get(i));
+                    closestCars.add(memoryList.get(memoryList.size() - 1 - i));
                 } else {
                     closestCars.add(OUT_OF_BOUNDS_V.copy());
                 }
