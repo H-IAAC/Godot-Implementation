@@ -63,10 +63,10 @@ public class LFA extends ValueBasedRL {
         return vals;
     }
 
-    protected void serializeLearning(String fileName) {
+    protected void serializeLearning(String filePath) {
         try {
             FileOutputStream fileOutputStream =
-                    new FileOutputStream(super.pathToSaveLearning + fileName);
+                    new FileOutputStream( filePath );
             ObjectOutputStream objectOutputStream =
                     new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(this.weights);

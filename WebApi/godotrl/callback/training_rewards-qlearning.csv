@@ -1,2 +1,4 @@
 episode, reward, epsilon, hasWon
-0, -31.00, 1.00, false
+0, -34.00, 1.00, false
+1, -28.00, 0.90, false
+2, -29.00, 0.80, false

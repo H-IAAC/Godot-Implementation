@@ -79,8 +79,7 @@ public class LearnerCodelet extends Codelet {
             this.qLearning = (Tabular) learning;
             this.qLearning.initQTable();
         } else {
-            FeaturesExtractor fe = new FeaturesExtractor();
-            this.lfa = (LFA) learning;
+            this.lfa = (FroggerLFA) learning;
         }
     }
 
@@ -127,7 +126,8 @@ public class LearnerCodelet extends Codelet {
                     if (isTabular) {
                         qLearning.update(lastObs, obs, idAction, new Domain<Double>(currReward));
                     } else {
-                        lfa.update(lastObs, obs, idAction, new Domain<Double>(currReward));
+                        ((FroggerLFA) lfa).update(
+                                lastState, state, lastAction, new Domain<Double>(currReward), episodeIsDone, hasWon);
                     }
                 }
 

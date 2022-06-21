@@ -3,9 +3,7 @@ package com.example.godotrl.cst;
 import br.unicamp.cst.core.entities.Codelet;
 import br.unicamp.cst.core.entities.MemoryObject;
 import br.unicamp.cst.core.entities.Mind;
-import com.example.godotrl.cst.behavior.Domain;
-import com.example.godotrl.cst.behavior.LearnerCodelet;
-import com.example.godotrl.cst.behavior.Tabular;
+import com.example.godotrl.cst.behavior.*;
 import com.example.godotrl.cst.perception.CarDetection;
 import com.example.godotrl.cst.perception.CarUpdater;
 import com.example.godotrl.cst.perception.CloseCars;
@@ -26,8 +24,8 @@ public class AgentMind extends Mind {
     MemoryObject updateMO = null;
     MemoryObject motorMO = null;
 
-    CarUpdater carUpdater = null;
     LearnerCodelet learnerCodelet = null;
+    CarUpdater carUpdater = null;
 
     public void resetMOs(MapData mapData) {
         // Sensor
@@ -106,30 +104,32 @@ public class AgentMind extends Mind {
         // Behavior
 
         String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
-        //String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
-        String rlFile = "q-table.csv";
-        String rewardFile = "rewards-qlearning.csv";
+        // String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
+        String rlFile = "lfa-weights.csv";
+        String rewardFile = "rewards-lfa.csv";
         Integer nMaxSteps = 50;
-        Double epsilonInitial = 0.999;
+        Double epsilonInitial = 0.5;
         Double epsilonFinal = 0.01;
         Long numEpisodes = 10L;
-        Long checkPointEachNEpisodes = 500L;
+        Long checkPointEachNEpisodes = 300L;
         Boolean isTraining = true;
-        Boolean isTabular = true;
+        Boolean isTabular = false;
+        Double xLen = 5.0;
+        Double yLen = 5.0;
 
         /*
-         * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning
+         * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FroggerFE fe
          * */
-        Tabular rl = new Tabular(0.1, 0.98, 5, pathToSaveLearning);
+        FroggerLFA rl = new FroggerLFA( 0.1, 0.98, 5, pathToSaveLearning, new FroggerFE(xLen, yLen), xLen, yLen ) ;
 
         /*
-        *                 Double epsilonInitial, Double epsilonFinal,
-                          Long numEpisodes, Boolean isTraining, Boolean isTabular,
-                          ValueBasedRL learning, Domain<Double>[] actionSpace,
-                          String localPathToCheckpoint, String learningFileName,
-                          String cumRewardFileName, Long checkpointEachNEpisodes,
-                          Integer nMaxSteps
-                          * */
+              Double epsilonInitial, Double epsilonFinal,
+              Long numEpisodes, Boolean isTraining, Boolean isTabular,
+              ValueBasedRL learning, Domain<Double>[] actionSpace,
+              String localPathToCheckpoint, String learningFileName,
+              String cumRewardFileName, Long checkpointEachNEpisodes,
+              Integer nMaxSteps
+              * */
         learnerCodelet = new LearnerCodelet(
                 epsilonInitial, epsilonFinal,
                 numEpisodes, isTraining, isTabular,
@@ -151,10 +151,9 @@ public class AgentMind extends Mind {
 
     public void updateSensor(Vector2 pos, ArrayList<Vector2> cars) {
         if (positionMO != null && visionMO != null) {
-            if (((Updater) updateMO.getI()).canUpdateSensor()) {
+            if (((Updater) updateMO.getI()).updateSensor()) {
                 positionMO.setI(pos);
                 visionMO.setI(cars);
-                ((Updater) updateMO.getI()).updateSensor();
             }
         }
     }
@@ -180,16 +179,12 @@ public class AgentMind extends Mind {
     public void win() {
         if (learnerCodelet != null) {
             learnerCodelet.win();
-
-            ((Updater) updateMO.getI()).end();
         }
     }
 
     public void lose() {
         if (learnerCodelet != null) {
             learnerCodelet.lose();
-
-            ((Updater) updateMO.getI()).end();
         }
     }
 }
