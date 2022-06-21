@@ -104,15 +104,15 @@ public class AgentMind extends Mind {
         insertCodelet(stateManager, "PERCEPTION");
 
         // Behavior
-
-        String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
+        String pathToSaveLearning = "/home/ic-unicamp/IC/Godot-Implementation/WebApi/godotrl/callback/";
+        // String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
         //String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
         String rlFile = "q-table.csv";
         String rewardFile = "rewards-qlearning.csv";
         Integer nMaxSteps = 50;
         Double epsilonInitial = 0.999;
         Double epsilonFinal = 0.01;
-        Long numEpisodes = 10L;
+        Long numEpisodes = 12000L;
         Long checkPointEachNEpisodes = 500L;
         Boolean isTraining = true;
         Boolean isTabular = true;
