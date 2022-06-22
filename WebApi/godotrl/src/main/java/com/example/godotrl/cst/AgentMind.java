@@ -108,9 +108,9 @@ public class AgentMind extends Mind {
         String rlFile = "lfa-weights.csv";
         String rewardFile = "rewards-lfa.csv";
         Integer nMaxSteps = 50;
-        Double epsilonInitial = 0.5;
+        Double epsilonInitial = 0.9;
         Double epsilonFinal = 0.01;
-        Long numEpisodes = 10L;
+        Long numEpisodes = 150L;
         Long checkPointEachNEpisodes = 300L;
         Boolean isTraining = true;
         Boolean isTabular = false;

@@ -104,17 +104,17 @@ public class AgentMindTabular extends Mind {
         insertCodelet(stateManager, "PERCEPTION");
 
         // Behavior
-
-        String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
-        // String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
+        String pathToSaveLearning = "/home/ic-unicamp/IC/Godot-Implementation/WebApi/godotrl/callback/";
+        // String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
+        //String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
         String rlFile = "q-table.csv";
         String rewardFile = "rewards-qlearning.csv";
         Integer nMaxSteps = 50;
         Double epsilonInitial = 0.999;
         Double epsilonFinal = 0.01;
-        Long numEpisodes = 3L;
-        Long checkPointEachNEpisodes = 300L;
-        Boolean isTraining = true;
+        Long numEpisodes = 100L;
+        Long checkPointEachNEpisodes = 500L;
+        Boolean isTraining = false;
         Boolean isTabular = true;
 
         /*
@@ -151,9 +151,10 @@ public class AgentMindTabular extends Mind {
 
     public void updateSensor(Vector2 pos, ArrayList<Vector2> cars) {
         if (positionMO != null && visionMO != null) {
-            if (((Updater) updateMO.getI()).updateSensor()) {
+            if (((Updater) updateMO.getI()).canUpdateSensor()) {
                 positionMO.setI(pos);
                 visionMO.setI(cars);
+                ((Updater) updateMO.getI()).updateSensor();
             }
         }
     }
@@ -179,12 +180,16 @@ public class AgentMindTabular extends Mind {
     public void win() {
         if (learnerCodelet != null) {
             learnerCodelet.win();
+
+            ((Updater) updateMO.getI()).end();
         }
     }
 
     public void lose() {
         if (learnerCodelet != null) {
             learnerCodelet.lose();
+
+            ((Updater) updateMO.getI()).end();
         }
     }
 }

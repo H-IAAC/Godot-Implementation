@@ -96,11 +96,22 @@ public class FroggerLFA extends LFA {
                 break;
         }
         for (Vector2 car : state.getClosestCars() ) {
-            if ( car.getX() == x-1 && car.getY() == y )
+            if ( car.getY() == y && ( car.getX() == x || car.getX() == x-1 ) )
                 return 2;
         }
 
         return 0;
+    }
+
+    private Domain getIdBestValue ( State state ) {
+        ArrayList<Double> grad = getValues( state );
+        Double val = Collections.max( grad );
+        for ( int i = 0; i < grad.size(); i++ ) {
+            if ( val == grad.get(i) )
+                 return new Domain( i );
+        }
+
+        return new Domain( 0 );
     }
 
     private void initWeights() {
@@ -116,7 +127,15 @@ public class FroggerLFA extends LFA {
 
         Set<String> features = grad.keySet();
         for (String f : features) {
-            weights.put(f, 1.0);
+            weights.put(f, 0.5);
+        }
+    }
+
+    protected Domain epsilonGreedyPolicy(Double epsilon, State state) {
+        if (Math.random() < epsilon)
+            return new Domain((int) Math.floor( ((Math.random() - 0.1) * (this.numActions - 1) ) ) );
+        else {
+            return getIdBestValue(state);
         }
     }
 }

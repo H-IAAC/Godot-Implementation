@@ -138,7 +138,7 @@ public class LearnerCodelet extends Codelet {
                     if (isTabular)
                         idAction = qLearning.epsilonGreedyPolicy(this.epsilon, obs);
                     else
-                        idAction = lfa.epsilonGreedyPolicy(this.epsilon, obs);
+                        idAction = ((FroggerLFA) lfa).epsilonGreedyPolicy(this.epsilon, state);
 
                     // Action should be decided through the Q-Learning algorithm. Should be an element of the enum Action
                     action = env.convertIdToAction(idAction);

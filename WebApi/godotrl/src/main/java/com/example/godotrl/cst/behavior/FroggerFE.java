@@ -33,34 +33,42 @@ public class FroggerFE extends FeaturesExtractor {
 
         // x dist of the agent from the left border (0 at left)
         f.put("x-left-dist", pos.getX()/xLen);
-        // x dist of the agent from the right border (0 at right)
-        f.put("x-right-dist", (xLen - pos.getX()) /xLen);
-        
+
         // position of the 1st closest car
         xCar = closestCars.get(0).getX() > -990 ? closestCars.get(0).getX() : xLen;
         yCar = closestCars.get(0).getY() > -990 ? closestCars.get(0).getY() : yLen;
-        f.put("1st-car-x-coord", (xLen - xCar)/xLen);
-        f.put("1st-car-y-coord", (yLen - yCar)/yLen);
+        f.put( "dist-x-1st-car", ( xLen - (pos.getX() - xCar) )/2/xLen );
+        f.put( "dist-y-1st-car", ( yLen - (pos.getY() - yCar) )/2/yLen );
+        // f.put("1st-car-x-coord", (xLen - xCar)/xLen);
+        // f.put("1st-car-y-coord", (yLen - yCar)/yLen);
         // position of the 2nd closest car
         xCar = closestCars.get(1).getX() > -990 ? closestCars.get(1).getX() : xLen;
         yCar = closestCars.get(1).getY() > -990 ? closestCars.get(1).getY() : yLen;
-        f.put("2nd-car-x-coord", (xLen - xCar)/xLen);
-        f.put("2nd-car-y-coord", (yLen - yCar)/yLen);
+        f.put( "dist-x-2nd-car", ( xLen - (pos.getX() - xCar) )/2/xLen );
+        f.put( "dist-y-2nd-car", ( yLen - (pos.getY() - yCar) )/2/yLen );
+        // f.put("2nd-car-x-coord", (xLen - xCar)/xLen);
+        // f.put("2nd-car-y-coord", (yLen - yCar)/yLen);
         // position of the 3rd closest car
         xCar = closestCars.get(2).getX() > -990 ? closestCars.get(2).getX() : xLen;
         yCar = closestCars.get(2).getY() > -990 ? closestCars.get(2).getY() : yLen;
-        f.put("3rd-car-x-coord", (xLen - xCar)/xLen);
-        f.put("3rd-car-y-coord", (yLen - yCar)/yLen);
+        f.put( "dist-x-3rd-car", ( xLen - (pos.getX() - xCar) )/2/xLen );
+        f.put( "dist-y-3rd-car", ( yLen - (pos.getY() - yCar) )/2/yLen );
+        // f.put("3rd-car-x-coord", (xLen - xCar)/xLen);
+        // f.put("3rd-car-y-coord", (yLen - yCar)/yLen);
         // position of the 4th closest car
         xCar = closestCars.get(3).getX() > -990 ? closestCars.get(3).getX() : xLen;
         yCar = closestCars.get(3).getY() > -990 ? closestCars.get(3).getY() : yLen;
-        f.put("4th-car-x-coord", (xLen - xCar)/xLen);
-        f.put("4th-car-y-coord", (yLen - yCar)/yLen);
+        f.put( "dist-x-4th-car", ( xLen - (pos.getX() - xCar) )/2/xLen );
+        f.put( "dist-y-4th-car", ( yLen - (pos.getY() - yCar) )/2/yLen );
+        // f.put("4th-car-x-coord", (xLen - xCar)/xLen);
+        // f.put("4th-car-y-coord", (yLen - yCar)/yLen);
         // position of the 5th closest car
         xCar = closestCars.get(4).getX() > -990 ? closestCars.get(4).getX() : xLen;
         yCar = closestCars.get(4).getY() > -990 ? closestCars.get(4).getY() : yLen;
-        f.put("5th-car-x-coord", (xLen - xCar)/xLen);
-        f.put("5th-car-y-coord", (yLen - yCar)/yLen);
+        f.put( "dist-x-5th-car", ( xLen - (pos.getX() - xCar) )/2/xLen );
+        f.put( "dist-y-5th-car", ( yLen - (pos.getY() - yCar) )/2/yLen );
+        // f.put("5th-car-x-coord", (xLen - xCar)/xLen);
+        // f.put("5th-car-y-coord", (yLen - yCar)/yLen);
 
         // if the agent won
         f.put("won", hasWon ? 1d : 0d );
