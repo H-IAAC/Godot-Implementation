@@ -102,18 +102,18 @@ public class AgentMindLFA extends Mind {
         insertCodelet(stateManager, "PERCEPTION");
 
         // Behavior
-
-        String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
+        String pathToSaveLearning = "/home/ic-unicamp/IC/Godot-Implementation/WebApi/godotrl/callback/";
+        // String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
         // String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
         String rlFile = "lfa-weights.csv";
         String rewardFile = "rewards-lfa.csv";
         Integer nMaxSteps = 50;
-        Double epsilonInitial = 0.999;
+        Double epsilonInitial = 0.5;
         Double epsilonFinal = 0.01;
-        Long numEpisodes = 3L;
+        Long numEpisodes = 10L;
         Long checkPointEachNEpisodes = 300L;
         Boolean isTraining = true;
-        Boolean isTabular = true;
+        Boolean isTabular = false;
         Double xLen = 5.0;
         Double yLen = 5.0;
 

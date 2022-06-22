@@ -105,6 +105,7 @@ public class AgentMindTabular extends Mind {
 
         // Behavior
 
+        // String pathToSaveLearning = "/home/ic-unicamp/IC/Godot-Implementation/WebApi/godotrl/callback/";
         String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
         // String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
         String rlFile = "q-table.csv";
