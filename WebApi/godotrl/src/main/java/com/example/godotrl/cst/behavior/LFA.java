@@ -79,10 +79,10 @@ public class LFA extends ValueBasedRL {
         }
     }
 
-    protected void deserializeLearning(String filePath) {
+    protected void deserializeLearning(String fileName) {
         try {
             FileInputStream fileInputStream =
-                    new FileInputStream( filePath );
+                    new FileInputStream( super.pathToSaveLearning + fileName );
             ObjectInputStream objectInputStream =
                     new ObjectInputStream(fileInputStream);
             //TODO("Figure out what's the right way to handle objectInputStream")

@@ -18,4 +18,12 @@ public class State {
     public ArrayList<Vector2> getClosestCars() {
         return closestCars;
     }
+
+    public Vector2 setPosition() {
+        return position;
+    }
+
+    public ArrayList<Vector2> setClosestCars() {
+        return closestCars;
+    }
 }
