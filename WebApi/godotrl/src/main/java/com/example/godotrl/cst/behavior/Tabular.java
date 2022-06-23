@@ -14,7 +14,7 @@ public class Tabular extends ValueBasedRL {
     *   hasCarTopLeft, hasCarTopRight, hasCarLowerRight, hasCarLowerLeft <Array of Values>
     > */
     private ArrayList<ArrayList<ArrayList<ArrayList<ArrayList<
-            ArrayList<ArrayList<ArrayList<ArrayList<ArrayList<Double>>>>>
+            ArrayList<ArrayList<ArrayList<ArrayList<ArrayList<ArrayList<Double>>>>>>
             >>>>> qTable = new ArrayList<>();
 
     //constructor
@@ -25,6 +25,7 @@ public class Tabular extends ValueBasedRL {
     public void initQTable() {
         // is closer of goal
         for (int cl = 0; cl <= 1; cl++ ) {
+
             this.qTable.add(new ArrayList<>());
             // has car up
             for ( int up = 0; up <= 1; up++ ) {
@@ -61,8 +62,17 @@ public class Tabular extends ValueBasedRL {
 
                                             this.qTable.get(cl).get(up).get(r).get(dn).get(l).get(tl).get(tr).get(lr).
                                                     add( new ArrayList<>() );
-                                            this.qTable.get(cl).get(up).get(r).get(dn).get(l).get(tl).get(tr).get(lr).
-                                                    set( ll, this.getInitActionValues() );
+
+                                            // has second left
+                                            for ( int sl = 0 ; sl <= 1 ; sl++ ) {
+
+                                                this.qTable.get(cl).get(up).get(r).get(dn).get(l).get(tl).get(tr).get(lr).
+                                                        get(ll).add( new ArrayList<>() );
+
+                                                this.qTable.get(cl).get(up).get(r).get(dn).get(l).get(tl).get(tr).get(lr).
+                                                    get(ll).set( sl, this.getInitActionValues() );
+                                                
+                                            }
                                         }
                                     }
                                 }
@@ -91,7 +101,8 @@ public class Tabular extends ValueBasedRL {
                 obs.get(2).intValue() ).get( obs.get(3).intValue() ).get(
                 obs.get(4).intValue() ).get( obs.get(5).intValue() ).get(
                 obs.get(6).intValue() ).get( obs.get(7).intValue() ).get(
-                obs.get(8).intValue() ).set( idAction, val );
+                obs.get(8).intValue() ).get( obs.get(9).intValue() ).set( 
+                idAction, val );
     }
 
     protected void setQValues( ArrayList<Domain> obs, ArrayList<Double> vals ) {
@@ -99,8 +110,8 @@ public class Tabular extends ValueBasedRL {
         qTable.get( obs.get(0).intValue() ).get( obs.get(1).intValue() ).get(
                 obs.get(2).intValue() ).get( obs.get(3).intValue() ).get(
                 obs.get(4).intValue() ).get( obs.get(5).intValue() ).get(
-                obs.get(6).intValue() ).get( obs.get(7).intValue() ).set(
-                obs.get(8).intValue(), vals );
+                obs.get(6).intValue() ).get( obs.get(7).intValue() ).get(
+                obs.get(8).intValue() ).set( obs.get(9).intValue(), vals );
     }
 
     @Override
@@ -109,7 +120,8 @@ public class Tabular extends ValueBasedRL {
                     obs.get(2).intValue() ).get( obs.get(3).intValue() ).get(
                     obs.get(4).intValue() ).get( obs.get(5).intValue() ).get(
                     obs.get(6).intValue() ).get( obs.get(7).intValue() ).get(
-                    obs.get(8).intValue() ).get( idAction.intValue() );
+                    obs.get(8).intValue() ).get( obs.get(9).intValue() ).get(
+                    idAction.intValue() );
     }
 
     @Override
@@ -119,7 +131,7 @@ public class Tabular extends ValueBasedRL {
                         obs.get(2).intValue() ).get( obs.get(3).intValue() ).get(
                         obs.get(4).intValue() ).get( obs.get(5).intValue() ).get(
                         obs.get(6).intValue() ).get( obs.get(7).intValue() ).get(
-                        obs.get(8).intValue() );
+                        obs.get(8).intValue() ).get( obs.get(9).intValue() );
         }
         return this.getInitActionValues();
     }
@@ -165,7 +177,7 @@ public class Tabular extends ValueBasedRL {
                     new ObjectInputStream(fileInputStream);
             this.qTable =
                     (ArrayList<ArrayList<ArrayList<ArrayList<ArrayList<
-                            ArrayList<ArrayList<ArrayList<ArrayList<ArrayList<Double>>>>> >>>>>)
+                            ArrayList<ArrayList<ArrayList<ArrayList<ArrayList<ArrayList<Double>>>>>> >>>>>)
                             objectInputStream.readObject();
 
             objectInputStream.close();

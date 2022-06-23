@@ -124,8 +124,9 @@ public class FrogEnv extends  Environment {
             new Domain(0),            // 5: has Car top left
             new Domain(0),            // 6: has Car top right
             new Domain(0),            // 7: has Car lower right
-            new Domain(0)             // 8: has Car lower left
-            // new Domain(0)          // 9: has Car in curr state
+            new Domain(0),            // 8: has Car lower left
+            new Domain(0)             // 9: has Car at second left
+            // new Domain(0)          // 10: has Car in curr state
         };
                 
         for  ( Vector2 car : closestCars ) {
@@ -155,6 +156,11 @@ public class FrogEnv extends  Environment {
                     if ( d[1] == -1 ) state[8].val = 1;
                     else if ( d[1] == 0 ) state[4].val = 1;
                     else if ( d[1] == 1 ) state[5].val = 1;
+                }
+
+                // agent is two squares right a car
+                else if ( d[0] == 2 ) {
+                    if ( d[1] == 0 ) state[9].val = 1;
                 }
             }
         }
