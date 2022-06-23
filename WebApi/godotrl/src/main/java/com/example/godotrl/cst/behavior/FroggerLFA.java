@@ -71,6 +71,11 @@ public class FroggerLFA extends LFA {
     }
 
     private Double getBestValue(State state) {
+        // ArrayList<Vector2> closestCars = state.getClosestCars();
+        // for ( int c = 0; c <= closestCars.size() ; c++ ) {
+        //     closestCars.get(c).setX( state.getClosestCars().get(c).getX() + 1 );
+        // }
+        // State predState = new State( state.getPosition(), closestCars );
         return Collections.max( this.getValues( state ) );
     }
 
@@ -103,17 +108,6 @@ public class FroggerLFA extends LFA {
         return 0;
     }
 
-    private Domain getIdBestValue ( State state ) {
-        ArrayList<Double> grad = getValues( state );
-        Double val = Collections.max( grad );
-        for ( int i = 0; i < grad.size(); i++ ) {
-            if ( val == grad.get(i) )
-                 return new Domain( i );
-        }
-
-        return new Domain( 0 );
-    }
-
     private void initWeights() {
         ArrayList<Vector2> cars = new ArrayList<>();
         cars.add( new Vector2(-999, -999) );
@@ -131,11 +125,24 @@ public class FroggerLFA extends LFA {
         }
     }
 
+    protected int getIdBestValue( State state ) {
+        Double max = Double.MIN_VALUE;
+        int id = 0;
+        ArrayList<Double> vals = getValues( state );
+        for ( int i = 0; i < vals.size(); i++ ) {
+            if ( vals.get(i) > max) {
+                max = vals.get(i);
+                id = i;
+            }
+        }
+        return id;
+    }
+
     protected Domain epsilonGreedyPolicy(Double epsilon, State state) {
         if (Math.random() < epsilon)
             return new Domain((int) Math.floor( ((Math.random() - 0.1) * (this.numActions - 1) ) ) );
         else {
-            return getIdBestValue(state);
+            return new Domain( getIdBestValue(state) );
         }
     }
 }

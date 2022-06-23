@@ -98,11 +98,11 @@ public class LearnerCodelet extends Codelet {
                 if (this.currEpisode == 0 && this.currStep == 0) {
                     if (Files.exists(
                             Path.of(this.localPathToCheckpoint + "final_" + this.learningFileName))) {
-                        this.deserializeLearning();
+                        this.deserializeLearning( "final_" + this.learningFileName );
                     }
                     else if (Files.exists(
                             Path.of(this.localPathToCheckpoint + this.learningFileName))) {
-                        this.deserializeLearning();
+                        this.deserializeLearning( this.learningFileName );
                     }
                 }
 
@@ -201,12 +201,12 @@ public class LearnerCodelet extends Codelet {
         }
     }
 
-    private void deserializeLearning() {
+    private void deserializeLearning( String learningFileName ) {
         if (this.isTabular) {
-            qLearning.deserializeLearning( this.learningFileName );
+            qLearning.deserializeLearning( learningFileName );
         }
         else {
-            lfa.deserializeLearning( this.learningFileName );
+            lfa.deserializeLearning( learningFileName );
         }
     }
 

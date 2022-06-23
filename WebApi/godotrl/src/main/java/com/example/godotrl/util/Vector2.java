@@ -44,4 +44,12 @@ public class Vector2 {
     public Double getY() {
         return y;
     }
+
+    public void setX(Double x) {
+        this.x = x;
+    }
+
+    public void setY(Double y) {
+        this.y = y;
+    }
 }
