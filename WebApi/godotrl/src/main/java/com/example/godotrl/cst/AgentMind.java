@@ -108,7 +108,7 @@ public class AgentMind extends Mind {
         // String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
         //String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
         String rlFile = "best-q-table.csv";
-        String rewardFile = "5x5-rewards-qlearning.csv";
+        String rewardFile = "best-rewards-qlearning.csv";
         Integer nMaxSteps = 50;
         Double epsilonInitial = 0.999;
         Double epsilonFinal = 0.01;
