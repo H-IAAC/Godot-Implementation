@@ -102,25 +102,26 @@ public class AgentMind extends Mind {
         insertCodelet(stateManager, "PERCEPTION");
 
         // Behavior
-        // String pathToSaveLearning = "/home/ic-unicamp/IC/Godot-Implementation/WebApi/godotrl/callback/";
-        String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
+        String pathToSaveLearning = "/home/ic-unicamp/IC/Godot-Implementation/WebApi/godotrl/callback/";
+        // String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
         // String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
         String rlFile = "lfa-weights.csv";
-        String rewardFile = "rewards-lfa.csv";
+        String rewardFile = "rewards-5x5-lfa.csv";
         Integer nMaxSteps = 50;
-        Double epsilonInitial = 0.9;
+        Double epsilonInitial = 0.999;
         Double epsilonFinal = 0.01;
-        Long numEpisodes = 15L;
-        Long checkPointEachNEpisodes = 300L;
+        Long numEpisodes = 10L;
+        Long checkPointEachNEpisodes = 500L;
         Boolean isTraining = false;
         Boolean isTabular = false;
         Double xLen = 5.0;
         Double yLen = 5.0;
+        Double learningRate = 0.01;
 
         /*
          * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FroggerFE fe
          * */
-        FroggerLFA rl = new FroggerLFA( 0.1, 0.98, 5, pathToSaveLearning, new FroggerFE(xLen, yLen), xLen, yLen ) ;
+        FroggerLFA rl = new FroggerLFA( learningRate, 0.98, 5, pathToSaveLearning, new FroggerFE(xLen, yLen), xLen, yLen ) ;
 
         /*
               Double epsilonInitial, Double epsilonFinal,

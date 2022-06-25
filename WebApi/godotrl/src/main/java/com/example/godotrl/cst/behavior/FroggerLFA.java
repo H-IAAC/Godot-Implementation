@@ -4,10 +4,7 @@ import com.example.godotrl.util.Action;
 import com.example.godotrl.util.State;
 import com.example.godotrl.util.Vector2;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import java.util.*;
 
 public class FroggerLFA extends LFA {
 
@@ -35,6 +32,7 @@ public class FroggerLFA extends LFA {
             Double w = super.ALPHA * (target - q_val) * gradient.get(f);
             this.weights.put(f, w);
         }
+        return;
     }
 
     public LinkedHashMap<String, Double> getWeights() {
@@ -61,21 +59,16 @@ public class FroggerLFA extends LFA {
         Action[] validActions = new Action[4];
         System.arraycopy(Action.values(), 0, validActions, 0, 4);
         for (Action _action : validActions ) {
-            int predictStep = isTheEnd(state, _action);
-            Boolean done = predictStep > 0;
-            Boolean won = done && predictStep == 1;
-            futureVals.add( this.getValue(state, _action, done, won) );
+            // int predictStep = isTheEnd(state, _action);
+            // Boolean done = predictStep > 0;
+            // Boolean won = done && predictStep == 1;
+            futureVals.add( this.getValue(state, _action, false, false) );
         }
 
         return futureVals;
     }
 
     private Double getBestValue(State state) {
-        // ArrayList<Vector2> closestCars = state.getClosestCars();
-        // for ( int c = 0; c <= closestCars.size() ; c++ ) {
-        //     closestCars.get(c).setX( state.getClosestCars().get(c).getX() + 1 );
-        // }
-        // State predState = new State( state.getPosition(), closestCars );
         return Collections.max( this.getValues( state ) );
     }
 
@@ -119,9 +112,11 @@ public class FroggerLFA extends LFA {
         Action a = Action.UP;
         LinkedHashMap<String, Double> grad = ((FroggerFE) extractor).getFeatures(st, a, false, false);
 
+        double mean = 0.5, std = 0.05;
+        Random rdm = new Random();
         Set<String> features = grad.keySet();
         for (String f : features) {
-            weights.put(f, 0.5);
+            weights.put(f, mean + std * rdm.nextGaussian() );
         }
     }
 
@@ -140,7 +135,7 @@ public class FroggerLFA extends LFA {
 
     protected Domain epsilonGreedyPolicy(Double epsilon, State state) {
         if (Math.random() < epsilon)
-            return new Domain((int) Math.floor( ((Math.random() - 0.1) * (this.numActions - 1) ) ) );
+            return new Domain( (int) Math.floor( ((Math.random() - 0.1) * (Math.max(0, this.numActions - 1) ) ) ) );
         else {
             return new Domain( getIdBestValue(state) );
         }

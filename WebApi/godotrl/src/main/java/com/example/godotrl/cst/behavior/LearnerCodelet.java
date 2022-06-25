@@ -150,7 +150,6 @@ public class LearnerCodelet extends Codelet {
                 lastObs = obs;
 
                 if (episodeIsDone) {
-
                     if (isTraining && (this.currEpisode + 1) % this.checkpointEachNEpisodes == 0) {
                         if (this.reward.doubleValue() > this.greatestCheckpointReward) {
                             this.greatestCheckpointReward = this.reward.doubleValue();
@@ -167,6 +166,12 @@ public class LearnerCodelet extends Codelet {
 
                     if (isTraining)
                         this.epsilon = Math.max(this.epsilon - this.epsilonDecay, this.epsilonFinal);
+                        if (!isTabular) {
+                            if (state != null) {
+                                ((FroggerLFA) lfa).update(
+                                        lastState, state, lastAction, new Domain<Double>(currReward), episodeIsDone, hasWon);
+                            }
+                        }
                 }
                 else {
                     currStep++;

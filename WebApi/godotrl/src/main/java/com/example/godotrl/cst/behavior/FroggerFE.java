@@ -12,7 +12,7 @@ public class FroggerFE extends FeaturesExtractor {
     private Double yLen;
     private Double xLen;
 
-    private Double factor = 0.1;
+    private Double factor = 1.0;
 
     public FroggerFE(Double xLen, Double yLen ) {
         this.yLen = yLen;
@@ -47,37 +47,55 @@ public class FroggerFE extends FeaturesExtractor {
                 break;
         }
 
-        Boolean won = ( dy == 0 ), lost = false;
+        Boolean won = (hasWon || py == 0 ), lost = false, willWin = (dy == 0), willLose = false;
         for ( Vector2 car : closestCars ) {
-            if ( car.getY() == dy && ( car.getX() == dx || car.getX() + 1 == dx ) )
+            if ( (int) car.getY().intValue() == (int) py.intValue() &&
+                    (int) car.getX().intValue() == (int) px.intValue() ||
+                    (isDone && !hasWon) )
                 lost = true;
+            if ( (int) car.getY().intValue() == (int) dy.intValue() &&
+                    ( (int) car.getX().intValue() == (int) dx.intValue() || (int)(car.getX().intValue() + 1) == (int) dx.intValue() ) )
+                willLose = true;
         }
+
+        // if (isDone || won || lost || willWin || willLose)
+        //    lost = lost;
 
         f.put("bias", 1.0);
 
         // y coord of the agent in the map (0 bottom)
-        f.put("y-coord", (yLen - dy)/yLen);
+        f.put("y-coord", (yLen - py)/yLen);
+        f.put("y-coord-after", (yLen - dy)/yLen);
 
         // x dist of the agent from the left border (0 at left)
-        f.put("x-coord", (xLen - dx)/xLen);
+        f.put("x-coord", (xLen - px)/xLen);
+        f.put("x-coord-after", (xLen - dx)/xLen);
+
+        f.put("dist-to-target", py/yLen );
 
         String num;
-        for ( int i = 0; i < closestCars.size(); i++ ) {
+        for ( int i = 1; i <= closestCars.size(); i++ ) {
             num = Integer.toString(i);
-            xCar = closestCars.get(0).getX() > -990 ? closestCars.get(0).getX() : xLen;
-            yCar = closestCars.get(0).getY() > -990 ? closestCars.get(0).getY() : yLen;
-            // f.put(num+"th-car-x-coord", (xLen - xCar)/xLen );
-            // f.put(num+"th-car-x-after", (xLen - xCar + 1)/xLen );
-            // f.put(num+"th-car-y-coord", (yLen - yCar)/yLen );
-            f.put(num+"th-x-dist", 1.0 - Math.abs( (xCar - dx)/xLen ) );
-            f.put(num+"th-x-dist-after", 1.0 - Math.abs( (xCar + 1 - dx)/xLen ) );
-            f.put(num+"th-y-dist", 1.0 - Math.abs( (yCar - dy)/yLen ) );
+            xCar = closestCars.get(i-1).getX();
+            yCar = closestCars.get(i-1).getY();
+            // xCar = closestCars.get(0).getX() > -990 ? closestCars.get(0).getX() : 1000;
+            // yCar = closestCars.get(0).getY() > -990 ? closestCars.get(0).getY() : 1000;
+
+            f.put(num+"th-car-x-coord", xCar<-990?-1.0: (xLen - xCar)/xLen );
+            f.put(num+"th-car-x-after", xCar<-990?-1.0: (xLen - xCar + 1)/xLen );
+            f.put(num+"th-car-y-coord", yCar<-990?-1.0: (yLen - yCar)/yLen );
+            f.put(num+"th-x-dist", xCar<-990?0.0: 1.0 - Math.abs( (xCar - dx)/xLen ) );
+            f.put(num+"th-x-dist-after", xCar<-990?0.0: 1.0 - Math.abs( (xCar + 1 - dx)/xLen ) );
+            f.put(num+"th-y-dist", yCar<-990?0.0: 1.0 - Math.abs( (yCar - dy)/yLen ) );
         }
 
         // if the agent won
         f.put("won", won ? 1d : 0d );
         // if the agent lost
-        f.put("lost", won || lost ? 1d : 0d );
+        f.put("lost", lost ? 1d : 0d );
+        f.put("will-win", willWin ? 1d : 0d );
+        f.put("will-lose", willLose ? 1d : 0d );
+
 
         // last movement of the agent
         f.put("moved-up", action.equals( Action.UP ) ? 1d : 0d );
