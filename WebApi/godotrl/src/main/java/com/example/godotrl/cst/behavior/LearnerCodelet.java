@@ -164,14 +164,9 @@ public class LearnerCodelet extends Codelet {
                     currStep = 0;
                     currEpisode++;
 
-                    if (isTraining)
+                    if (isTraining) {
                         this.epsilon = Math.max(this.epsilon - this.epsilonDecay, this.epsilonFinal);
-                        if (!isTabular) {
-                            if (state != null) {
-                                ((FroggerLFA) lfa).update(
-                                        lastState, state, lastAction, new Domain<Double>(currReward), episodeIsDone, hasWon);
-                            }
-                        }
+                    }
                 }
                 else {
                     currStep++;
