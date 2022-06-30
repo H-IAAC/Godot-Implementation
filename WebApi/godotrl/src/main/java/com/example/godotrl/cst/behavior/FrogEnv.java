@@ -23,8 +23,12 @@ public class FrogEnv extends  Environment {
     private Double getReward( ArrayList<Domain> state, Vector2 pos, Action lastAction, Boolean isDone, Boolean hasWon ) {
         Double rw = 0.0;
         if ( isDone ) {
-            if ( hasWon ) rw += 30.0;
-            else rw -= 30.0;
+            if ( hasWon ) {
+                rw += 20.0;
+            }
+            else {
+                rw -= 30.0;
+            }
         }
 
         if ( lastAction == Action.UP ) rw += 1.0;

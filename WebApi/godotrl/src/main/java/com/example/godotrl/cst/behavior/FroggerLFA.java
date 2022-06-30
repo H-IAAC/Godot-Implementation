@@ -22,7 +22,12 @@ public class FroggerLFA extends LFA {
     public void update(State state, State newState, Action action, Domain reward, Boolean isDone, Boolean won) {
         LinkedHashMap<String, Double> gradient = ((FroggerFE) this.extractor).getFeatures(state, action, isDone, won);
 
-        Double new_q_val = this.getBestValue(newState);
+        Double new_q_val;
+        if (isDone)
+            new_q_val = 0.0;
+        else
+            new_q_val = this.getBestValue(newState);
+
         Double q_val = this.getValue(state, action, isDone, won);
 
         Double target = reward.doubleValue() + super.GAMMA * new_q_val;

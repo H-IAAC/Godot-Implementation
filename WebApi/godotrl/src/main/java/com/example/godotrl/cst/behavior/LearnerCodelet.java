@@ -91,7 +91,6 @@ public class LearnerCodelet extends Codelet {
         */
 
             hasLost = hasLost || currStep >= nMaxSteps;
-            episodeIsDone = hasWon || hasLost;
 
             if (this.currEpisode < this.numEpisodes) {
 
@@ -112,7 +111,7 @@ public class LearnerCodelet extends Codelet {
                 State state = (State) stateMO.getI();
 
                 /* Q LEARNING ALGORITHM */
-                ArrayList step = env.step(state, lastAction, episodeIsDone, hasWon);
+                ArrayList step = env.step(state, lastAction, (hasWon || hasLost), hasWon);
 
                 Double currReward = ((Double) step.get(1));
                 this.reward = new Domain<Double>(this.reward.doubleValue() + currReward);
@@ -121,11 +120,16 @@ public class LearnerCodelet extends Codelet {
                 ArrayList obs = ((ArrayList<Domain>) step.get(0));
                 Domain idAction = env.getActionID(lastAction);
 
-                if (!this.episodeIsDone && currStep > 0) {
+                if ( !episodeIsDone && currStep > 0 && isTraining ) {
 
-                    if (isTabular) {
-                        qLearning.update(lastObs, obs, idAction, new Domain<Double>(currReward));
-                    } else {
+                    episodeIsDone = hasWon || hasLost;
+
+                    if ( isTabular) {
+                        if (!this.episodeIsDone ) {
+                            qLearning.update(lastObs, obs, idAction, new Domain<Double>(currReward));
+                        }
+                    }
+                    else {
                         ((FroggerLFA) lfa).update(
                                 lastState, state, lastAction, new Domain<Double>(currReward), episodeIsDone, hasWon);
                     }
@@ -134,7 +138,7 @@ public class LearnerCodelet extends Codelet {
                 /* CHOOSE ACTION */
                 Action action;
 
-                if ( currStep < nMaxSteps ) {
+                if ( !episodeIsDone && currStep < nMaxSteps ) {
                     if (isTabular)
                         idAction = qLearning.epsilonGreedyPolicy(this.epsilon, obs);
                     else
@@ -148,6 +152,7 @@ public class LearnerCodelet extends Codelet {
 
                 motorMO.setI(action);
                 lastObs = obs;
+                // is lastState == state in the next step?
 
                 if (episodeIsDone) {
                     if (isTraining && (this.currEpisode + 1) % this.checkpointEachNEpisodes == 0) {
@@ -163,6 +168,7 @@ public class LearnerCodelet extends Codelet {
                     reward = new Domain<Double>(0.0);
                     currStep = 0;
                     currEpisode++;
+                    episodeIsDone = false;
 
                     if (isTraining) {
                         this.epsilon = Math.max(this.epsilon - this.epsilonDecay, this.epsilonFinal);

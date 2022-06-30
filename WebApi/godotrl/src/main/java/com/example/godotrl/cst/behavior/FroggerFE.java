@@ -58,8 +58,8 @@ public class FroggerFE extends FeaturesExtractor {
                 willLose = true;
         }
 
-        // if (isDone || won || lost || willWin || willLose)
-        //    lost = lost;
+        if (isDone || won || lost || willWin || willLose)
+            lost = lost;
 
         f.put("bias", 1.0);
 
