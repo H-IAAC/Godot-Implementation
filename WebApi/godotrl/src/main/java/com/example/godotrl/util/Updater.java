@@ -94,6 +94,6 @@ public class Updater {
     }
 
     public void end() {
-        state = UpdateState.LEARNER;
+        state = UpdateState.SENSOR;
     }
 }

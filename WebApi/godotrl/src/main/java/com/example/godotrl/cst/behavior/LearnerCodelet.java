@@ -168,7 +168,6 @@ public class LearnerCodelet extends Codelet {
                     reward = new Domain<Double>(0.0);
                     currStep = 0;
                     currEpisode++;
-                    episodeIsDone = false;
 
                     if (isTraining) {
                         this.epsilon = Math.max(this.epsilon - this.epsilonDecay, this.epsilonFinal);
@@ -227,6 +226,8 @@ public class LearnerCodelet extends Codelet {
     public void resetWinState() {
         hasWon = false;
         hasLost = false;
+
+        episodeIsDone = false;
 
         currStep = 0;
     }

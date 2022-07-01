@@ -15,6 +15,8 @@ public class CarUpdater extends Codelet {
 
     MapData mapData = null;
 
+    boolean isAlive = true;
+
     public CarUpdater(MapData mapData) {
         super();
 
@@ -23,6 +25,10 @@ public class CarUpdater extends Codelet {
 
     public void setMapData(MapData mapData) {
         this.mapData = mapData;
+    }
+
+    public void setAlive(boolean isAlive) {
+        this.isAlive = isAlive;
     }
 
     @Override
@@ -40,23 +46,25 @@ public class CarUpdater extends Codelet {
     @Override
     public void proc() {
         if (((Updater) updateMO.getI()).canUpdateCarUpdate()) {
-            ArrayList<Vector2> memoryList = (ArrayList<Vector2>) knownCarsMO.getI();
-            Vector2 pos = (Vector2) positionMO.getI();
+            if (isAlive) {
+                ArrayList<Vector2> memoryList = (ArrayList<Vector2>) knownCarsMO.getI();
+                Vector2 pos = (Vector2) positionMO.getI();
 
-            int i = 0;
-            while (i < memoryList.size()) {
-                Vector2 car = memoryList.get(i);
-                car.add(new Vector2(1, 0));
-                i += 1;
-            }
-
-            i = 0;
-            while (i < memoryList.size()) {
-                Vector2 car = memoryList.get(i);
-                if (car.getX() >= mapData.h_size) {
-                    memoryList.remove(i);
-                } else {
+                int i = 0;
+                while (i < memoryList.size()) {
+                    Vector2 car = memoryList.get(i);
+                    car.add(new Vector2(1, 0));
                     i += 1;
+                }
+
+                i = 0;
+                while (i < memoryList.size()) {
+                    Vector2 car = memoryList.get(i);
+                    if (car.getX() >= mapData.h_size) {
+                        memoryList.remove(i);
+                    } else {
+                        i += 1;
+                    }
                 }
             }
 
