@@ -44,6 +44,7 @@ public class AgentMind extends Mind {
         // Motor
         motorMO.setI(Action.INVALID);
 
+        carUpdater.setAlive(true);
         carUpdater.setMapData(mapData);
         learnerCodelet.resetWinState();
     }
@@ -104,7 +105,7 @@ public class AgentMind extends Mind {
         // Behavior
         String pathToSaveLearning = "/home/ic-unicamp/IC/Godot-Implementation/WebApi/godotrl/callback/";
         // String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
-        // String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
+        // String pathToSaveLearning = "/c/Users/morai/OneDrive/Documentos/Git/Godot-Implementation/callback/";
         String rlFile = "lfa-weights.csv";
         String rewardFile = "0107-5x5-rewards-lfa.csv";
         Integer nMaxSteps = 50;
@@ -182,6 +183,7 @@ public class AgentMind extends Mind {
         if (learnerCodelet != null) {
             learnerCodelet.win();
 
+            carUpdater.setAlive(false);
             ((Updater) updateMO.getI()).end();
         }
     }
@@ -190,6 +192,7 @@ public class AgentMind extends Mind {
         if (learnerCodelet != null) {
             learnerCodelet.lose();
 
+            carUpdater.setAlive(false);
             ((Updater) updateMO.getI()).end();
         }
     }
