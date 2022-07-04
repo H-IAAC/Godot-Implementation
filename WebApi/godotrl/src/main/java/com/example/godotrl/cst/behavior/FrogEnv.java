@@ -37,6 +37,25 @@ public class FrogEnv extends  Environment {
         return rw;
     }
 
+    public Boolean hasWon( State state ) {
+        Vector2 pos = state.getPosition();
+        return pos.getY().intValue() == 0;
+    }
+
+    public Boolean hasLost ( State state, Integer currStep, Integer nMaxSteps ) {
+
+        if ( currStep >= nMaxSteps ) return true;
+
+        Vector2 pos = state.getPosition();
+        Double x = pos.getX(), y = pos.getY();
+        for ( Vector2 car : state.getClosestCars() ) {
+            if ( x.intValue() == car.getX().intValue() && y.intValue() == car.getY().intValue() )
+                return true;
+        }
+
+        return false;
+    }
+
     /*
     * calls a step in the environment.
     * Return ArrayList { state: ArrayList<Domain>, reward: Domain,

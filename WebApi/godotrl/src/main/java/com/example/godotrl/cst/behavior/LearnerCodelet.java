@@ -89,8 +89,7 @@ public class LearnerCodelet extends Codelet {
         /*
             Old code below, should be reimplemented above
         */
-
-            hasLost = hasLost || currStep >= nMaxSteps;
+//            hasLost = hasLost || currStep >= nMaxSteps;
 
             if (this.currEpisode < this.numEpisodes) {
 
@@ -110,8 +109,12 @@ public class LearnerCodelet extends Codelet {
                 Action lastAction = (Action) motorMO.getI();
                 State state = (State) stateMO.getI();
 
+                hasLost = env.hasLost( state, currStep, nMaxSteps );
+                hasWon = env.hasWon( state );
+                episodeIsDone = hasWon || hasLost;
+
                 /* Q LEARNING ALGORITHM */
-                ArrayList step = env.step(state, lastAction, (hasWon || hasLost), hasWon);
+                ArrayList step = env.step(state, lastAction, episodeIsDone, hasWon);
 
                 Double currReward = ((Double) step.get(1));
                 this.reward = new Domain<Double>(this.reward.doubleValue() + currReward);
@@ -120,9 +123,10 @@ public class LearnerCodelet extends Codelet {
                 ArrayList obs = ((ArrayList<Domain>) step.get(0));
                 Domain idAction = env.getActionID(lastAction);
 
-                if ( !episodeIsDone && currStep > 0 && isTraining ) {
+                if ( currStep > 0 && isTraining ) {
+//                if ( currStep > 0 && isTraining ) {
 
-                    episodeIsDone = hasWon || hasLost;
+//                    episodeIsDone = hasWon || hasLost;
 
                     if ( isTabular) {
                         if (!this.episodeIsDone ) {
@@ -134,6 +138,8 @@ public class LearnerCodelet extends Codelet {
                                 lastState, state, lastAction, new Domain<Double>(currReward), episodeIsDone, hasWon);
                     }
                 }
+
+//                episodeIsDone = hasWon || hasLost;
 
                 /* CHOOSE ACTION */
                 Action action;
@@ -152,7 +158,6 @@ public class LearnerCodelet extends Codelet {
 
                 motorMO.setI(action);
                 lastObs = obs;
-                // is lastState == state in the next step?
 
                 if (episodeIsDone) {
                     if (isTraining && (this.currEpisode + 1) % this.checkpointEachNEpisodes == 0) {
@@ -168,6 +173,7 @@ public class LearnerCodelet extends Codelet {
                     reward = new Domain<Double>(0.0);
                     currStep = 0;
                     currEpisode++;
+                    episodeIsDone = false;
 
                     if (isTraining) {
                         this.epsilon = Math.max(this.epsilon - this.epsilonDecay, this.epsilonFinal);
