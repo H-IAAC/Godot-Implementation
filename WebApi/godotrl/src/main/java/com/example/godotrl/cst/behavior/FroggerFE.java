@@ -91,9 +91,9 @@ public class FroggerFE extends FeaturesExtractor {
             // xCar = closestCars.get(0).getX() > -990 ? closestCars.get(0).getX() : 1000;
             // yCar = closestCars.get(0).getY() > -990 ? closestCars.get(0).getY() : 1000;
 
-            f.put(num+"th-car-x-coord", xCar<-990?-1.0: (xLen - xCar)/xLen );
-            f.put(num+"th-car-x-after", xCar<-990?-1.0: (xLen - xCar + 1)/xLen );
-            f.put(num+"th-car-y-coord", yCar<-990?-1.0: (yLen - yCar)/yLen );
+            f.put(num+"th-car-x-coord", xCar<-990?0.0: (xLen - xCar)/xLen );
+            f.put(num+"th-car-x-after", xCar<-990?0.0: (xLen - xCar + 1)/xLen );
+            f.put(num+"th-car-y-coord", yCar<-990?0.0: (yLen - yCar)/yLen );
             f.put(num+"th-x-dist", xCar<-990?0.0: 1.0 - Math.abs( (xCar - dx)/xLen ) );
             f.put(num+"th-x-dist-after", xCar<-990?0.0: 1.0 - Math.abs( (xCar + 1 - dx)/xLen ) );
             f.put(num+"th-y-dist", yCar<-990?0.0: 1.0 - Math.abs( (yCar - dy)/yLen ) );

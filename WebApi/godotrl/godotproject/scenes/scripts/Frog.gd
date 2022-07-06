@@ -151,7 +151,7 @@ func lose():
 	game_over()
 	
 	request_pile.append(Request.SENSOR)
-	request_pile.append(Request.LOSE)
+	request_pile.push_front(Request.LOSE)
 	request()
 
 
@@ -159,5 +159,5 @@ func win():
 	game_over()
 	
 	request_pile.append(Request.SENSOR)
-	request_pile.append(Request.WIN)
+	request_pile.push_front(Request.WIN)
 	request()

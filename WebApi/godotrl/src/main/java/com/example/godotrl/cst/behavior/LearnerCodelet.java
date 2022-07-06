@@ -85,11 +85,13 @@ public class LearnerCodelet extends Codelet {
 
     @Override
     public void proc() {
+//        if (((Updater) this.updateMO.getI()).canUpdateLearner() ) {
         if (((Updater) this.updateMO.getI()).canUpdateLearner() && !doneRunning) {
         /*
             Old code below, should be reimplemented above
         */
-//            hasLost = hasLost || currStep >= nMaxSteps;
+            hasLost = hasLost || currStep >= nMaxSteps;
+            episodeIsDone = hasWon || hasLost;
 
             if (this.currEpisode < this.numEpisodes) {
 
@@ -109,10 +111,6 @@ public class LearnerCodelet extends Codelet {
                 Action lastAction = (Action) motorMO.getI();
                 State state = (State) stateMO.getI();
 
-                hasLost = env.hasLost( state, currStep, nMaxSteps );
-                hasWon = env.hasWon( state );
-                episodeIsDone = hasWon || hasLost;
-
                 /* Q LEARNING ALGORITHM */
                 ArrayList step = env.step(state, lastAction, episodeIsDone, hasWon);
 
@@ -124,9 +122,6 @@ public class LearnerCodelet extends Codelet {
                 Domain idAction = env.getActionID(lastAction);
 
                 if ( currStep > 0 && isTraining ) {
-//                if ( currStep > 0 && isTraining ) {
-
-//                    episodeIsDone = hasWon || hasLost;
 
                     if ( isTabular) {
                         if (!this.episodeIsDone ) {
@@ -135,11 +130,9 @@ public class LearnerCodelet extends Codelet {
                     }
                     else {
                         ((FroggerLFA) lfa).update(
-                                lastState, state, lastAction, new Domain<Double>(currReward), episodeIsDone, hasWon);
+                                lastState, state, lastAction, new Domain<Double>(currReward), episodeIsDone, this.hasWon);
                     }
                 }
-
-//                episodeIsDone = hasWon || hasLost;
 
                 /* CHOOSE ACTION */
                 Action action;
@@ -160,8 +153,8 @@ public class LearnerCodelet extends Codelet {
                 lastObs = obs;
 
                 if (episodeIsDone) {
-                    if (isTraining && (this.currEpisode + 1) % this.checkpointEachNEpisodes == 0) {
-                        if (this.reward.doubleValue() > this.greatestCheckpointReward) {
+                    if ( isTraining && (this.currEpisode + 1) % this.checkpointEachNEpisodes == 0 ) {
+                        if ( this.reward.doubleValue() > this.greatestCheckpointReward ) {
                             this.greatestCheckpointReward = this.reward.doubleValue();
                             serializeLearning();
                         }
@@ -173,7 +166,7 @@ public class LearnerCodelet extends Codelet {
                     reward = new Domain<Double>(0.0);
                     currStep = 0;
                     currEpisode++;
-                    episodeIsDone = false;
+//                    episodeIsDone = false;
 
                     if (isTraining) {
                         this.epsilon = Math.max(this.epsilon - this.epsilonDecay, this.epsilonFinal);
