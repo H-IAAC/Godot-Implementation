@@ -34,7 +34,7 @@ public class FroggerLFA extends LFA {
 
         Set<String> name_features = gradient.keySet();
         for(String f : name_features) {
-            Double w = super.ALPHA * (target - q_val) * gradient.get(f);
+            Double w = this.weights.get(f) + super.ALPHA * (target - q_val) * gradient.get(f);
             this.weights.put(f, w);
         }
         return;
