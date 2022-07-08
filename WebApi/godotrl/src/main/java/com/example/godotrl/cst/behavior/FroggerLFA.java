@@ -19,16 +19,16 @@ public class FroggerLFA extends LFA {
         initWeights();
     }
 
-    public void update(State state, State newState, Action action, Domain reward, Boolean isDone, Boolean won) {
-        LinkedHashMap<String, Double> gradient = ((FroggerFE) this.extractor).getFeatures(state, action, isDone, won);
+    public void update(State state, State newState, Action action, Domain reward, Integer currStep, Boolean isDone, Boolean won) {
+        LinkedHashMap<String, Double> gradient = ((FroggerFE) this.extractor).getFeatures(state, action, currStep, isDone, won);
 
         Double new_q_val;
         if (isDone)
             new_q_val = 0.0;
         else
-            new_q_val = this.getBestValue(newState);
+            new_q_val = this.getBestValue(newState, currStep );
 
-        Double q_val = this.getValue(state, action, isDone, won);
+        Double q_val = this.getValue(state, action, currStep-1, isDone, won);
 
         Double target = reward.doubleValue() + super.GAMMA * new_q_val;
 
@@ -45,9 +45,9 @@ public class FroggerLFA extends LFA {
     }
 
 
-    protected Double getValue (State state, Action action, Boolean isDone, Boolean won) {
+    protected Double getValue (State state, Action action, Integer currStep, Boolean isDone, Boolean won) {
         Double q_val = (double) 0;
-        LinkedHashMap<String, Double> gradient = ((FroggerFE) this.extractor).getFeatures(state, action, isDone, won);
+        LinkedHashMap<String, Double> gradient = ((FroggerFE) this.extractor).getFeatures(state, action, currStep, isDone, won);
 
         Set<String> features = gradient.keySet();
         for (String f : features) {
@@ -58,7 +58,7 @@ public class FroggerLFA extends LFA {
     }
 
 
-    protected ArrayList<Double> getValues(State state) {
+    protected ArrayList<Double> getValues(State state, Integer currStep ) {
         ArrayList<Double> futureVals = new ArrayList<>();
 
         Action[] validActions = new Action[4];
@@ -67,14 +67,15 @@ public class FroggerLFA extends LFA {
             // int predictStep = isTheEnd(state, _action);
             // Boolean done = predictStep > 0;
             // Boolean won = done && predictStep == 1;
-            futureVals.add( this.getValue(state, _action, false, false) );
+            futureVals.add( this.getValue(state, _action, currStep, false, false) );
         }
 
         return futureVals;
     }
 
-    private Double getBestValue(State state) {
-        return Collections.max( this.getValues( state ) );
+    private Double getBestValue(State state, Integer currStep ) {
+
+        return Collections.max( this.getValues( state , currStep ) );
     }
 
     private int isTheEnd(State state, Action action ) {
@@ -115,7 +116,7 @@ public class FroggerLFA extends LFA {
         cars.add( new Vector2(-999, -999) );
         State st = new State( new Vector2(0, 0), cars );
         Action a = Action.UP;
-        LinkedHashMap<String, Double> grad = ((FroggerFE) extractor).getFeatures(st, a, false, false);
+        LinkedHashMap<String, Double> grad = ((FroggerFE) extractor).getFeatures(st, a, 0, false, false);
 
         double mean = 0.5, std = 0.05;
         Random rdm = new Random();
@@ -125,12 +126,12 @@ public class FroggerLFA extends LFA {
         }
     }
 
-    protected int getIdBestValue( State state ) {
-        Double max = Double.MIN_VALUE;
+    protected int getIdBestValue( State state, Integer currStep ) {
+        Double max = (double) Integer.MIN_VALUE;
         int id = 0;
-        ArrayList<Double> vals = getValues( state );
+        ArrayList<Double> vals = getValues( state, currStep );
         for ( int i = 0; i < vals.size(); i++ ) {
-            if ( vals.get(i) > max) {
+            if ( Double.compare(vals.get(i), max ) > 0 ) {
                 max = vals.get(i);
                 id = i;
             }
@@ -138,11 +139,11 @@ public class FroggerLFA extends LFA {
         return id;
     }
 
-    protected Domain epsilonGreedyPolicy(Double epsilon, State state) {
+    protected Domain epsilonGreedyPolicy(Double epsilon, State state, Integer currStep ) {
         if (Math.random() < epsilon)
             return new Domain( (int) Math.floor( ((Math.random() - 0.1) * (Math.max(0, this.numActions - 1) ) ) ) );
         else {
-            return new Domain( getIdBestValue(state) );
+            return new Domain( getIdBestValue(state, currStep ) );
         }
     }
 }

@@ -12,18 +12,20 @@ public class FroggerFE extends FeaturesExtractor {
 
     private Double yLen;
     private Double xLen;
+    private Integer numMaxSteps;
 
     private Double factor = 1.0;
     private Integer stateQueueSize = 4;
 
     protected LinkedList<State> stateQueue = new LinkedList<>();
 
-    public FroggerFE(Double xLen, Double yLen ) {
+    public FroggerFE(Double xLen, Double yLen, Integer numMaxSteps ) {
         this.yLen = yLen;
         this.xLen = xLen;
+        this.numMaxSteps = numMaxSteps;
     }
 
-    public LinkedHashMap<String, Double> getFeatures( State state, Action action, Boolean isDone, Boolean hasWon ) {
+    public LinkedHashMap<String, Double> getFeatures( State state, Action action, Integer currStep, Boolean isDone, Boolean hasWon ) {
         
         LinkedHashMap<String, Double> f = new LinkedHashMap<String, Double>();
 
@@ -144,11 +146,14 @@ public class FroggerFE extends FeaturesExtractor {
         f.put("moved-down", action.equals( Action.DOWN ) ? 1d : 0d );
         f.put("moved-left", action.equals( Action.RIGHT ) ? 1d : 0d );
 
+        f.put("curr-step", (double) currStep / numMaxSteps );
+
         f.replaceAll( ( k, v ) -> v * factor );
         return f;
     }
 
-    // public LinkedHashMap<String, Double> getFeatures( State state, Action action, Boolean isDone, Boolean hasWon ) {
+    // public LinkedHashMap<String, Double> getFeatures(
+    //      State state, Action action, Boolean isDone, Boolean hasWon Integer currStep ) {
 
     //     stateQueue.addLast(state);
     //     if ( stateQueue.size() > stateQueueSize ) {
@@ -288,6 +293,9 @@ public class FroggerFE extends FeaturesExtractor {
     //     f.put("moved-down", action.equals( Action.DOWN ) ? 1d : 0d );
     //     f.put("moved-left", action.equals( Action.RIGHT ) ? 1d : 0d );
     //     f.put("has-moved", px != dx || py != dy ? 1d : 0d );
+
+    //     f.put("curr-step", (double) currStep / numMaxSteps );
+
 
     //     f.replaceAll( ( k, v ) -> v * factor );
     //     return f;

@@ -120,7 +120,7 @@ public class AgentMindLFA extends Mind {
         /*
          * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FroggerFE fe
          * */
-        FroggerLFA rl = new FroggerLFA( 0.1, 0.98, 5, pathToSaveLearning, new FroggerFE(xLen, yLen), xLen, yLen ) ;
+        FroggerLFA rl = new FroggerLFA( 0.1, 0.98, 5, pathToSaveLearning, new FroggerFE(xLen, yLen, nMaxSteps), xLen, yLen ) ;
 
         /*
               Double epsilonInitial, Double epsilonFinal,

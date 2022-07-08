@@ -130,7 +130,7 @@ public class LearnerCodelet extends Codelet {
                     }
                     else {
                         ((FroggerLFA) lfa).update(
-                                lastState, state, lastAction, new Domain<Double>(currReward), episodeIsDone, this.hasWon);
+                                lastState, state, lastAction, new Domain<Double>(currReward), currStep, episodeIsDone, this.hasWon);
                     }
                 }
 
@@ -141,7 +141,7 @@ public class LearnerCodelet extends Codelet {
                     if (isTabular)
                         idAction = qLearning.epsilonGreedyPolicy(this.epsilon, obs);
                     else
-                        idAction = ((FroggerLFA) lfa).epsilonGreedyPolicy(this.epsilon, state);
+                        idAction = ((FroggerLFA) lfa).epsilonGreedyPolicy(this.epsilon, state, currStep );
 
                     // Action should be decided through the Q-Learning algorithm. Should be an element of the enum Action
                     action = env.convertIdToAction(idAction);

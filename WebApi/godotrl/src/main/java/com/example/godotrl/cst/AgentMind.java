@@ -106,23 +106,23 @@ public class AgentMind extends Mind {
         String pathToSaveLearning = "/home/ic-unicamp/IC/Godot-Implementation/WebApi/godotrl/callback/";
         // String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
         // String pathToSaveLearning = "/c/Users/morai/OneDrive/Documentos/Git/Godot-Implementation/callback/";
-        String rlFile = "3000-lfa-weights.csv"; // CHANGE TO .txt!!
-        String rewardFile = "ignorable-5x5-rewards-lfa.csv";
+        String rlFile = "500-lfa-weights.csv"; // CHANGE TO .txt!!
+        String rewardFile = "500-10x10-rewards-lfa.csv";
         Integer nMaxSteps = 50;
         Double epsilonInitial = 0.999;
         Double epsilonFinal = 0.01;
-        Long numEpisodes = 30L;
         Long checkPointEachNEpisodes = 500L;
-        Boolean isTraining = false;
+        Double learningRate = 0.05;
+        Long numEpisodes = 1000L;
+        Double xLen = 10.0;
+        Double yLen = 10.0;
+        Boolean isTraining = true;
         Boolean isTabular = false;
-        Double xLen = 5.0;
-        Double yLen = 5.0;
-        Double learningRate = 0.04;
 
         /*
          * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FroggerFE fe
          * */
-        FroggerLFA rl = new FroggerLFA( learningRate, 0.98, 5, pathToSaveLearning, new FroggerFE(xLen, yLen), xLen, yLen ) ;
+        FroggerLFA rl = new FroggerLFA( learningRate, 0.98, 5, pathToSaveLearning, new FroggerFE(xLen, yLen, nMaxSteps), xLen, yLen ) ;
 
         /*
               Double epsilonInitial, Double epsilonFinal,

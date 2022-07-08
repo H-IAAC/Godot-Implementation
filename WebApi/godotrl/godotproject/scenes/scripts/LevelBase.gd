@@ -10,8 +10,8 @@ const Car = preload("res://scenes/Car.tscn")
 
 const TURNS_FOR_SPAWN = 2
 
-const H_SIZE = 5
-const V_SIZE = 5
+const H_SIZE = 10
+const V_SIZE = 10
 const MIN_H_SIZE = 5
 const MIN_V_SIZE = 5
 

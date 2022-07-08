@@ -31,8 +31,9 @@ public class FrogEnv extends  Environment {
             }
         }
 
-        if ( lastAction == Action.UP ) rw += 1.0;
-        if ( lastAction == Action.DOWN ) rw -= 1.0;
+        if ( lastAction == Action.UP ) rw += 3.0;
+        else if ( lastAction == Action.DOWN ) rw -= 1.0;
+        else rw -= 0.1;
 
         return rw;
     }
