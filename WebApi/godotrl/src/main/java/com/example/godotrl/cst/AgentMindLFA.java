@@ -44,6 +44,7 @@ public class AgentMindLFA extends Mind {
         // Motor
         motorMO.setI(Action.INVALID);
 
+        carUpdater.setAlive(true);
         carUpdater.setMapData(mapData);
         learnerCodelet.resetWinState();
     }
@@ -104,23 +105,26 @@ public class AgentMindLFA extends Mind {
         // Behavior
         String pathToSaveLearning = "/home/ic-unicamp/IC/Godot-Implementation/WebApi/godotrl/callback/";
         // String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
-        // String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
-        String rlFile = "lfa-weights.csv";
-        String rewardFile = "rewards-lfa.csv";
-        Integer nMaxSteps = 50;
-        Double epsilonInitial = 0.5;
+        // String pathToSaveLearning = "/c/Users/morai/OneDrive/Documentos/Git/Godot-Implementation/callback/";
+        String rlFile = "simple-0907-lfa-weights.csv"; // CHANGE TO .txt!!
+        String rewardFile = "simple-0907-nxn-rewards-lfa.csv";
+        Integer nMaxSteps = 100;
+        Double epsilonInitial = 0.99;
         Double epsilonFinal = 0.01;
-        Long numEpisodes = 10L;
-        Long checkPointEachNEpisodes = 300L;
-        Boolean isTraining = true;
-        Boolean isTabular = false;
+        // percenteage of num episides that the agent should explore.
+        Double explorationPeriod = 0.5;
+        Long checkPointEachNEpisodes = 500L;
+        Double learningRate = 0.02;
+        Long numEpisodes = 100L;
         Double xLen = 5.0;
         Double yLen = 5.0;
+        Boolean isTraining = true;
+        Boolean isTabular = false;
 
         /*
          * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FroggerFE fe
          * */
-        FroggerLFA rl = new FroggerLFA( 0.1, 0.98, 5, pathToSaveLearning, new FroggerFE(xLen, yLen, nMaxSteps), xLen, yLen ) ;
+        FroggerLFA rl = new FroggerLFA( learningRate, 0.98, 5, pathToSaveLearning, new FroggerSimpleFE(xLen, yLen, nMaxSteps), xLen, yLen ) ;
 
         /*
               Double epsilonInitial, Double epsilonFinal,
@@ -130,10 +134,11 @@ public class AgentMindLFA extends Mind {
               String cumRewardFileName, Long checkpointEachNEpisodes,
               Integer nMaxSteps
               * */
+        FrogEnv env = new FrogEnv(stateMO, new Domain[] {new Domain(0), new Domain(0), new Domain(4)}, yLen);
         learnerCodelet = new LearnerCodelet(
-                epsilonInitial, epsilonFinal,
+                epsilonInitial, epsilonFinal, explorationPeriod,
                 numEpisodes, isTraining, isTabular,
-                rl, new Domain[] {new Domain(0), new Domain(0), new Domain(4)},
+                rl, env,
                 pathToSaveLearning, rlFile,
                 rewardFile, checkPointEachNEpisodes, nMaxSteps
         );
@@ -151,9 +156,10 @@ public class AgentMindLFA extends Mind {
 
     public void updateSensor(Vector2 pos, ArrayList<Vector2> cars) {
         if (positionMO != null && visionMO != null) {
-            if (((Updater) updateMO.getI()).updateSensor()) {
+            if (((Updater) updateMO.getI()).canUpdateSensor()) {
                 positionMO.setI(pos);
                 visionMO.setI(cars);
+                ((Updater) updateMO.getI()).updateSensor();
             }
         }
     }
@@ -179,12 +185,18 @@ public class AgentMindLFA extends Mind {
     public void win() {
         if (learnerCodelet != null) {
             learnerCodelet.win();
+
+            carUpdater.setAlive(false);
+            ((Updater) updateMO.getI()).end();
         }
     }
 
     public void lose() {
         if (learnerCodelet != null) {
             learnerCodelet.lose();
+
+            carUpdater.setAlive(false);
+            ((Updater) updateMO.getI()).end();
         }
     }
 }

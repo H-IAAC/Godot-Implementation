@@ -4,6 +4,7 @@ import br.unicamp.cst.core.entities.Codelet;
 import br.unicamp.cst.core.entities.MemoryObject;
 import br.unicamp.cst.core.entities.Mind;
 import com.example.godotrl.cst.behavior.Domain;
+import com.example.godotrl.cst.behavior.FrogEnv;
 import com.example.godotrl.cst.behavior.LearnerCodelet;
 import com.example.godotrl.cst.behavior.Tabular;
 import com.example.godotrl.cst.perception.CarDetection;
@@ -109,11 +110,16 @@ public class AgentMindTabular extends Mind {
         //String pathToSaveLearning = "C:\\Users\\morai\\OneDrive\\Documentos\\Git\\GodotImplementation\\cmob-godotimplementation\\WebApi\\godotrl\\callback\\";
         String rlFile = "q-table.csv";
         String rewardFile = "rewards-qlearning.csv";
-        Integer nMaxSteps = 50;
-        Double epsilonInitial = 0.999;
+        Integer nMaxSteps = 100;
+        Double epsilonInitial = 0.99;
         Double epsilonFinal = 0.01;
-        Long numEpisodes = 100L;
+        // percenteage of num episides that the agent should explore.
+        Double explorationPeriod = 0.5;
         Long checkPointEachNEpisodes = 500L;
+        Double learningRate = 0.02;
+        Long numEpisodes = 100L;
+        Double xLen = 5.0;
+        Double yLen = 5.0;
         Boolean isTraining = false;
         Boolean isTabular = true;
 
@@ -130,10 +136,11 @@ public class AgentMindTabular extends Mind {
                           String cumRewardFileName, Long checkpointEachNEpisodes,
                           Integer nMaxSteps
                           * */
+        FrogEnv env = new FrogEnv(stateMO, new Domain[] {new Domain(0), new Domain(0), new Domain(4)}, yLen);
         learnerCodelet = new LearnerCodelet(
-                epsilonInitial, epsilonFinal,
+                epsilonInitial, epsilonFinal, explorationPeriod,
                 numEpisodes, isTraining, isTabular,
-                rl, new Domain[] {new Domain(0), new Domain(0), new Domain(4)},
+                rl, env,
                 pathToSaveLearning, rlFile,
                 rewardFile, checkPointEachNEpisodes, nMaxSteps
         );

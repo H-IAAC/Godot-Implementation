@@ -12,49 +12,27 @@ import java.util.Arrays;
 
 public class FrogEnv extends  Environment {
 
-    Double yTarget = 0.0;
+    Double yLen;
 
-    public FrogEnv(MemoryObject stateMO, Domain[] actionSpace) {
+    public FrogEnv(MemoryObject stateMO, Domain[] actionSpace, Double yLen) {
         super(stateMO, actionSpace);
         this.actionSpace = actionSpace;
+        this.yLen = yLen;
     }
 
     /* Metrics created for defining reward policy */
     private Double getReward( ArrayList<Domain> state, Vector2 pos, Action lastAction, Boolean isDone, Boolean hasWon ) {
         Double rw = 0.0;
+        rw += (double) ( yLen - 1.0 - pos.getY() )/5;
         if ( isDone ) {
             if ( hasWon ) {
-                rw += 20.0;
+                rw += yLen * 5.0;
             }
             else {
-                rw -= 30.0;
+                rw -= yLen * 3.0;
             }
         }
-
-        if ( lastAction == Action.UP ) rw += 3.0;
-        else if ( lastAction == Action.DOWN ) rw -= 1.0;
-        else rw -= 0.1;
-
         return rw;
-    }
-
-    public Boolean hasWon( State state ) {
-        Vector2 pos = state.getPosition();
-        return pos.getY().intValue() == 0;
-    }
-
-    public Boolean hasLost ( State state, Integer currStep, Integer nMaxSteps ) {
-
-        if ( currStep >= nMaxSteps ) return true;
-
-        Vector2 pos = state.getPosition();
-        Double x = pos.getX(), y = pos.getY();
-        for ( Vector2 car : state.getClosestCars() ) {
-            if ( x.intValue() == car.getX().intValue() && y.intValue() == car.getY().intValue() )
-                return true;
-        }
-
-        return false;
     }
 
     /*
@@ -76,16 +54,6 @@ public class FrogEnv extends  Environment {
 
     public ArrayList getObservationSpace( State state, Action lastAction ) {
         return this.convertState( state, lastAction );
-    }
-
-    private Boolean isDone( ArrayList<Domain> st, Vector2 pos ) {
-
-        if ( !st.isEmpty() ) {
-            if ( st.get(5).intValue() == 1 || pos.getY().doubleValue() == this.yTarget.doubleValue() )
-                return true;
-        }
-
-        return false;
     }
 
     public Domain getActionID( Action action ) {

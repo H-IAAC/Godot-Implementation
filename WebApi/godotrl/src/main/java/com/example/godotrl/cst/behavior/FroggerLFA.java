@@ -46,7 +46,7 @@ public class FroggerLFA extends LFA {
 
 
     protected Double getValue (State state, Action action, Integer currStep, Boolean isDone, Boolean won) {
-        Double q_val = (double) 0;
+        Double q_val = 0.0;
         LinkedHashMap<String, Double> gradient = ((FroggerFE) this.extractor).getFeatures(state, action, currStep, isDone, won);
 
         Set<String> features = gradient.keySet();
@@ -64,9 +64,6 @@ public class FroggerLFA extends LFA {
         Action[] validActions = new Action[4];
         System.arraycopy(Action.values(), 0, validActions, 0, 4);
         for (Action _action : validActions ) {
-            // int predictStep = isTheEnd(state, _action);
-            // Boolean done = predictStep > 0;
-            // Boolean won = done && predictStep == 1;
             futureVals.add( this.getValue(state, _action, currStep, false, false) );
         }
 

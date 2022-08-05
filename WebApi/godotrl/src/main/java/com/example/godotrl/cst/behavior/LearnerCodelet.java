@@ -50,20 +50,20 @@ public class LearnerCodelet extends Codelet {
 
 
     public LearnerCodelet(
-            Double epsilonInitial, Double epsilonFinal,
+            Double epsilonInitial, Double epsilonFinal, Double explorationPeriod,
             Long numEpisodes, Boolean isTraining, Boolean isTabular,
-            ValueBasedRL learning, Domain<Double>[] actionSpace,
+            ValueBasedRL learning, Environment env,
             String localPathToCheckpoint, String learningFileName,
             String cumRewardFileName, Long checkpointEachNEpisodes, Integer nMaxSteps) {
+
         this.epsilon = isTraining ? epsilonInitial : epsilonFinal;
         this.epsilonInitial = epsilonInitial;
         this.epsilonFinal = epsilonFinal;
         this.numEpisodes = numEpisodes;
-        this.epsilonDecay = (epsilonInitial - epsilonFinal) / numEpisodes;
+        this.epsilonDecay = (epsilonInitial - epsilonFinal) / (explorationPeriod * numEpisodes);
         this.isTraining = isTraining;
         this.isTabular = isTabular;
-        this.actionSpace = actionSpace;
-        this.env = new FrogEnv( stateMO, actionSpace );
+        this.env = (FrogEnv) env;
         this.localPathToCheckpoint = localPathToCheckpoint;
         this.learningFileName = learningFileName;
         this.cumRewardFileName = cumRewardFileName;

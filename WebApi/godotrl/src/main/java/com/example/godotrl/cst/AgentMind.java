@@ -106,23 +106,28 @@ public class AgentMind extends Mind {
         String pathToSaveLearning = "/home/ic-unicamp/IC/Godot-Implementation/WebApi/godotrl/callback/";
         // String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
         // String pathToSaveLearning = "/c/Users/morai/OneDrive/Documentos/Git/Godot-Implementation/callback/";
-        String rlFile = "500-lfa-weights.csv"; // CHANGE TO .txt!!
-        String rewardFile = "500-10x10-rewards-lfa.csv";
+//        String rlFile = "simple-0907-lfa-weights.csv"; // CHANGE TO .txt!!
+        String rlFile = "best-q-table.csv"; // CHANGE TO .txt!!
+//        String rewardFile = "simple-0907-nxn-rewards-lfa.csv";
+        String rewardFile = "filming.csv";
         Integer nMaxSteps = 50;
-        Double epsilonInitial = 0.999;
+        Double epsilonInitial = 0.99;
         Double epsilonFinal = 0.01;
+        // percenteage of num episides that the agent should explore.
+        Double explorationPeriod = 0.5;
         Long checkPointEachNEpisodes = 500L;
-        Double learningRate = 0.05;
-        Long numEpisodes = 1000L;
-        Double xLen = 10.0;
-        Double yLen = 10.0;
-        Boolean isTraining = true;
+        Double learningRate = 0.02;
+        Long numEpisodes = 100L;
+        Double xLen = 5.0;
+        Double yLen = 5.0;
+        Boolean isTraining = false;
         Boolean isTabular = false;
 
         /*
          * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FroggerFE fe
          * */
-        FroggerLFA rl = new FroggerLFA( learningRate, 0.98, 5, pathToSaveLearning, new FroggerFE(xLen, yLen, nMaxSteps), xLen, yLen ) ;
+        FroggerLFA rl = new FroggerLFA( learningRate, 0.98, 5, pathToSaveLearning, new FroggerSimpleFE(xLen, yLen, nMaxSteps), xLen, yLen ) ;
+//        Tabular rl = new Tabular( learningRate, 0.98, 5, pathToSaveLearning ) ;
 
         /*
               Double epsilonInitial, Double epsilonFinal,
@@ -132,10 +137,11 @@ public class AgentMind extends Mind {
               String cumRewardFileName, Long checkpointEachNEpisodes,
               Integer nMaxSteps
               * */
+        FrogEnv env = new FrogEnv(stateMO, new Domain[] {new Domain(0), new Domain(0), new Domain(4)}, yLen);
         learnerCodelet = new LearnerCodelet(
-                epsilonInitial, epsilonFinal,
+                epsilonInitial, epsilonFinal, explorationPeriod,
                 numEpisodes, isTraining, isTabular,
-                rl, new Domain[] {new Domain(0), new Domain(0), new Domain(4)},
+                rl, env,
                 pathToSaveLearning, rlFile,
                 rewardFile, checkPointEachNEpisodes, nMaxSteps
         );
