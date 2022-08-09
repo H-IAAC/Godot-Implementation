@@ -106,10 +106,8 @@ public class AgentMind extends Mind {
         String pathToSaveLearning = "/home/ic-unicamp/IC/Godot-Implementation/WebApi/godotrl/callback/";
         // String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
         // String pathToSaveLearning = "/c/Users/morai/OneDrive/Documentos/Git/Godot-Implementation/callback/";
-//        String rlFile = "simple-0907-lfa-weights.csv"; // CHANGE TO .txt!!
-        String rlFile = "best-q-table.csv"; // CHANGE TO .txt!!
-//        String rewardFile = "simple-0907-nxn-rewards-lfa.csv";
-        String rewardFile = "filming.csv";
+        String rlFile = "simple-0808-lfa-weights.txt"; // CHANGE TO .txt!!
+        String rewardFile = "testing-0808.csv";
         Integer nMaxSteps = 50;
         Double epsilonInitial = 0.99;
         Double epsilonFinal = 0.01;
@@ -117,10 +115,10 @@ public class AgentMind extends Mind {
         Double explorationPeriod = 0.5;
         Long checkPointEachNEpisodes = 500L;
         Double learningRate = 0.02;
-        Long numEpisodes = 100L;
+        Long numEpisodes = 2000L;
         Double xLen = 5.0;
         Double yLen = 5.0;
-        Boolean isTraining = false;
+        Boolean isTraining = true;
         Boolean isTabular = false;
 
         /*

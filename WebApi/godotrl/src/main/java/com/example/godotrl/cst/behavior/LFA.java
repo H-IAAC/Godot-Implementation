@@ -11,10 +11,12 @@ import java.util.Set;
 public class LFA extends ValueBasedRL {
     protected LinkedHashMap<String, Double> weights = new LinkedHashMap<String, Double>();
     protected FeaturesExtractor extractor; // new featuresExtractor();
+    protected WeightsLFA txtWeights;
 
     public LFA(Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FeaturesExtractor fe) {
         super(alpha, gamma, numActions, pathToSaveLearning);
         this.extractor = fe;
+        this.txtWeights = new WeightsLFA( pathToSaveLearning, "txt-weights.txt" );
     }
 
     /**
@@ -77,6 +79,8 @@ public class LFA extends ValueBasedRL {
         catch (IOException e) {
             e.printStackTrace();
         }
+
+        txtWeights.recordNewEpisode(weights);
     }
 
     protected void deserializeLearning(String fileName) {
