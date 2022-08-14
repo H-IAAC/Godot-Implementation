@@ -23,7 +23,7 @@ public class FrogEnv extends  Environment {
     /* Metrics created for defining reward policy */
     private Double getReward( ArrayList<Domain> state, Vector2 pos, Action lastAction, Boolean isDone, Boolean hasWon ) {
         Double rw = 0.0;
-        rw += (double) ( yLen - 1.0 - pos.getY() )/5;
+        rw += (double) ( yLen - 1.0 - pos.getY() )/(100 * yLen);
         if ( isDone ) {
             if ( hasWon ) {
                 rw += yLen * 5.0;

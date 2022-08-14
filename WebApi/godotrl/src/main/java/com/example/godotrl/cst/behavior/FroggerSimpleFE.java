@@ -71,15 +71,15 @@ public class FroggerSimpleFE extends FroggerFE {
         f.put("had-car-second-left", 0.0);
 
         // new state
-        f.put("has-car-up", 0.0);
-        f.put("has-car-right", 0.0);
-        f.put("has-car-down", 0.0);
-        f.put("has-car-left", 0.0);
-        f.put("has-car-upper-right", 0.0);
-        f.put("has-car-lower-right", 0.0);
-        f.put("has-car-lower-left", 0.0);
-        f.put("has-car-upper-left", 0.0);
-        f.put("has-car-second-left", 0.0);
+//        f.put("has-car-up", 0.0);
+//        f.put("has-car-right", 0.0);
+//        f.put("has-car-down", 0.0);
+//        f.put("has-car-left", 0.0);
+//        f.put("has-car-upper-right", 0.0);
+//        f.put("has-car-lower-right", 0.0);
+//        f.put("has-car-lower-left", 0.0);
+//        f.put("has-car-upper-left", 0.0);
+//        f.put("has-car-second-left", 0.0);
 
         String num;
         for ( int i = 1; i <= closestCars.size(); i++ ) {
@@ -127,43 +127,43 @@ public class FroggerSimpleFE extends FroggerFE {
             }
             
             // check cars positions at the new state
-            if ( Double.compare(xCar, -990.0) > 0 ) {
-                Integer d[] = {
-                        ( xCar.intValue() - dx.intValue() ),
-                        ( yCar.intValue() - dy.intValue() )
-                };
-                // car at left
-                if ( d[0] == -1 ) {
-                    if ( d[1] == -1 ) f.put("has-car-upper-left", 1.0);
-                    else if ( d[1] == 0 ) f.put("has-car-left", 1.0);
-                    else if ( d[1] == 1 ) f.put("has-car-lower-left", 1.0);
-                }
-
-                // agent and car at the same x-axis
-                else if ( d[0] == 0 ) {
-                    if ( d[1] == -1 ) f.put("has-car-up", 1.0);
-                    else if ( d[1] == 1 ) f.put("has-car-down", 1.0);
-                }
-
-                // car at right
-                else if ( d[0] == 1 ) {
-                    if ( d[1] == -1 ) f.put("has-car-upper-right", 1.0);
-                    else if ( d[1] == 0 ) f.put("has-car-right", 1.0);
-                    else if ( d[1] == 1 ) f.put("has-car-lower-right", 1.0);
-                }
-
-                // car is two squares left the agent
-                else if ( d[0] == -2 ) {
-                    if ( d[1] == 0 ) f.put("has-car-second-left", 1.0);
-                }
-            }
+//            if ( Double.compare(xCar, -990.0) > 0 ) {
+//                Integer d[] = {
+//                        ( xCar.intValue() - dx.intValue() ),
+//                        ( yCar.intValue() - dy.intValue() )
+//                };
+//                // car at left
+//                if ( d[0] == -1 ) {
+//                    if ( d[1] == -1 ) f.put("has-car-upper-left", 1.0);
+//                    else if ( d[1] == 0 ) f.put("has-car-left", 1.0);
+//                    else if ( d[1] == 1 ) f.put("has-car-lower-left", 1.0);
+//                }
+//
+//                // agent and car at the same x-axis
+//                else if ( d[0] == 0 ) {
+//                    if ( d[1] == -1 ) f.put("has-car-up", 1.0);
+//                    else if ( d[1] == 1 ) f.put("has-car-down", 1.0);
+//                }
+//
+//                // car at right
+//                else if ( d[0] == 1 ) {
+//                    if ( d[1] == -1 ) f.put("has-car-upper-right", 1.0);
+//                    else if ( d[1] == 0 ) f.put("has-car-right", 1.0);
+//                    else if ( d[1] == 1 ) f.put("has-car-lower-right", 1.0);
+//                }
+//
+//                // car is two squares left the agent
+//                else if ( d[0] == -2 ) {
+//                    if ( d[1] == 0 ) f.put("has-car-second-left", 1.0);
+//                }
+//            }
         }
 
         // final result of the game
-        f.put("won", hasWon ? 1d : 0d );
-        f.put("lost", isDone&&!hasWon ? 1d : 0d );
-        f.put("will-win", willWin ? 1d : 0d );
-        f.put("will-lose", willLose ? 1d : 0d );
+//        f.put("won", hasWon ? 1d : 0d );
+//        f.put("lost", isDone&&!hasWon ? 1d : 0d );
+//        f.put("will-win", willWin ? 1d : 0d );
+//        f.put("will-lose", willLose ? 1d : 0d );
 
         // last movement of the agent
         f.put("moved-up", action.equals( Action.UP ) ? 1d : 0d );
