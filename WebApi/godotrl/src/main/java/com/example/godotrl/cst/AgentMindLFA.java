@@ -120,6 +120,7 @@ public class AgentMindLFA extends Mind {
         Double yLen = 5.0;
         Boolean isTraining = true;
         Boolean isTabular = false;
+        Boolean recordReward = true;
 
         /*
          * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FroggerFE fe
@@ -140,7 +141,8 @@ public class AgentMindLFA extends Mind {
                 numEpisodes, isTraining, isTabular,
                 rl, env,
                 pathToSaveLearning, rlFile,
-                rewardFile, checkPointEachNEpisodes, nMaxSteps
+                rewardFile, checkPointEachNEpisodes, nMaxSteps,
+                recordReward
         );
         learnerCodelet.addOutput(updateMO);
         learnerCodelet.addOutput(motorMO);

@@ -47,6 +47,7 @@ public class LearnerCodelet extends Codelet {
     private boolean hasLost = false;
     private Integer nMaxSteps;
     private ArrayList lastObs;
+    private Boolean recordReward;
 
 
     public LearnerCodelet(
@@ -54,7 +55,8 @@ public class LearnerCodelet extends Codelet {
             Long numEpisodes, Boolean isTraining, Boolean isTabular,
             ValueBasedRL learning, Environment env,
             String localPathToCheckpoint, String learningFileName,
-            String cumRewardFileName, Long checkpointEachNEpisodes, Integer nMaxSteps) {
+            String cumRewardFileName, Long checkpointEachNEpisodes, Integer nMaxSteps,
+            Boolean recordReward ) {
 
         this.epsilon = isTraining ? epsilonInitial : epsilonFinal;
         this.epsilonInitial = epsilonInitial;
@@ -69,9 +71,11 @@ public class LearnerCodelet extends Codelet {
         this.cumRewardFileName = cumRewardFileName;
         this.checkpointEachNEpisodes = checkpointEachNEpisodes;
         this.nMaxSteps = nMaxSteps;
+        this.recordReward = recordReward;
         setLearningType( learning );
         cumRewardFileName = isTraining ? "training_" + cumRewardFileName : "eval_" + cumRewardFileName;
-        this.csvRewardRecord = new CSV(localPathToCheckpoint, cumRewardFileName, false, true);
+        if (recordReward)
+            this.csvRewardRecord = new CSV(localPathToCheckpoint, cumRewardFileName, false, true);
     }
 
     private void setLearningType( ValueBasedRL learning ) {
@@ -160,8 +164,9 @@ public class LearnerCodelet extends Codelet {
                         }
                     }
 
-                    csvRewardRecord.recordNewEpisode(
-                            currEpisode, reward, epsilon, hasWon );
+                    if (recordReward) {
+                        csvRewardRecord.recordNewEpisode( currEpisode, reward, epsilon, hasWon );
+                    }
 
                     reward = new Domain<Double>(0.0);
                     currStep = 0;

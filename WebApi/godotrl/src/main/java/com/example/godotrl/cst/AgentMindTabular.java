@@ -122,6 +122,7 @@ public class AgentMindTabular extends Mind {
         Double yLen = 5.0;
         Boolean isTraining = false;
         Boolean isTabular = true;
+        Boolean recordReward = true;
 
         /*
          * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning
@@ -142,7 +143,8 @@ public class AgentMindTabular extends Mind {
                 numEpisodes, isTraining, isTabular,
                 rl, env,
                 pathToSaveLearning, rlFile,
-                rewardFile, checkPointEachNEpisodes, nMaxSteps
+                rewardFile, checkPointEachNEpisodes, nMaxSteps,
+                recordReward
         );
         learnerCodelet.addOutput(updateMO);
         learnerCodelet.addOutput(motorMO);

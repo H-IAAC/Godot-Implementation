@@ -106,20 +106,21 @@ public class AgentMind extends Mind {
         String pathToSaveLearning = "/home/ic-unicamp/IC/Godot-Implementation/WebApi/godotrl/callback/";
         // String pathToSaveLearning = "/home/ianloron00/IC/Godot-Implementation/WebApi/godotrl/callback/";
         // String pathToSaveLearning = "/c/Users/morai/OneDrive/Documentos/Git/Godot-Implementation/callback/";
-        String rlFile = "simple-0908-lfa-weights-new-rw-new-extr.txt"; // CHANGE TO .txt!!
-        String rewardFile = "testing-0908-2000-eps-new-rw-new-extr.csv";
+        String rlFile = "1408-lfa-weights-simpleFE2.txt"; // CHANGE TO .txt!!
+        String rewardFile = "rw-1408-2000-simpleFE2.csv";
         Integer nMaxSteps = 50;
         Double epsilonInitial = 0.99;
         Double epsilonFinal = 0.01;
         // percenteage of num episides that the agent should explore.
         Double explorationPeriod = 0.5;
         Long checkPointEachNEpisodes = 500L;
-        Double learningRate = 0.02;
+        Double learningRate = 0.01;
         Long numEpisodes = 50L;
         Double xLen = 5.0;
         Double yLen = 5.0;
         Boolean isTraining = false;
         Boolean isTabular = false;
+        Boolean recordReward = true;
 
         /*
          * Double alpha, Double gamma, Integer numActions, String pathToSaveLearning, FroggerFE fe
@@ -141,7 +142,8 @@ public class AgentMind extends Mind {
                 numEpisodes, isTraining, isTabular,
                 rl, env,
                 pathToSaveLearning, rlFile,
-                rewardFile, checkPointEachNEpisodes, nMaxSteps
+                rewardFile, checkPointEachNEpisodes, nMaxSteps,
+                recordReward
         );
         learnerCodelet.addOutput(updateMO);
         learnerCodelet.addOutput(motorMO);
