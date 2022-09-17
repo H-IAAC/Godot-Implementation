@@ -34,7 +34,7 @@ https://user-images.githubusercontent.com/63124011/190866614-dc507050-10e2-417d-
 
 This experiment was the first implementation of CST-Godot. It uses [Godot's Android plugin functionality](https://docs.godotengine.org/en/stable/tutorials/platform/android/android_plugin.html), as such, it can only run on Android platforms. The Android part of its implementation can be found in `Godot-Implementation/AndroidProject/CollectorAgentMind/`, while the Godot part of its implementation can be found in `Godot-Implementation/GodotProject/PortCST/`
 
-## The Frogger-inspired experiment
+### The Frogger-inspired experiment
 
 This experiment is an adaptation of the classic game Frogger, built to test the capability of CST-Godot in implementing classic AI techniques. We implemented a reinforcement learning algorithm as part of a larger cognitive architecture to allow a frog to cross a street while avoiding moving cars.
 
